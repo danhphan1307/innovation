@@ -1,0 +1,256 @@
+*{
+    border:0;
+    padding:0;
+    margin:0;
+}
+
+body {
+    width:100vw;
+    height:100vh;
+    overflow-x:hidden;
+    margin: 0px;
+    z-index: 0;
+}
+
+#blackOverlay{
+    display:none;
+    position:absolute;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+}
+
+.sidenav{
+    height: 100%;
+    width: 70%;
+    position: fixed;
+    z-index: 3;
+    top: 0;
+    left: -70%;
+    overflow-x: hidden;
+    background: rgba(58,64,90,1);
+    background: -moz-linear-gradient(top, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(58,64,90,1)), color-stop(100%, rgba(102,99,120,1)));
+    background: -webkit-linear-gradient(top, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
+    background: -o-linear-gradient(top, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
+    background: -ms-linear-gradient(top, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
+    background: linear-gradient(to bottom, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a405a', endColorstr='#666378', GradientType=0 );
+    transition: 0.5s; 
+}
+
+/* The navigation menu links */
+nav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 15px;
+    color: white;
+    display: block;
+    transition: 0.3s
+}
+
+nav a.active{
+    background-color: #779ECB;
+}
+
+/* When you mouse over the navigation links, change their color */
+nav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+#logo{
+    display: block;
+    margin:auto;
+    margin-top:10%;
+    margin-bottom:5%;
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    border: 4px solid #779ECB;
+    max-width: 150px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s;
+    padding: 0;
+    height:100%;
+}
+#controlNav{
+    height: 6%;
+    display:flex;
+    align-items:center;
+}
+#controlNav h1{
+    color:#464962;
+    margin: 0;
+    font-size:1.1em;
+    margin-left: 15px;
+    width:43%;
+    display:inline-block;
+}
+#controlNav #hamburger{
+    color:#2A6684;
+    font-size:20px;
+    margin-left:3%;
+    cursor:pointer;
+    display:inline-block;
+}
+#controlNav img{
+    position: relative;
+    display:inline-block;
+    margin-left:45%;
+}
+h2{
+    font-size: 20px;
+    color:white;
+    text-align: center;
+    margin-bottom:20%;
+}
+
+#mapCanvas{
+    margin: 0;
+    padding: 0;
+    height: 88%;
+}
+#controlLove{
+    height: 6%;
+}
+
+.glyphicon.glyphicon-menu-right{
+    right:0;
+    float:right;
+}
+
+.gm-style-iw div{
+    overflow:visible!important;
+}
+.cityBike {
+    width: 110%;
+}
+.cityBike h3{
+    display: inline-block;
+}
+.cityBike .loveIcon{
+    z-index: 10000;
+    margin-top:-10px;
+    margin-left:10px;
+}
+
+.cityBike .separate{
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-top: 3px solid #eee;
+}
+.cityBike .info{
+    margin-top:5px;
+    color:#484B64;
+    font-size:17px;
+    font-weight: normal;
+}
+.cityBike .register{
+    margin-left:25%;
+    width: 50%;
+    min-height: 30px;
+    border-radius: 5%;
+    background-color:#484B64;
+}
+.cityBike .register a{
+    color:white;
+}
+.cityBike .moreInfo{
+    display:block;
+    width: 100%;
+    text-align: center;
+    color:#484B64;
+}
+.cityBike .freeBike{
+    display:inline-block;
+    background: #fbb800;
+    width:10px;
+    height: 10px;
+    margin-left:1px;
+    margin-right: 1px;
+}
+.cityBike .freeSpot{
+    display:inline-block;
+    background: #E5E8EF;
+    width:10px;
+    height: 10px;
+    margin-left:1px;
+    margin-right: 1px;
+}
+.cityBike h3{
+    text-transform: uppercase;
+    margin:0;
+    color:#484B64;
+    font-size: 19px;
+}
+.cityBike span{
+    font-size: 17px;
+    color:#484B64;
+    font-weight:normal;
+}
+.bottomNav nav{
+
+    height: 100%;
+}
+.bottomNav ul{
+    width: 100%;
+    height: 100%;
+    margin:0;
+}
+.bottomNav li{
+    z-index: 2;
+    position: relative;
+    height: 100%;
+    list-style-type: none; 
+    font-size: 0.8em;
+    font-weight: bold;
+    height: 100%;
+    border-top:1px solid #ddd;
+    color:#acacac;
+    padding-top: 5px;
+    width: 50%;
+    float: left;
+    display:inline-block;
+    text-align: center;
+    text-transform: uppercase;
+}
+.bottomNav li:nth-of-type(2){
+    border-left:1px solid #ddd;
+}
+.bottomNav img{
+    margin-top: -5px;
+}
+.bottomNav span{
+    margin-bottom:2px;
+}
+.bottomNav .active{
+    background-color:#464962;
+    color:white;
+}
+.bottomNav span:nth-of-type(1){
+    transition: .5s; 
+}
+.bottomNav .active span:nth-of-type(1){
+    -ms-transform: rotate(180deg); 
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.bottomNav .bottomDiv{
+    z-index: 2;
+    position: absolute;
+    bottom:0;
+    height: 0;
+    width: 100%;
+    background-color: white;
+    transition: .5s;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
