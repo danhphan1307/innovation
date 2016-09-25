@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
-import { BikeStation }  from 'models/bike';
+import { BikeStation }  from './bike';
 
 import {Observable} from 'rxjs/Rx';
 
@@ -11,23 +11,31 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class BikeService{
 
-    private bikeUrl = 'http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental';
-    //private bikeUrl = 'http://content.guardianapis.com/search?api-key=test';
+  private bikeUrl = 'http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental';
+
 
     constructor(private http: Http){
 
     }
 
     getBikeStations() : Observable<BikeStation[]>{
-        return this.http.get(this.bikeUrl,{headers: this.getHeaders()})
-        .map(this.extractData)
-        .catch(this.handleError);
+      return this.http.get(this.bikeUrl,{headers: this.getHeaders()})
+      //.map(this.mapStations)
+      .map(this.extractData)
+      .do(data => console.log('All: ' +  JSON.stringify(data)))
+      .catch(this.handleError);
     }
 
+    private extractData(res: Response) {
+    let body = res.json();
+    return body.stations || { };
+  }
+
+
     private getHeaders(){
-        let headers = new Headers();
-        headers.append('Accept', 'application/json');
-        return headers;
+      let headers = new Headers();
+      headers.append('Accept', 'application/json');
+      return headers;
     }
 
     private handleError (error: any) {
@@ -37,12 +45,6 @@ export class BikeService{
   error.status ? `${error.status} - ${error.statusText}` : 'Server error';
   console.error(errMsg); // log to console instead
   return Observable.throw(errMsg);
-}
-
-private extractData(res: Response) {
-    let body = res.json();
-
-    return body.stations|| { };
 }
 
 
