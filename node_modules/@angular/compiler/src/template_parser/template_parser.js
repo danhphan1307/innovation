@@ -684,13 +684,13 @@ var TemplateParseVisitor = (function () {
                 boundPropertyName = this._schemaRegistry.getMappedPropName(partValue);
                 securityContext = this._schemaRegistry.securityContext(elementName, boundPropertyName);
                 bindingType = PropertyBindingType.Property;
-                this._assertNoEventBinding(boundPropertyName, sourceSpan);
+                this._assertNoEventBinding(boundPropertyName, sourceSpan, false);
                 if (!this._schemaRegistry.hasProperty(elementName, boundPropertyName, this._schemas)) {
                     var errorMsg = "Can't bind to '" + boundPropertyName + "' since it isn't a known property of '" + elementName + "'.";
                     if (elementName.indexOf('-') > -1) {
                         errorMsg +=
                             ("\n1. If '" + elementName + "' is an Angular component and it has '" + boundPropertyName + "' input, then verify that it is part of this module.") +
-                                ("\n2. If '" + elementName + "' is a Web Component then add \"CUSTOM_ELEMENTS_SCHEMA\" to the '@NgModule.schema' of this component to suppress this message.\n");
+                                ("\n2. If '" + elementName + "' is a Web Component then add \"CUSTOM_ELEMENTS_SCHEMA\" to the '@NgModule.schemas' of this component to suppress this message.\n");
                     }
                     this._reportError(errorMsg, sourceSpan);
                 }
@@ -699,7 +699,7 @@ var TemplateParseVisitor = (function () {
         else {
             if (parts[0] == ATTRIBUTE_PREFIX) {
                 boundPropertyName = parts[1];
-                this._assertNoEventBinding(boundPropertyName, sourceSpan);
+                this._assertNoEventBinding(boundPropertyName, sourceSpan, true);
                 // NB: For security purposes, use the mapped property name, not the attribute name.
                 var mapPropName = this._schemaRegistry.getMappedPropName(boundPropertyName);
                 securityContext = this._schemaRegistry.securityContext(elementName, mapPropName);
@@ -730,10 +730,22 @@ var TemplateParseVisitor = (function () {
         }
         return new BoundElementPropertyAst(boundPropertyName, bindingType, securityContext, ast, unit, sourceSpan);
     };
-    TemplateParseVisitor.prototype._assertNoEventBinding = function (propName, sourceSpan) {
+    /**
+     * @param propName the name of the property / attribute
+     * @param sourceSpan
+     * @param isAttr true when binding to an attribute
+     * @private
+     */
+    TemplateParseVisitor.prototype._assertNoEventBinding = function (propName, sourceSpan, isAttr) {
         if (propName.toLowerCase().startsWith('on')) {
-            this._reportError(("Binding to event attribute '" + propName + "' is disallowed ") +
-                ("for security reasons, please use (" + propName.slice(2) + ")=..."), sourceSpan, ParseErrorLevel.FATAL);
+            var msg = ("Binding to event attribute '" + propName + "' is disallowed for security reasons, ") +
+                ("please use (" + propName.slice(2) + ")=...");
+            if (!isAttr) {
+                msg +=
+                    ("\nIf '" + propName + "' is a directive input, make sure the directive is imported by the") +
+                        " current module.";
+            }
+            this._reportError(msg, sourceSpan, ParseErrorLevel.FATAL);
         }
     };
     TemplateParseVisitor.prototype._findComponentDirectiveNames = function (directives) {
@@ -766,7 +778,7 @@ var TemplateParseVisitor = (function () {
         if (!matchElement && !this._schemaRegistry.hasElement(elName, this._schemas)) {
             var errorMsg = ("'" + elName + "' is not a known element:\n") +
                 ("1. If '" + elName + "' is an Angular component, then verify that it is part of this module.\n") +
-                ("2. If '" + elName + "' is a Web Component then add \"CUSTOM_ELEMENTS_SCHEMA\" to the '@NgModule.schema' of this component to suppress this message.");
+                ("2. If '" + elName + "' is a Web Component then add \"CUSTOM_ELEMENTS_SCHEMA\" to the '@NgModule.schemas' of this component to suppress this message.");
             this._reportError(errorMsg, element.sourceSpan);
         }
     };

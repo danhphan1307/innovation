@@ -5,7 +5,7 @@ export class Hub{
     id : number;
     name: MultilligualString;
     location: number;
-    facilityIds: [number];
+    facilityIds: number[];
     address: Address
     constructor(info: any){
         this.id = info.id;

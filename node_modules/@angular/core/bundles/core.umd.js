@@ -1,5 +1,5 @@
 /**
- * @license Angular v2.0.0
+ * @license Angular v2.0.1
  * (c) 2010-2016 Google, Inc. https://angular.io/
  * License: MIT
  */
@@ -59,11 +59,6 @@
     }
     function isFunction(obj) {
         return typeof obj === 'function';
-    }
-    function isPromise(obj) {
-        // allow any Promise/A+ compliant thenable.
-        // It's up to the caller to ensure that obj.then conforms to the spec
-        return isPresent(obj) && isFunction(obj.then);
     }
     function isArray(obj) {
         return Array.isArray(obj);
@@ -663,8 +658,12 @@
      *  @Annotation
      */
     var ContentChildren = makePropDecorator('ContentChildren', [
-        ['selector', undefined],
-        { first: false, isViewQuery: false, descendants: false, read: undefined }
+        ['selector', undefined], {
+            first: false,
+            isViewQuery: false,
+            descendants: false,
+            read: undefined,
+        }
     ], Query);
     /**
      * @whatItDoes Configures a content query.
@@ -699,7 +698,7 @@
         ['selector', undefined], {
             first: true,
             isViewQuery: false,
-            descendants: false,
+            descendants: true,
             read: undefined,
         }
     ], Query);
@@ -1148,13 +1147,6 @@
     /**
      * Metadata properties available for configuring Views.
      *
-     * Each Angular component requires a single `@Component` and at least one `@View` annotation. The
-     * `@View` annotation specifies the HTML template to use, and lists the directives that are active
-     * within the template.
-     *
-     * When a component is instantiated, the template is loaded into the component's shadow root, and
-     * the expressions and statements in the template are evaluated against the component.
-     *
      * For details on the `@Component` annotation, see {@link Component}.
      *
      * ### Example
@@ -1163,7 +1155,6 @@
      * @Component({
      *   selector: 'greet',
      *   template: 'Hello {{name}}!',
-     *   directives: [GreetUser, Bold]
      * })
      * class Greet {
      *   name: string;
@@ -1175,6 +1166,8 @@
      * ```
      *
      * @deprecated Use Component instead.
+     *
+     * {@link Component}
      */
     var ViewMetadata = (function () {
         function ViewMetadata(_a) {
@@ -1338,7 +1331,6 @@
          * - Throws {@link NoProviderError} if no `notFoundValue` that is not equal to
          * Injector.THROW_IF_NOT_FOUND is given
          * - Returns the `notFoundValue` otherwise
-         * ```
          */
         Injector.prototype.get = function (token, notFoundValue) { return unimplemented(); };
         Injector.THROW_IF_NOT_FOUND = _THROW_IF_NOT_FOUND;
@@ -1346,20 +1338,18 @@
         return Injector;
     }());
 
-    var Map$1 = global$1.Map;
-    var Set = global$1.Set;
     // Safari and Internet Explorer do not support the iterable parameter to the
     // Map constructor.  We work around that by manually adding the items.
     var createMapFromPairs = (function () {
         try {
-            if (new Map$1([[1, 2]]).size === 1) {
-                return function createMapFromPairs(pairs) { return new Map$1(pairs); };
+            if (new Map([[1, 2]]).size === 1) {
+                return function createMapFromPairs(pairs) { return new Map(pairs); };
             }
         }
         catch (e) {
         }
         return function createMapAndPopulateFromPairs(pairs) {
-            var map = new Map$1();
+            var map = new Map();
             for (var i = 0; i < pairs.length; i++) {
                 var pair = pairs[i];
                 map.set(pair[0], pair[1]);
@@ -1367,22 +1357,8 @@
             return map;
         };
     })();
-    var createMapFromMap = (function () {
-        try {
-            if (new Map$1(new Map$1())) {
-                return function createMapFromMap(m) { return new Map$1(m); };
-            }
-        }
-        catch (e) {
-        }
-        return function createMapAndPopulateFromMap(m) {
-            var map = new Map$1();
-            m.forEach(function (v, k) { map.set(k, v); });
-            return map;
-        };
-    })();
     var _clearValues = (function () {
-        if ((new Map$1()).keys().next) {
+        if ((new Map()).keys().next) {
             return function _clearValues(m) {
                 var keyIterator = m.keys();
                 var k;
@@ -1401,7 +1377,7 @@
     // TODO(mlaval): remove the work around once we have a working polyfill of Array.from
     var _arrayFromMap = (function () {
         try {
-            if ((new Map$1()).values().next) {
+            if ((new Map()).values().next) {
                 return function createArrayFromMap(m, getValues) {
                     return getValues ? Array.from(m.values()) : Array.from(m.keys());
                 };
@@ -1410,7 +1386,7 @@
         catch (e) {
         }
         return function createArrayFromMapWithForeach(m, getValues) {
-            var res = ListWrapper.createFixedSize(m.size), i = 0;
+            var res = new Array(m.size), i = 0;
             m.forEach(function (v, k) {
                 res[i] = getValues ? v : k;
                 i++;
@@ -1421,9 +1397,8 @@
     var MapWrapper = (function () {
         function MapWrapper() {
         }
-        MapWrapper.clone = function (m) { return createMapFromMap(m); };
         MapWrapper.createFromStringMap = function (stringMap) {
-            var result = new Map$1();
+            var result = new Map();
             for (var prop in stringMap) {
                 result.set(prop, stringMap[prop]);
             }
@@ -1435,7 +1410,6 @@
             return r;
         };
         MapWrapper.createFromPairs = function (pairs) { return createMapFromPairs(pairs); };
-        MapWrapper.clearValues = function (m) { _clearValues(m); };
         MapWrapper.iterable = function (m) { return m; };
         MapWrapper.keys = function (m) { return _arrayFromMap(m, false); };
         MapWrapper.values = function (m) { return _arrayFromMap(m, true); };
@@ -1447,15 +1421,6 @@
     var StringMapWrapper = (function () {
         function StringMapWrapper() {
         }
-        StringMapWrapper.create = function () {
-            // Note: We are not using Object.create(null) here due to
-            // performance!
-            // http://jsperf.com/ng2-object-create-null
-            return {};
-        };
-        StringMapWrapper.contains = function (map, key) {
-            return map.hasOwnProperty(key);
-        };
         StringMapWrapper.get = function (map, key) {
             return map.hasOwnProperty(key) ? map[key] : undefined;
         };
@@ -1470,7 +1435,6 @@
             }
             return true;
         };
-        StringMapWrapper.delete = function (map, key) { delete map[key]; };
         StringMapWrapper.forEach = function (map, callback) {
             for (var _i = 0, _a = Object.keys(map); _i < _a.length; _i++) {
                 var k = _a[_i];
@@ -1639,7 +1603,7 @@
         if (!isJsObject(obj))
             return false;
         return isArray(obj) ||
-            (!(obj instanceof Map$1) &&
+            (!(obj instanceof Map) &&
                 getSymbolIterator() in obj); // JS Iterable have a Symbol.iterator prop
     }
     function areIterablesEqual(a, b, comparator) {
@@ -2261,16 +2225,17 @@
         __extends$2(Reflector, _super);
         function Reflector(reflectionCapabilities) {
             _super.call(this);
-            /** @internal */
-            this._injectableInfo = new Map$1();
-            /** @internal */
-            this._getters = new Map$1();
-            /** @internal */
-            this._setters = new Map$1();
-            /** @internal */
-            this._methods = new Map$1();
-            this._usedKeys = null;
             this.reflectionCapabilities = reflectionCapabilities;
+            /** @internal */
+            this._injectableInfo = new Map();
+            /** @internal */
+            this._getters = new Map();
+            /** @internal */
+            this._setters = new Map();
+            /** @internal */
+            this._methods = new Map();
+            /** @internal */
+            this._usedKeys = null;
         }
         Reflector.prototype.updateCapabilities = function (caps) { this.reflectionCapabilities = caps; };
         Reflector.prototype.isReflectionEnabled = function () { return this.reflectionCapabilities.isReflectionEnabled(); };
@@ -2717,7 +2682,7 @@
         function ReflectiveProtoInjectorDynamicStrategy(protoInj, providers) {
             this.providers = providers;
             var len = providers.length;
-            this.keyIds = ListWrapper.createFixedSize(len);
+            this.keyIds = new Array(len);
             for (var i = 0; i < len; i++) {
                 this.keyIds[i] = providers[i].key.id;
             }
@@ -2862,7 +2827,7 @@
         function ReflectiveInjectorDynamicStrategy(protoStrategy, injector) {
             this.protoStrategy = protoStrategy;
             this.injector = injector;
-            this.objs = ListWrapper.createFixedSize(protoStrategy.providers.length);
+            this.objs = new Array(protoStrategy.providers.length);
             ListWrapper.fill(this.objs, UNDEFINED);
         }
         ReflectiveInjectorDynamicStrategy.prototype.resetConstructionCounter = function () { this.injector._constructionCounter = 0; };
@@ -3206,7 +3171,7 @@
         };
         ReflectiveInjector_.prototype._instantiateProvider = function (provider) {
             if (provider.multiProvider) {
-                var res = ListWrapper.createFixedSize(provider.resolvedFactories.length);
+                var res = new Array(provider.resolvedFactories.length);
                 for (var i = 0; i < provider.resolvedFactories.length; ++i) {
                     res[i] = this._instantiate(provider, provider.resolvedFactories[i]);
                 }
@@ -3516,6 +3481,19 @@
     }());
 
     /**
+     * @license
+     * Copyright Google Inc. All Rights Reserved.
+     *
+     * Use of this source code is governed by an MIT-style license that can be
+     * found in the LICENSE file at https://angular.io/license
+     */
+    function isPromise(obj) {
+        // allow any Promise/A+ compliant thenable.
+        // It's up to the caller to ensure that obj.then conforms to the spec
+        return !!obj && typeof obj.then === 'function';
+    }
+
+    /**
      * A function that will be executed when an application is initialized.
      * @experimental
      */
@@ -3584,7 +3562,7 @@
     var APP_ID_RANDOM_PROVIDER = {
         provide: APP_ID,
         useFactory: _appIdRandomProviderFactory,
-        deps: []
+        deps: [],
     };
     function _randomChar() {
         return StringWrapper.fromCharCode(97 + Math.floor(Math.random() * 25));
@@ -5635,7 +5613,7 @@
         }
         else if (projectableNodes.length < expectedSlotCount) {
             var givenSlotCount = projectableNodes.length;
-            res = ListWrapper.createFixedSize(expectedSlotCount);
+            res = new Array(expectedSlotCount);
             for (var i = 0; i < expectedSlotCount; i++) {
                 res[i] = (i < givenSlotCount) ? projectableNodes[i] : EMPTY_ARR;
             }
@@ -6601,6 +6579,7 @@
             this._runCallbacksIfReady();
         };
         Testability.prototype.getPendingRequestCount = function () { return this._pendingCount; };
+        /** @deprecated use findProviders */
         Testability.prototype.findBindings = function (using, provider, exactMatch) {
             // TODO(juliemr): implement.
             return [];
@@ -6625,7 +6604,7 @@
     var TestabilityRegistry = (function () {
         function TestabilityRegistry() {
             /** @internal */
-            this._applications = new Map$1();
+            this._applications = new Map();
             _testabilityGetter.addToWindow(this);
         }
         TestabilityRegistry.prototype.registerApplication = function (token, testability) {
@@ -6713,12 +6692,12 @@
      * @experimental APIs related to application bootstrap are currently under review.
      */
     function createPlatform(injector) {
-        if (isPresent(_platform) && !_platform.destroyed) {
+        if (_platform && !_platform.destroyed) {
             throw new Error('There can be only one platform. Destroy the previous one to create a new one.');
         }
         _platform = injector.get(PlatformRef);
         var inits = injector.get(PLATFORM_INITIALIZER, null);
-        if (isPresent(inits))
+        if (inits)
             inits.forEach(function (init) { return init(); });
         return _platform;
     }
@@ -6751,10 +6730,10 @@
      */
     function assertPlatform(requiredToken) {
         var platform = getPlatform();
-        if (isBlank(platform)) {
+        if (!platform) {
             throw new Error('No platform exists!');
         }
-        if (isPresent(platform) && isBlank(platform.injector.get(requiredToken, null))) {
+        if (!platform.injector.get(requiredToken, null)) {
             throw new Error('A platform with a different configuration has been created. Please destroy it first.');
         }
         return platform;
@@ -6765,7 +6744,7 @@
      * @experimental APIs related to application bootstrap are currently under review.
      */
     function destroyPlatform() {
-        if (isPresent(_platform) && !_platform.destroyed) {
+        if (_platform && !_platform.destroyed) {
             _platform.destroy();
         }
     }
@@ -6775,7 +6754,7 @@
      * @experimental APIs related to application bootstrap are currently under review.
      */
     function getPlatform() {
-        return isPresent(_platform) && !_platform.destroyed ? _platform : null;
+        return _platform && !_platform.destroyed ? _platform : null;
     }
     /**
      * The Angular platform is the entry point for Angular on a web page. Each page
@@ -6862,9 +6841,7 @@
                     throw e;
                 });
             }
-            else {
-                return result;
-            }
+            return result;
         }
         catch (e) {
             errorHandler.handleError(e);
@@ -6896,8 +6873,8 @@
             if (this._destroyed) {
                 throw new Error('The platform has already been destroyed!');
             }
-            ListWrapper.clone(this._modules).forEach(function (app) { return app.destroy(); });
-            this._destroyListeners.forEach(function (dispose) { return dispose(); });
+            this._modules.slice().forEach(function (module) { return module.destroy(); });
+            this._destroyListeners.forEach(function (listener) { return listener(); });
             this._destroyed = true;
         };
         PlatformRef_.prototype.bootstrapModuleFactory = function (moduleFactory) {
@@ -6939,7 +6916,7 @@
             var _this = this;
             if (compilerOptions === void 0) { compilerOptions = []; }
             var compilerFactory = this.injector.get(CompilerFactory);
-            var compiler = compilerFactory.createCompiler(compilerOptions instanceof Array ? compilerOptions : [compilerOptions]);
+            var compiler = compilerFactory.createCompiler(Array.isArray(compilerOptions) ? compilerOptions : [compilerOptions]);
             // ugly internal api hack: generate host component factories for all declared components and
             // pass the factories into the callback - this is used by UpdateAdapter to get hold of all
             // factories.
@@ -7051,7 +7028,7 @@
             var compRef = componentFactory.create(this._injector, [], componentFactory.selector);
             compRef.onDestroy(function () { _this._unloadComponent(compRef); });
             var testability = compRef.injector.get(Testability, null);
-            if (isPresent(testability)) {
+            if (testability) {
                 compRef.injector.get(TestabilityRegistry)
                     .registerApplication(compRef.location.nativeElement, testability);
             }
@@ -7073,7 +7050,7 @@
         };
         /** @internal */
         ApplicationRef_.prototype._unloadComponent = function (componentRef) {
-            if (!ListWrapper.contains(this._rootComponents, componentRef)) {
+            if (this._rootComponents.indexOf(componentRef) == -1) {
                 return;
             }
             this.unregisterChangeDetector(componentRef.changeDetectorRef);
@@ -7083,7 +7060,7 @@
             if (this._runningTick) {
                 throw new Error('ApplicationRef.tick is called recursively');
             }
-            var s = ApplicationRef_._tickScope();
+            var scope = ApplicationRef_._tickScope();
             try {
                 this._runningTick = true;
                 this._changeDetectorRefs.forEach(function (detector) { return detector.detectChanges(); });
@@ -7093,12 +7070,12 @@
             }
             finally {
                 this._runningTick = false;
-                wtfLeave(s);
+                wtfLeave(scope);
             }
         };
         ApplicationRef_.prototype.ngOnDestroy = function () {
             // TODO(alxhub): Dispose of the NgZone.
-            ListWrapper.clone(this._rootComponents).forEach(function (ref) { return ref.destroy(); });
+            this._rootComponents.slice().forEach(function (component) { return component.destroy(); });
         };
         Object.defineProperty(ApplicationRef_.prototype, "componentTypes", {
             get: function () { return this._rootComponentTypes; },
@@ -7877,9 +7854,12 @@
         return reflector;
     }
     var _CORE_PLATFORM_PROVIDERS = [
-        PlatformRef_, { provide: PlatformRef, useExisting: PlatformRef_ },
+        PlatformRef_,
+        { provide: PlatformRef, useExisting: PlatformRef_ },
         { provide: Reflector, useFactory: _reflector, deps: [] },
-        { provide: ReflectorReader, useExisting: Reflector }, TestabilityRegistry, Console
+        { provide: ReflectorReader, useExisting: Reflector },
+        TestabilityRegistry,
+        Console,
     ];
     /**
      * This platform has to be included in any other platform
@@ -9226,7 +9206,7 @@
 
     var ViewAnimationMap = (function () {
         function ViewAnimationMap() {
-            this._map = new Map$1();
+            this._map = new Map();
             this._allPlayers = [];
         }
         Object.defineProperty(ViewAnimationMap.prototype, "length", {
@@ -9260,11 +9240,11 @@
         ViewAnimationMap.prototype.getAllPlayers = function () { return this._allPlayers; };
         ViewAnimationMap.prototype.remove = function (element, animationName) {
             var playersByAnimation = this._map.get(element);
-            if (isPresent(playersByAnimation)) {
+            if (playersByAnimation) {
                 var player = playersByAnimation[animationName];
                 delete playersByAnimation[animationName];
                 var index = this._allPlayers.indexOf(player);
-                ListWrapper.removeAt(this._allPlayers, index);
+                this._allPlayers.splice(index, 1);
                 if (StringMapWrapper.isEmpty(playersByAnimation)) {
                     this._map.delete(element);
                 }
@@ -9798,7 +9778,8 @@
         DEFAULT_STATE: DEFAULT_STATE,
         EMPTY_STATE: EMPTY_STATE,
         FILL_STYLE_FLAG: FILL_STYLE_FLAG,
-        ComponentStillLoadingError: ComponentStillLoadingError
+        ComponentStillLoadingError: ComponentStillLoadingError,
+        isPromise: isPromise
     };
 
     exports.createPlatform = createPlatform;

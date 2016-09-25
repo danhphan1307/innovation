@@ -11,7 +11,7 @@ export class Facility{
     statusDescription: MultilligualString;
     pricingMethod: PricingMethod;
     builtCapacity: number
-    usage: [Usage];
+    usage: Usage[];
 
     constructor(info: any){
         this.id = info.id;
