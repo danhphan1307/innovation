@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BikeService } from './bikes/bike.service';
-import {BikeStation} from './bikes/bike';
+import { HubService } from './hub.service';
+import { Hub } from './hub';
 
 import {AgmCoreModule} from 'angular2-google-maps/core';
 
 
 @Component({
-    selector: 'my-app',
+    selector: 'my-hub',
     styles: [`
     .sebm-google-map-container {
         height: 900px;
@@ -21,31 +21,30 @@ import {AgmCoreModule} from 'angular2-google-maps/core';
 
     <sebm-google-map [latitude]="lat" [longitude]="lon" [zoom]="zoom">
     <sebm-google-map-marker [latitude]="lat" [longitude]="lon"></sebm-google-map-marker>
-    <sebm-google-map-marker *ngFor="let station of stations"
-                [latitude]="station.y"
-                [longitude]="station.x"
-                [iconUrl]="iconUrl"
+    <sebm-google-map-marker *ngFor="let hub of hubss"
+                [latitude]="hub.coordinator"
+                [longitude]="hub.coordinator"
                  [label]="station.name"></sebm-google-map-marker>
     </sebm-google-map>
 
     `,
-    providers: [BikeService]
+    providers: [HubService]
 })
 
-export class AppComponent implements OnInit {
-    stations : BikeStation[];
+export class HubComponent implements OnInit {
+    hubs : Hub[];
     title = 'City bikes';
     data : string
 
     // google maps zoom level
-    zoom: number = 14;
+    zoom: number = 7;
 
   // initial center position for the map
   lat: number = 60.1699;
   lon: number = 24.9384;
-  iconUrl = 'https://c8.staticflickr.com/6/5298/29373396503_72f744d420_t.jpg';
 
-  constructor(private bikeService: BikeService){
+
+  constructor(private hubService: HubService){
 
   }
 
@@ -54,8 +53,8 @@ export class AppComponent implements OnInit {
   }
 
   private loadBikeStations(): void{
-      this.bikeService.getBikeStations()
-      .subscribe((stations:BikeStation[]) => this.stations = stations);
+      this.hubService.getHubs()
+      .subscribe((stations:Hub[]) => this.hubs = stations);
 
   }
 
