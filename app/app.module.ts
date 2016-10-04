@@ -7,12 +7,16 @@ import { AppComponent }  from './app.component';
 import { HttpModule }    from '@angular/http';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 
+import { FormsModule } from '@angular/forms';
+import { Ng2BootstrapModule } from 'ng2-bootstrap/ng2-bootstrap';
+
 import { routing,
          appRoutingProviders }  from './app.routing';
 
 @NgModule({
     imports: [ BrowserModule,
-    HttpModule,
+    HttpModule,FormsModule,
+    Ng2BootstrapModule,
     AgmCoreModule.forRoot({
         apiKey: 'AIzaSyC9xg4iGS-l2PLDIdLp1u3T9vCIMXIdVoE'
     }),

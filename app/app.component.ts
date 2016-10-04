@@ -4,31 +4,18 @@ import { BikeService } from './bikes/bike.service';
 import {BikeStation} from './bikes/bike';
 
 import {AgmCoreModule} from 'angular2-google-maps/core';
-
+import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
+import {NgModel} from '@angular/forms';
 
 @Component({
+  moduleId: module.id,
     selector: 'my-app',
     styles: [`
     .sebm-google-map-container {
         height: 900px;
     }
     `],
-    template: `
-    <h1>{{ title }}</h1>
-
-    <!-- this creates a google map on the page with the given lat/lng from -->
-    <!-- the component as the initial center of the map: -->
-
-    <sebm-google-map [latitude]="lat" [longitude]="lon" [zoom]="zoom">
-    <sebm-google-map-marker [latitude]="lat" [longitude]="lon"></sebm-google-map-marker>
-    <sebm-google-map-marker *ngFor="let station of stations"
-                [latitude]="station.y"
-                [longitude]="station.x"
-                [iconUrl]="iconUrl"
-                 [label]="station.name"></sebm-google-map-marker>
-    </sebm-google-map>
-
-    `,
+   templateUrl: 'app.component.html',
     providers: [BikeService]
 })
 
@@ -43,7 +30,7 @@ export class AppComponent implements OnInit {
   // initial center position for the map
   lat: number = 60.1699;
   lon: number = 24.9384;
-  iconUrl = 'https://c8.staticflickr.com/6/5298/29373396503_72f744d420_t.jpg';
+  iconUrl = '../img/largeBike.png';
 
   constructor(private bikeService: BikeService){
 
@@ -57,6 +44,10 @@ export class AppComponent implements OnInit {
       this.bikeService.getBikeStations()
       .subscribe((stations:BikeStation[]) => this.stations = stations);
 
+  }
+
+  clicked(event) {
+    
   }
 
 }

@@ -22,7 +22,6 @@ export class BikeService{
       return this.http.get(this.bikeUrl,{headers: this.getHeaders()})
       //.map(this.mapStations)
       .map(this.extractData)
-      .do(data => console.log('All: ' +  JSON.stringify(data)))
       .catch(this.handleError);
     }
 
