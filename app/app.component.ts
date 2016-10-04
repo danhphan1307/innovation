@@ -1,25 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  Input,
+  trigger,
+  state,
+  style,
+  transition,
+  animate,
+  ViewChild} from '@angular/core';
 
-import { BikeService } from './bikes/bike.service';
-import {BikeStation} from './bikes/bike';
+  import {BikeService } from './bikes/bike.service';
+  import {BikeStation} from './bikes/bike';
+  import {LeftNavigation} from './component/left.navigation.component';
 
-import {AgmCoreModule} from 'angular2-google-maps/core';
-import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
-import {NgModel} from '@angular/forms';
+  import {AgmCoreModule} from 'angular2-google-maps/core';
+  import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
+  import {NgModel} from '@angular/forms';
 
-@Component({
-  moduleId: module.id,
+  @Component({
+    moduleId: module.id,
     selector: 'my-app',
     styles: [`
     .sebm-google-map-container {
-        height: 900px;
+      height: 900px;
     }
     `],
-   templateUrl: 'app.component.html',
-    providers: [BikeService]
-})
+    templateUrl: 'app.component.html',
+    providers: [BikeService],
+  })
 
-export class AppComponent implements OnInit {
+  export class AppComponent implements OnInit {
+    
+    @ViewChild(LeftNavigation)
+    private leftNav:LeftNavigation;
+
     stations : BikeStation[];
     title = 'City bikes';
     data : string
@@ -32,22 +43,22 @@ export class AppComponent implements OnInit {
   lon: number = 24.9384;
   iconUrl = '../img/largeBike.png';
 
+
   constructor(private bikeService: BikeService){
 
   }
 
   ngOnInit(){
-      this.loadBikeStations();
+    this.loadBikeStations();
   }
 
   private loadBikeStations(): void{
-      this.bikeService.getBikeStations()
-      .subscribe((stations:BikeStation[]) => this.stations = stations);
-
+    this.bikeService.getBikeStations()
+    .subscribe((stations:BikeStation[]) => this.stations = stations);
   }
 
-  clicked(event) {
-    
+  public beginAnim():void{
+    this.leftNav.beginAnim();
   }
 
 }

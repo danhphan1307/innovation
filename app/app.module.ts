@@ -1,6 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BikeService } from './bikes/bike.service';
+import { LeftNavigation } from './component/left.navigation.component';
 
 import {HubComponent} from './hubs/hub.component';
 import { AppComponent }  from './app.component';
@@ -22,7 +23,8 @@ import { routing,
     }),
     routing],
     declarations: [ AppComponent,
-                    HubComponent],
+                    HubComponent,
+                    LeftNavigation],
     providers: [BikeService, appRoutingProviders],
     bootstrap: [ AppComponent]
 })

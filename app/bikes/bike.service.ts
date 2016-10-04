@@ -14,21 +14,21 @@ export class BikeService{
   private bikeUrl = 'http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental';
 
 
-    constructor(private http: Http){
+  constructor(private http: Http){
 
-    }
+  }
 
-    getBikeStations() : Observable<BikeStation[]>{
-      return this.http.get(this.bikeUrl,{headers: this.getHeaders()})
+  getBikeStations() : Observable<BikeStation[]>{
+    return this.http.get(this.bikeUrl,{headers: this.getHeaders()})
       //.map(this.mapStations)
       .map(this.extractData)
       .catch(this.handleError);
     }
 
     private extractData(res: Response) {
-    let body = res.json();
-    return body.stations || { };
-  }
+      let body = res.json();
+      return body.stations || { };
+    }
 
 
     private getHeaders(){
