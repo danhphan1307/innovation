@@ -15,7 +15,7 @@ import {AbstractComponent} from './abstract.class.component';
     ]),
   trigger("animationBlackOverlay", [
     state("open", style({display:"block", opacity:1})),
-    state("close", style({isplay:"none", opacity:0})),
+    state("close", style({display:"none", opacity:0})),
     transition("open <=> close", animate( "1ms" )),
     ])
   ],
@@ -30,6 +30,7 @@ import {AbstractComponent} from './abstract.class.component';
   <a href="/asdas"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">Free Parking <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
   <a href="#"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">Paid Parking <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
   <a href="#"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">Paid Parking Zones <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+  <a href="#"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">Park and Ride<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
   <a class="active" href="#"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">City Bicycle <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
   </nav>
   </div>

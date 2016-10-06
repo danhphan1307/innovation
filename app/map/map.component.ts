@@ -9,7 +9,7 @@ declare var google: any;
     moduleId: module.id,
     selector: 'map-gg',
     template: `
-    <div id="map" style="width:800px;height:450px;"></div>
+    <div id="mapCanvas" ></div>
     `,
     providers: []
 })
@@ -39,7 +39,7 @@ export class MapComponent{
             zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        this.map = new google.maps.Map(document.getElementById("map"), mapProp);
+        this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
         this.placeMarker(this.centerLat,this.centerLon);
 
     }
