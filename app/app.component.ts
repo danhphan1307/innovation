@@ -56,6 +56,9 @@ import { Component, OnInit,  Input,
 
   }
 
+  ngOnInit(){
+
+  }
 
 
   public beginLeftNav():void{
