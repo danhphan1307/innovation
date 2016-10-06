@@ -1,5 +1,6 @@
 
 import {Component, Input, animate, style, state, transition, trigger} from '@angular/core';
+import {AbstractComponent} from './abstract.class.component';
 
 @Component({
   moduleId: module.id,
@@ -10,7 +11,7 @@ import {Component, Input, animate, style, state, transition, trigger} from '@ang
   trigger("animationLeftNav", [
     state("open", style({left:0})),
     state("close", style({left: "-70%" })),
-    transition("open <=> close", animate( "500ms" )),
+    transition("open <=> close", animate( "200ms" )),
     ]),
   trigger("animationBlackOverlay", [
     state("open", style({display:"block", opacity:1})),
@@ -21,9 +22,6 @@ import {Component, Input, animate, style, state, transition, trigger} from '@ang
 
   template:
   `
-  <div id="blackOverlay" [@animationBlackOverlay]="state" (click)="closeAnim()">
-
-  </div>
   <div id="mySidenav" class="sidenav" [@animationLeftNav]="state">
   <nav>
   <img src="img/logo.png" alt="logo" id="logo">
@@ -37,14 +35,6 @@ import {Component, Input, animate, style, state, transition, trigger} from '@ang
   </div>
   `
 })
-export class LeftNavigation {
-  state = 'close';
-
-  beginAnim(){
-    //this.state = this.state === 'open' ? 'closed' : 'open';
-    this.state = 'open';
-  }
-  closeAnim(){
-    this.state = 'close';
-  }
+export class LeftNavigation  extends AbstractComponent{
+  
 }

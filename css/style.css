@@ -83,14 +83,14 @@ nav a:hover, .offcanvas a:focus{
 #controlNav h1{
     color:#464962;
     margin: 0;
-    font-size:1.1em;
+    font-size:1.3em;
     margin-left: 15px;
     width:43%;
     display:inline-block;
 }
 #controlNav #hamburger{
     color:#2A6684;
-    font-size:20px;
+    font-size:1.8em;
     margin-left:3%;
     cursor:pointer;
     display:inline-block;
@@ -111,9 +111,6 @@ h2{
     margin: 0;
     padding: 0;
     height: 88%;
-}
-#controlLove{
-    height: 6%;
 }
 
 .glyphicon.glyphicon-menu-right{
@@ -189,6 +186,9 @@ h2{
     font-size: 17px;
     color:#484B64;
     font-weight:normal;
+}
+.bottomNav{
+    height: 6%;
 }
 .bottomNav nav{
 

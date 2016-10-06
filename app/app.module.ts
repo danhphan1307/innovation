@@ -2,6 +2,9 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BikeService } from './bikes/bike.service';
 import { LeftNavigation } from './component/left.navigation.component';
+import { BottomNavigation } from './component/bottom.navigation.component';
+import { BlackOverlay } from './component/blackoverlay.component';
+
 
 import {HubComponent} from './hubs/hub.component';
 import { AppComponent }  from './app.component';
@@ -24,7 +27,9 @@ import { routing,
     routing],
     declarations: [ AppComponent,
                     HubComponent,
-                    LeftNavigation],
+                    LeftNavigation,
+                    BottomNavigation,
+                    BlackOverlay],
     providers: [BikeService, appRoutingProviders],
     bootstrap: [ AppComponent]
 })

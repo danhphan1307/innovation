@@ -1,6 +1,7 @@
+<blackoverlay (click)="closeAll()"></blackoverlay>
 <left-nav></left-nav>
 <div id="controlNav">
-  <span id="hamburger"  (click)="beginAnim()"  class="glyphicon glyphicon-menu-hamburger" ></span><h1>Helsinki Parking >> {{ title }}</h1><img src="img/location.png" alt="location" id="location" class="img-responsive">
+  <span id="hamburger" (click)="beginLeftNav()"  class="glyphicon glyphicon-menu-hamburger" ></span><h1>{{ title }}</h1><img src="img/location.png" alt="location" id="location" class="img-responsive">
 </div>
 
 <sebm-google-map [latitude]="lat" [longitude]="lon" [zoom]="zoom">
@@ -12,20 +13,4 @@
   ></sebm-google-map-marker>
 </sebm-google-map>
 
-<div id="controlLove" class="bottomNav">
-  <div class="bottomDiv">
-  </div>
-  <nav >
-    <ul>
-      <li>
-        <span class="glyphicon glyphicon-menu-up"></span><br>
-        <span class="glyphicon glyphicon-map-marker" style="display:inline-block; margin-right:1px;"></span> Near you
-      </li>
-      <li>
-        <span class="glyphicon glyphicon-menu-up"></span><br>
-        <span class="glyphicon glyphicon-heart" style="display:inline-block; margin-right:5px;"></span>Your Favorites
-      </li>
-    </ul>
-  </nav>
-
-</div>
+<bottom-nav (click)="bottomtNav()" ></bottom-nav>
