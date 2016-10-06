@@ -1,0 +1,32 @@
+<<<<<<< c2797edc3ffa8ba6256bf268304bc9aa37d58e4d
+<blackoverlay (click)="closeAll()"></blackoverlay>
+=======
+
+>>>>>>> map component
+<left-nav></left-nav>
+<div id="controlNav">
+  <span id="hamburger" (click)="beginLeftNav()"  class="glyphicon glyphicon-menu-hamburger" ></span><h1>{{ title }}</h1><img src="img/location.png" alt="location" id="location" class="img-responsive">
+</div>
+
+<map-gg></map-gg>
+
+<<<<<<< c2797edc3ffa8ba6256bf268304bc9aa37d58e4d
+<bottom-nav (click)="bottomtNav()" ></bottom-nav>
+=======
+<div id="controlLove" class="bottomNav">
+  <div class="bottomDiv">
+  </div>
+  <nav >
+    <ul>
+      <li>
+        <span class="glyphicon glyphicon-menu-up"></span><br>
+        <span class="glyphicon glyphicon-map-marker" style="display:inline-block; margin-right:1px;"></span> Near you
+      </li>
+      <li>
+        <span class="glyphicon glyphicon-menu-up"></span><br>
+        <span class="glyphicon glyphicon-heart" style="display:inline-block; margin-right:5px;"></span>Your Favorites
+      </li>
+    </ul>
+  </nav>
+</div>
+>>>>>>> map component

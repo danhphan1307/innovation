@@ -5,7 +5,8 @@ import {HubComponent} from './hubs/hub.component';
 
 const appRoutes: Routes = [
   { path: 'bike', component: AppComponent },
-  { path: 'hub', component: HubComponent }
+  { path: 'hub', component: HubComponent },
+  { path: '', component: AppComponent },
 
 ];
 

@@ -4,13 +4,6 @@
   <span id="hamburger" (click)="beginLeftNav()"  class="glyphicon glyphicon-menu-hamburger" ></span><h1>{{ title }}</h1><img src="img/location.png" alt="location" id="location" class="img-responsive">
 </div>
 
-<sebm-google-map [latitude]="lat" [longitude]="lon" [zoom]="zoom">
-  <sebm-google-map-marker [latitude]="lat" [longitude]="lon"></sebm-google-map-marker>
-  <sebm-google-map-marker *ngFor="let station of stations"
-  [latitude]="station.y"
-  [longitude]="station.x"
-  [iconUrl]="iconUrl"
-  ></sebm-google-map-marker>
-</sebm-google-map>
+<map-gg></map-gg>
 
 <bottom-nav (click)="bottomtNav()" ></bottom-nav>

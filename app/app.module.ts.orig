@@ -27,8 +27,14 @@ import { routing,
     routing],
     declarations: [ AppComponent,
                     HubComponent,
+<<<<<<< c2797edc3ffa8ba6256bf268304bc9aa37d58e4d
+                    LeftNavigation,
+                    BottomNavigation,
+                    BlackOverlay],
+=======
                     MapComponent,
                     LeftNavigation],
+>>>>>>> map component
     providers: [BikeService, appRoutingProviders],
     bootstrap: [ AppComponent]
 })
