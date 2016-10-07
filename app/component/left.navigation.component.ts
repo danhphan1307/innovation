@@ -27,11 +27,11 @@ import {AbstractComponent} from './abstract.class.component';
   <img src="img/logo.png" alt="logo" id="logo">
   <h2>Helsinki Parking</h2>
   <hr>
-  <a href="/asdas"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">Free Parking <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  <a href="#"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">Paid Parking <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  <a href="#"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">Paid Parking Zones <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  <a href="#"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">Park and Ride<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  <a class="active" href="#"><img src="img/bikeIcon.png" alt="bike icon" style="display:inline-block; margin-right:10px;">City Bicycle <span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+  <a href="#"><img src="img/Free Parking-50.png" alt="free parking" style="display:inline-block; margin-right:10px;">Free Parking<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+  <a href="#"><img src="img/Paid Parking-50.png" alt="paid parking" style="display:inline-block; margin-right:10px;">Paid Parking<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+  <a href="#"><img src="img/Parking Zone-50.png" alt="parking zone" style="display:inline-block; margin-right:10px;">Parking Zones<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+  <a href="#"><img src="img/Park Ride-50.png" alt="park ride" style="display:inline-block; margin-right:10px;">Park and Ride<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
+  <a class="active" href="#"><img src="img/Bicycle-50.png" alt="bike icon" style="display:inline-block; margin-right:10px;">City Bicycle<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
   </nav>
   </div>
   `

@@ -30,28 +30,27 @@ body {
     top: 0;
     left: -70%;
     overflow-x: hidden;
-    background: rgba(58,64,90,1);
-    background: -moz-linear-gradient(top, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
-    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(58,64,90,1)), color-stop(100%, rgba(102,99,120,1)));
-    background: -webkit-linear-gradient(top, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
-    background: -o-linear-gradient(top, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
-    background: -ms-linear-gradient(top, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
-    background: linear-gradient(to bottom, rgba(58,64,90,1) 0%, rgba(102,99,120,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a405a', endColorstr='#666378', GradientType=0 );
+    background: white;
 }
 
 /* The navigation menu links */
 nav a {
+    position: relative;
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 15px;
-    color: white;
+    color: black;
     display: block;
     transition: 0.3s
 }
 
 nav a.active{
     background-color: #779ECB;
+}
+nav a span{
+    top: 50%!important;
+    transform: translate(-50%, -50%)!important;
+    position: absolute!important;
 }
 
 /* When you mouse over the navigation links, change their color */
@@ -103,7 +102,7 @@ nav a:hover, .offcanvas a:focus{
 }
 h2{
     font-size: 20px;
-    color:white;
+    color:black;
     text-align: center;
     margin-bottom:20%;
 }

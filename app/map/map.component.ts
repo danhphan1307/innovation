@@ -16,8 +16,8 @@ declare var google: any;
 
 export class MapComponent{
 
-    centerLat: number
-    centerLon: number
+    centerLat: number = 0
+    centerLon: number = 0
     map : any;
     markers: any[] = [];
 
@@ -30,6 +30,7 @@ export class MapComponent{
             navigator.geolocation.getCurrentPosition(this.createMap.bind(this));
         }
     }
+
     createMap(position: any): void{
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
@@ -52,4 +53,6 @@ export class MapComponent{
         }));
 
     }
+
+
 }
