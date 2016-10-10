@@ -11,6 +11,7 @@ import { AppComponent }  from './app.component';
 import { HttpModule }    from '@angular/http';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import {MapComponent} from './map/map.component';
+import {FacilityComponent} from './facilities/facility.component'
 import { FormsModule } from '@angular/forms';
 import { Ng2BootstrapModule } from 'ng2-bootstrap/ng2-bootstrap';
 
@@ -28,6 +29,7 @@ import { routing,
     declarations: [ AppComponent,
                     HubComponent,
                     MapComponent,
+                    FacilityComponent,
                     LeftNavigation,
                     BottomNavigation,
                     BlackOverlay],

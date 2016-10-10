@@ -1,6 +1,6 @@
 
-import { Component, OnInit} from '@angular/core';
-
+import { Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Coords} from '../models/location';
 
 declare var google: any;
 
@@ -20,6 +20,8 @@ export class MapComponent{
     centerLon: number = 0
     map : any;
     markers: any[] = [];
+    @Output()
+    centerUpdated = new EventEmitter();
 
     constructor(){
 
@@ -34,6 +36,11 @@ export class MapComponent{
     createMap(position: any): void{
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
+
+        this.centerUpdated.emit(
+            new Coords(this.centerLat,this.centerLon)
+
+        );
 
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
