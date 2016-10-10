@@ -20,6 +20,9 @@ export class MapComponent{
     centerLon: number = 0
     map : any;
     centerMarker: any
+
+    directionsDisplay = new google.maps.DirectionsRenderer;
+
     @Input()
     circleRadius: number;
 
@@ -60,6 +63,10 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+        //Bind direction display to map
+
+        this.directionsDisplay.setMap(this.map);
+
         this.centerMarker = new google.maps.Marker({
             position: new google.maps.LatLng(this.centerLat,this.centerLon),
             map: this.map,
@@ -71,12 +78,13 @@ export class MapComponent{
     }
 
     placeMarker(lat: number, lon: number): void{
-        this.markers.push( new google.maps.Marker({
+        let marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat,lon),
             map: this.map,
             icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
-        }));
-
+        });
+        this.markers.push(marker);
+       google.maps.event.addListener(marker,'click',() => this.showDirection(marker));
     }
 
     placeCircle(lat: number, lon: number, radius: number): void{
@@ -116,5 +124,26 @@ export class MapComponent{
         this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
         this.clickUpdated.emit(clickCoord);
     }
+
+    private showDirection(marker: any){
+        var start = new google.maps.LatLng(this.centerLat,this.centerLon);
+        var end = marker.getPosition();
+
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: 'DRIVING'
+        };
+        var directionsService = new google.maps.DirectionsService;
+        directionsService.route(request, (result:any, status: string) => this.callbackForShowDirection(result,status));
+    }
+
+    callbackForShowDirection(result:any, status: string){
+        if (status == 'OK') {
+
+            this.directionsDisplay.setDirections(result);
+        };
+    }
+
 
 }
