@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Coords} from '../models/location';
 
 declare var google: any;
@@ -19,7 +19,15 @@ export class MapComponent{
     centerLat: number = 0
     centerLon: number = 0
     map : any;
+    centerMarker: any
+    @Input()
+    circleRadius: number;
+
+    @Input()
     markers: any[] = [];
+
+    @Input()
+    circles: any[] = [];
 
     @Output()
     centerUpdated = new EventEmitter();
@@ -52,8 +60,12 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+        this.centerMarker = new google.maps.Marker({
+            position: new google.maps.LatLng(this.centerLat,this.centerLon),
+            map: this.map,
+            icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+        });
 
-        this.placeMarker(this.centerLat,this.centerLon);
         this.createEventListeners();
 
     }
@@ -67,12 +79,41 @@ export class MapComponent{
 
     }
 
-    createEventListeners(){
-        this.map.addListener('click', (event) => this.callback(event));
+    placeCircle(lat: number, lon: number, radius: number): void{
+        this.circles.push(new google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: this.map,
+            center: new google.maps.LatLng(lat,lon),
+            radius: radius
+          }));
     }
 
-    callback(event){
+    clearMarkers(){
+        for (var i = 0; i < this.markers.length; i++) {
+          this.markers[i].setMap(null);
+        }
+    }
+
+    clearCircles(){
+        for (var i = 0; i < this.circles.length; i++) {
+          this.circles[i].setMap(null);
+        }
+    }
+    createEventListeners(): void{
+        this.map.addListener('click', (event) => this.callbackForClickEvent(event));
+    }
+
+    callbackForClickEvent(event): void{
         let clickCoord = new Coords(event.latLng.lat(),event.latLng.lng());
+        //Clear from previous searches
+        this.clearMarkers()
+        this.clearCircles();
+        //Create new circle and notify parent view
+        this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
         this.clickUpdated.emit(clickCoord);
     }
 

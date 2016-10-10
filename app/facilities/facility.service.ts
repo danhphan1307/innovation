@@ -39,10 +39,7 @@ export class FacilityService{
           search: params
       });
       return this.http.get(this.facilityUrl,options)
-      //.map(this.mapStations)
-
       .map(this.extractData)
-      //.do(data => console.log(JSON.stringify(data)))
       .catch(this.handleError);
     }
 
