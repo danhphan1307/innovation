@@ -7,7 +7,7 @@ import {Coords} from '../models/location';
 
 import {MapComponent} from '../map/map.component';
 import {AgmCoreModule} from 'angular2-google-maps/core';
-
+import {Usage, PricingMethod, FacilityStatus} from '../models/model-enum';
 
 @Component({
   selector: 'my-facility',
@@ -53,8 +53,11 @@ export class FacilityComponent implements OnInit {
   private loadFacilitiesNearby(coord: Coords): void{
     this.facilityService.getFaclitiesNearby(coord,this.radius)
     .subscribe((facilities) => {
-      this.facilities = facilities;
+      //filter park and ride + active
+      this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
+                                               && f.status == FacilityStatus.IN_OPERATION);
       for (var f of this.facilities) {
+        console.log(f);
         let coords = f.location.coordinates;
         this.mapComponent.placeMarker(coords[0][0][1],coords[0][0][0]);
         //this.markers.push(this.createMarker(new google.maps.LatLng(coords[0][0][1],coords[0][0][0])));

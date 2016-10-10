@@ -8,10 +8,10 @@ export enum CapacityType {
     "BICYCLE_SECURE_SPACE"
 }
 
-export enum Usage {
-    "PARK_AND_RIDE",
-    "HSL_TRAVEL_CARD",
-    "COMMERCIAL"
+export class Usage {
+    static PARK_AND_RIDE: string = "PARK_AND_RIDE";
+    static HSL_TRAVEL_CARD: string ="HSL_TRAVEL_CARD";
+    static COMMERCIAL:string = "COMMERCIAL"
 }
 
 export enum DayType{
@@ -56,14 +56,15 @@ export enum PaymentMethod {
     "OTHER"
 }
 
-export enum FacilityStatus {
-    "IN_OPERATION",
-    "INACTIVE",
-    "TEMPORARILY_CLOSED",
-    "EXCEPTIONAL_SITUATION"
+export class FacilityStatus {
+    static IN_OPERATION: string = "IN_OPERATION";
+    static INACTIVE: string = "INACTIVE";
+    static TEMPORARILY_CLOSED: string = "TEMPORARILY_CLOSED";
+    static EXCEPTIONAL_SITUATION:string = "EXCEPTIONAL_SITUATION";
 }
 
-export enum PricingMethod {
-    "PARK_AND_RIDE_247_FREE",
-    "CUSTOM"
+export class PricingMethod {
+    static PARK_AND_RIDE_247_FREE: string ="PARK_AND_RIDE_247_FREE";
+    static PARK_AND_RIDE_247_FREE: string = "CUSTOM";
 }
+

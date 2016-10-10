@@ -12,6 +12,6 @@ export interface Facility{
     statusDescription: MultilligualString;
     pricingMethod: PricingMethod;
     builtCapacity: number
-    usage: Usage[];
+    usages: Usage[];
 
 }
