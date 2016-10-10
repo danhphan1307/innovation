@@ -20,8 +20,12 @@ export class MapComponent{
     centerLon: number = 0
     map : any;
     markers: any[] = [];
+
     @Output()
     centerUpdated = new EventEmitter();
+
+    @Output()
+    clickUpdated = new EventEmitter();
 
     constructor(){
 
@@ -40,7 +44,7 @@ export class MapComponent{
         this.centerUpdated.emit(
             new Coords(this.centerLat,this.centerLon)
 
-        );
+            );
 
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
@@ -48,7 +52,9 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+
         this.placeMarker(this.centerLat,this.centerLon);
+        this.createEventListeners();
 
     }
 
@@ -61,5 +67,13 @@ export class MapComponent{
 
     }
 
+    createEventListeners(){
+        this.map.addListener('click', (event) => this.callback(event));
+    }
+
+    callback(event){
+        let clickCoord = new Coords(event.latLng.lat(),event.latLng.lng());
+        this.clickUpdated.emit(clickCoord);
+    }
 
 }

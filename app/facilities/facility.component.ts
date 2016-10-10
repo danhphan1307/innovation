@@ -11,7 +11,7 @@ import {AgmCoreModule} from 'angular2-google-maps/core';
 
 @Component({
   selector: 'my-facility',
-  template: `<map-gg  (centerUpdated)="receiveCenterUpdated($event)"></map-gg>`,
+  template: `<map-gg  (centerUpdated)="receiveCenterUpdated($event)" (clickUpdated)="receivedClick($event)"></map-gg>`,
   providers: [FacilityService],
 
 })
@@ -30,7 +30,6 @@ export class FacilityComponent implements OnInit {
   }
 
   receiveCenterUpdated(event: any){
-
     this.center.lat = event.lat;
     this.center.lon = event.lon;
 
@@ -38,12 +37,15 @@ export class FacilityComponent implements OnInit {
 
   }
 
-  private loadFacilitiesNearby(): void{
+  receivedClick(event: any){
+    console.log("ffrom fuckility",event);
+  }
 
+  private loadFacilitiesNearby(): void{
       this.facilityService.getFaclitiesNearby(this.center,1000)
       .subscribe((facilities) => {
            this.facilities = facilities;
-           console.log(this.facilities[0]);
+
       });
 
     }
