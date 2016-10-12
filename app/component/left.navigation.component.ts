@@ -26,7 +26,8 @@ import {AbstractComponent} from './abstract.class.component';
   <nav>
   <img src="img/logo.png" alt="logo" id="logo">
 
-  <img src="img/Parking-logo.png" alt="app-logo" id="app-logo">
+  <!--<img src="img/Parking-logo.png" alt="app-logo" id="app-logo">!-->
+  <img src="img/demo-logo.png" alt="app-logo" id="app-logo">
   <hr>
   <a class="active" href="#"><img src="img/Free Parking-50.png" alt="free parking" style="display:inline-block; margin-right:10px;">Free Parking<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
   <a href="#"><img src="img/Paid Parking-50.png" alt="paid parking" style="display:inline-block; margin-right:10px;">Paid Parking<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>

@@ -22,10 +22,10 @@ import {AbstractComponent} from './abstract.class.component';
   </div>
   <nav>
   <ul>
-  <li>
+  <!--<li>
   <span class="glyphicon glyphicon-menu-up"></span><br>
   <span class="glyphicon glyphicon-map-marker" style="display:inline-block; margin-right:1px;"></span> Near you
-  </li>
+  </li>-->
   <li>
   <span class="glyphicon glyphicon-menu-up"></span><br>
   <span class="glyphicon glyphicon-heart" style="display:inline-block; margin-right:5px;"></span>Your Favorites
