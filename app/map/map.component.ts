@@ -98,22 +98,12 @@ export class MapComponent{
           }));
     }
 
-    clearMarkers(){
-        for (var i = 0; i < this.markers.length; i++) {
-          this.markers[i].setMap(null);
-        }
+    //Private functions
+    private createEventListeners(): void{
+        this.map.addListener('click', (event: any) => this.callbackForMapClickEvent(event));
     }
 
-    clearCircles(){
-        for (var i = 0; i < this.circles.length; i++) {
-          this.circles[i].setMap(null);
-        }
-    }
-    createEventListeners(): void{
-        this.map.addListener('click', (event) => this.callbackForClickEvent(event));
-    }
-
-    callbackForClickEvent(event): void{
+    private callbackForMapClickEvent(event: any): void{
         let clickCoord = new Coords(event.latLng.lat(),event.latLng.lng());
         //Clear from previous searches
         this.clearMarkers()
@@ -143,5 +133,16 @@ export class MapComponent{
         };
     }
 
+    private clearMarkers(){
+        for (var i = 0; i < this.markers.length; i++) {
+          this.markers[i].setMap(null);
+        }
+    }
+
+    private clearCircles(){
+        for (var i = 0; i < this.circles.length; i++) {
+          this.circles[i].setMap(null);
+        }
+    }
 
 }

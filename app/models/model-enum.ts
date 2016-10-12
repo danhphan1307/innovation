@@ -65,6 +65,6 @@ export class FacilityStatus {
 
 export class PricingMethod {
     static PARK_AND_RIDE_247_FREE: string ="PARK_AND_RIDE_247_FREE";
-    static PARK_AND_RIDE_247_FREE: string = "CUSTOM";
+    static CUSTOM: string = "CUSTOM";
 }
 

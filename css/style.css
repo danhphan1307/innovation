@@ -69,6 +69,17 @@ nav a:hover, .offcanvas a:focus{
     max-width: 150px;
 }
 
+
+#app-logo{
+    display: block;
+    margin:auto;
+    margin-top:10%;
+    margin-bottom:5%;
+    width: 60%;
+    height: 40%;
+    max-width: 150px;
+}
+
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
 #main {
     transition: margin-left .5s;
@@ -203,7 +214,7 @@ h2{
     z-index: 2;
     position: relative;
     height: 100%;
-    list-style-type: none; 
+    list-style-type: none;
     font-size: 0.8em;
     font-weight: bold;
     height: 100%;
@@ -230,10 +241,10 @@ h2{
     color:white;
 }
 .bottomNav span:nth-of-type(1){
-    transition: .5s; 
+    transition: .5s;
 }
 .bottomNav .active span:nth-of-type(1){
-    -ms-transform: rotate(180deg); 
+    -ms-transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
 }

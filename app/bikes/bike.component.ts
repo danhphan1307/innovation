@@ -10,7 +10,7 @@ import {MapComponent} from '../map/map.component';
 
 @Component({
   selector: 'my-bike',
-  template:`<marker-gg></marker-gg>`,
+  template:``,
   providers: [BikeService, MapService]
 })
 

@@ -8,6 +8,8 @@ import { BlackOverlay } from './component/blackoverlay.component';
 
 import {HubComponent} from './hubs/hub.component';
 import { AppComponent }  from './app.component';
+import { BikeComponent }  from './bikes/bike.component';
+
 import { HttpModule }    from '@angular/http';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import {MapComponent} from './map/map.component';
@@ -29,11 +31,12 @@ import { routing,
     declarations: [ AppComponent,
                     HubComponent,
                     MapComponent,
+                    BikeComponent,
                     FacilityComponent,
                     LeftNavigation,
                     BottomNavigation,
                     BlackOverlay],
-    providers: [BikeService, appRoutingProviders],
+    providers: [appRoutingProviders],
     bootstrap: [ AppComponent]
 })
 export class AppModule { }

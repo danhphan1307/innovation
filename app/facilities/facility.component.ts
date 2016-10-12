@@ -55,12 +55,13 @@ export class FacilityComponent implements OnInit {
     .subscribe((facilities) => {
       //filter park and ride + active
       this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
-                                               && f.status == FacilityStatus.IN_OPERATION);
+                                               && f.status == FacilityStatus.IN_OPERATION
+                                          );
       for (var f of this.facilities) {
         console.log(f);
         let coords = f.location.coordinates;
         this.mapComponent.placeMarker(coords[0][0][1],coords[0][0][0]);
-        //this.markers.push(this.createMarker(new google.maps.LatLng(coords[0][0][1],coords[0][0][0])));
+
       }
     });
   }
