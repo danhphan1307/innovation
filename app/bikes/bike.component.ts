@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
 
 import { BikeService } from './bike.service';
-import {BikeStation, BikeMarker} from './bike';
+import {BikeStation} from './bike';
 import {Marker} from '../marker/marker';
 import {MarkerComponent} from '../marker/marker.component'
 import {MapService} from '../map/map.service'
@@ -16,8 +16,9 @@ import {MapComponent} from '../map/map.component';
 
 export class BikeComponent implements OnInit {
   stations : BikeStation[];
-  data : string
-  markers : Marker[] = []
+  data : string;
+  title = 'Bike Station';
+  markers : Marker[] = [];
   iconUrl = 'https://c8.staticflickr.com/6/5298/29373396503_72f744d420_t.jpg';
 
   @ViewChild(MarkerComponent)

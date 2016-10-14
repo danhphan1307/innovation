@@ -40,7 +40,6 @@ import { Component, OnInit,  Input,
     private blackOverlay: BlackOverlay;
 
     stations : BikeStation[];
-    title = 'City bikes';
     data : string
 
     // google maps zoom level

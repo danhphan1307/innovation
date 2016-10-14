@@ -17,8 +17,7 @@ import {FacilityComponent} from './facilities/facility.component'
 import { FormsModule } from '@angular/forms';
 import { Ng2BootstrapModule } from 'ng2-bootstrap/ng2-bootstrap';
 
-import { routing,
-         appRoutingProviders }  from './app.routing';
+import { routing, appRoutingProviders }  from './app.routing';
 
 @NgModule({
     imports: [ BrowserModule,
@@ -27,16 +26,16 @@ import { routing,
     AgmCoreModule.forRoot({
         apiKey: 'AIzaSyC9xg4iGS-l2PLDIdLp1u3T9vCIMXIdVoE'
     }),
-    routing],
+    appRoutingProviders],
     declarations: [ AppComponent,
-                    HubComponent,
-                    MapComponent,
-                    BikeComponent,
-                    FacilityComponent,
-                    LeftNavigation,
-                    BottomNavigation,
-                    BlackOverlay],
-    providers: [appRoutingProviders],
-    bootstrap: [ AppComponent]
+    HubComponent,
+    MapComponent,
+    BikeComponent,
+    FacilityComponent,
+    LeftNavigation,
+    BottomNavigation,
+    BlackOverlay,routing],
+    //providers: [appRoutingProviders],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

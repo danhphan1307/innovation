@@ -10,12 +10,12 @@ import {AgmCoreModule} from 'angular2-google-maps/core';
 import {Usage, PricingMethod, FacilityStatus} from '../models/model-enum';
 
 @Component({
-  selector: 'my-facility',
+  moduleId: module.id,
   template: `
   <map-gg     [circleRadius] = "radius"
-              [markers] = "markers"
-             (centerUpdated)="receiveCenterUpdated($event)"
-             (clickUpdated)="receivedClick($event)">
+  [markers] = "markers"
+  (centerUpdated)="receiveCenterUpdated($event)"
+  (clickUpdated)="receivedClick($event)">
   </map-gg>`,
   providers: [FacilityService],
 
@@ -26,6 +26,7 @@ export class FacilityComponent implements OnInit {
   center: Coords = new Coords(0.0,0.0);
   mapClicked: Coords = new Coords(0.0,0.0);
   markers : Coords[] = [];
+  title = 'Park and Ride';
   radius: number = 1000;
 
   @ViewChild(MapComponent)
@@ -47,7 +48,7 @@ export class FacilityComponent implements OnInit {
   }
 
   receivedClick(event: Coords){
-     this.loadFacilitiesNearby(event)
+    this.loadFacilitiesNearby(event)
   }
 
   private loadFacilitiesNearby(coord: Coords): void{
@@ -55,8 +56,8 @@ export class FacilityComponent implements OnInit {
     .subscribe((facilities) => {
       //filter park and ride + active
       this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
-                                               && f.status == FacilityStatus.IN_OPERATION
-                                          );
+        && f.status == FacilityStatus.IN_OPERATION
+        );
       for (var f of this.facilities) {
         console.log(f);
         let coords = f.location.coordinates;
