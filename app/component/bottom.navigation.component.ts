@@ -22,13 +22,34 @@ import {AbstractComponent} from './abstract.class.component';
   </div>
   <nav>
   <ul>
-  <!--<li>
+  <!--
+  <li>
   <span class="glyphicon glyphicon-menu-up"></span><br>
   <span class="glyphicon glyphicon-map-marker" style="display:inline-block; margin-right:1px;"></span> Near you
-  </li>-->
+  </li>
   <li>
   <span class="glyphicon glyphicon-menu-up"></span><br>
   <span class="glyphicon glyphicon-heart" style="display:inline-block; margin-right:5px;"></span>Your Favorites
+  </li>
+  !-->
+  
+  <li>
+  <a routerLink="abc" routerLinkActive="active"><img src="img/Free Parking-50.png" alt="free parking" ></a>
+  </li>
+  <li>
+  <a routerLink="abc" routerLinkActive="active"><img src="img/Paid Parking-50.png" alt="paid parking"></a>
+  </li>
+  <li>
+  <a routerLink="abc" routerLinkActive="active"><img src="img/Parking Zone-50.png" alt="parking zone"></a>
+  </li>
+  <li>
+  <a routerLink="/parking" routerLinkActive="active"><img src="img/Park Ride-50.png" alt="park ride"></a>
+  </li>
+  <li>
+  <a routerLink="/bike" routerLinkActive="active"><img src="img/Bicycle-50.png" alt="bike icon"></a>
+  </li>
+  <li>
+  <a routerLink="abc" routerLinkActive="active"><img src="img/User-Info.png" alt="user info"></a>
   </li>
   </ul>
   </nav>
@@ -39,4 +60,3 @@ import {AbstractComponent} from './abstract.class.component';
 export class BottomNavigation  extends AbstractComponent{
 
 }
- 

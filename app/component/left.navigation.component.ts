@@ -2,6 +2,8 @@
 import {Component, Input, animate, style, state, transition, trigger} from '@angular/core';
 import {AbstractComponent} from './abstract.class.component';
 
+declare var Slider: any;
+
 @Component({
   moduleId: module.id,
   selector: 'left-nav',
@@ -20,25 +22,68 @@ import {AbstractComponent} from './abstract.class.component';
     ])
   ],
 
+
   template:
   `
   <div id="mySidenav" class="sidenav" [@animationLeftNav]="state">
-  <nav>
-  <img src="img/logo.png" alt="logo" id="logo">
+  <img src="img/cog.png" alt="config" style="width:40%;display:block;margin:auto;margin-top:10%;">
+  <table>
+  <tr>
+  <td>
+  <span class="glyphicon glyphicon-map-marker" ></span>
+  </td>
+  <td>
+  Location Detect
+  </td>
+  <td>
+  <label class="switch">
+  <input type="checkbox">
+  <div class="sliderIOS round"></div>
+  </label>
+  </td>
+  </tr>
 
-  <!--<img src="img/Parking-logo.png" alt="app-logo" id="app-logo">!-->
-  <img src="img/demo-logo-2.png" alt="app-logo" id="app-logo">
+  <tr>
+  <td>
+  <img src="img/diameter.png" alt="diameter of the search"/>
+  </td>
+  <td colspan="2">
+  Search Diameter
+  </td>
+  </tr>
 
+  <tr>
+  <td class="special" colspan="3">
+  <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0.1" data-slider-max="5" data-slider-step="0.1" data-slider-value="1"/>
+  </td>
+  </tr>
+  </table>
+
+
+  <div class="copyright">
   <hr>
-  <a routerLink="abc" routerLinkActive="active"><img src="img/Free Parking-50.png" alt="free parking" style="display:inline-block; margin-right:10px;">Free Parking<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  <a routerLink="abc" routerLinkActive="active"><img src="img/Paid Parking-50.png" alt="paid parking" style="display:inline-block; margin-right:10px;">Paid Parking<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  <a routerLink="abc" routerLinkActive="active"><img src="img/Parking Zone-50.png" alt="parking zone" style="display:inline-block; margin-right:10px;">Parking Zones<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  <a routerLink="/parking" routerLinkActive="active"><img src="img/Park Ride-50.png" alt="park ride" style="display:inline-block; margin-right:10px;">Park and Ride<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  <a routerLink="/bike" routerLinkActive="active"><img src="img/Bicycle-50.png" alt="bike icon" style="display:inline-block; margin-right:10px;">City Bicycle<span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a>
-  </nav>
+  <img src="img/demo-logo-2.png" alt="config" style="width:40%;display:block;margin:5% auto;">
+  <p>Version: 0.9.1<br><br>
+  This is a free software . You must not sell or re-distribute under any circumstances. We are not responsible for any liability, or accuracy related to your use of this Site.<br><br>
+  © Parking Group, Metropolia UAS. <br>
+  All rights reserved.</p>
   </div>
-  `
+  </div>
+  <script>
+
+});
+</script>
+`
 })
+
 export class LeftNavigation  extends AbstractComponent{
 
-}
+  ngAfterViewInit() {
+    var slider = new Slider('#ex1', {
+      formatter: function(value:number) {
+        return value + ' km';
+      }
+    }
+    )};
+  }
+
