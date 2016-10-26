@@ -1,8 +1,11 @@
 <blackoverlay (click)="closeAll()"></blackoverlay>
 <left-nav></left-nav>
 <div id="controlNav">
-  <span id="cog" (click)="beginLeftNav()"  class="glyphicon glyphicon-cog " ></span><img src="img/demo-logo-2.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="beginLeftNav()"  class="glyphicon glyphicon-map-marker" ></span>
+	<span id="cog" (click)="beginLeftNav()"  class="glyphicon glyphicon-cog " ></span><img src="img/demo-logo-2.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="beginLeftNav()"  class="glyphicon glyphicon-map-marker" ></span>
 </div>
-<router-outlet></router-outlet>
+<map-gg (click)="FacilityRoute(event)">
+	<facility-component></facility-component>
+	<router-outlet></router-outlet>
+</map-gg>
 <bottom-nav (click)="bottomtNav()" ></bottom-nav>
 

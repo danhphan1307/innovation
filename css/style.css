@@ -113,7 +113,6 @@ nav a:hover, .offcanvas a:focus{
     cursor:pointer;
     display:inline-block;
 }
-
 #controlNav #cog{
     color:#AEC0C9;
     font-size:2em;
@@ -127,7 +126,6 @@ nav a:hover, .offcanvas a:focus{
     /*margin-left:45%;*/
 }
 /*Side Nav CSS*/
-
 #mySidenav .glyphicon{
     font-size:1.7em!important;
 }
@@ -146,19 +144,15 @@ nav a:hover, .offcanvas a:focus{
 #mySidenav table tr td.special{
     width:100%;
 }
-
 #mySidenav label{
     margin-bottom: -3px;
 }
-
 #mySidenav .slider.slider-horizontal {
     width: 100%;
 }
-
 #mySidenav .slider-selection {
     background: #BAD8F2;
 }
-
 #mySidenav .tooltip.tooltip-main.top{
     filter: alpha(opacity=90)!important;
     opacity: .9!important;
@@ -169,14 +163,12 @@ nav a:hover, .offcanvas a:focus{
     margin:auto 5%;
 }
 #mySidenav .copyright p{
-margin-left: auto; margin-right: auto; text-align: justify; -moz-text-align-last: center; text-align-last: center; 
+    margin-left: auto; margin-right: auto; text-align: justify; -moz-text-align-last: center; text-align-last: center; 
 }
-
 #mySidenav .copyright hr{
     margin-left:-5%;
     width: 110%;
 }
-
 /* The switch - the box around the sliderIOS */
 .switch {
   position: relative;
@@ -184,10 +176,8 @@ margin-left: auto; margin-right: auto; text-align: justify; -moz-text-align-last
   width: 50px;
   height: 23px;
 }
-
 /* Hide default HTML checkbox */
 .switch input {display:none;}
-
 /* The slider */
 .sliderIOS {
   position: absolute;
@@ -200,7 +190,6 @@ margin-left: auto; margin-right: auto; text-align: justify; -moz-text-align-last
   -webkit-transition: .4s;
   transition: .4s;
 }
-
 .sliderIOS:before {
   position: absolute;
   content: "";
@@ -212,15 +201,12 @@ margin-left: auto; margin-right: auto; text-align: justify; -moz-text-align-last
   -webkit-transition: .4s;
   transition: .4s;
 }
-
 input:checked + .sliderIOS {
   background-color: #2196F3;
 }
-
 input:focus + .sliderIOS {
   box-shadow: 0 0 1px #2196F3;
 }
-
 input:checked + .sliderIOS:before {
   -webkit-transform: translateX(28px);
   -ms-transform: translateX(28px);

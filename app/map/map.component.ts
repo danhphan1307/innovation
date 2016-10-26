@@ -33,10 +33,10 @@ export class MapComponent{
     circles: any[] = [];
 
     @Output()
-    centerUpdated = new EventEmitter();
+    centerUpdated: EventEmitter<Coords> = new EventEmitter<Coords>();
 
     @Output()
-    clickUpdated = new EventEmitter();
+    clickUpdated: EventEmitter<Coords> = new EventEmitter<Coords>();
 
     constructor(){
 
@@ -52,10 +52,7 @@ export class MapComponent{
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
 
-        this.centerUpdated.emit(
-            new Coords(this.centerLat,this.centerLon)
-
-            );
+        this.centerUpdated.emit( new Coords(this.centerLat,this.centerLon));
 
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
@@ -104,7 +101,7 @@ export class MapComponent{
     }
 
     private callbackForMapClickEvent(event: any): void{
-        let clickCoord = new Coords(event.latLng.lat(),event.latLng.lng());
+        let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
         //Clear from previous searches
         this.clearMarkers()
         this.clearCircles();

@@ -12,6 +12,7 @@ import { Component, OnInit,  Input,
   import {MapComponent} from './map/map.component';
   import {BottomNavigation} from './component/bottom.navigation.component';
   import {BlackOverlay} from './component/blackoverlay.component';
+  import {FacilityComponent} from './facilities/facility.component';
 
   import {AgmCoreModule} from 'angular2-google-maps/core';
   import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
@@ -21,13 +22,16 @@ import { Component, OnInit,  Input,
     moduleId: module.id,
     selector: 'my-app',
     templateUrl: 'app.component.html',
-    providers: [BikeService]
+    providers: []
   })
 
   export class AppComponent implements OnInit {
     private leftNavState = 'close';
     private bottomNavState = 'close';
     private blackOverlayState = 'close';
+
+    @ViewChild(MapComponent)
+    private MapComponent:MapComponent;
 
 
     @ViewChild(LeftNavigation)
@@ -38,6 +42,9 @@ import { Component, OnInit,  Input,
 
     @ViewChild(BlackOverlay)
     private blackOverlay: BlackOverlay;
+
+    @ViewChild(FacilityComponent)
+    private FacilityComponent: FacilityComponent;
 
     stations : BikeStation[];
     data : string
@@ -50,10 +57,6 @@ import { Component, OnInit,  Input,
   lon: number = 24.9384;
   iconUrl = '../img/largeBike.png';
 
-
-  constructor(private bikeService: BikeService){
-
-  }
 
   ngOnInit(){
 
@@ -78,4 +81,11 @@ import { Component, OnInit,  Input,
     this.bottomNav.setState('close');
   }
 
+  public FacilityRoute(event:any):void{
+    this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+    this.MapComponent.markers = this.FacilityComponent.markers;
+    //this.FacilityComponent.receiveCenterUpdated(this.MapComponent.centerUpdated);
+    //this.FacilityComponent.receivedClick(this.MapComponent.clickUpdated);
+
+  }
 }
