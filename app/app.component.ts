@@ -17,6 +17,7 @@ import { Component, OnInit,  Input,
   import {AgmCoreModule} from 'angular2-google-maps/core';
   import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
   import {NgModel} from '@angular/forms';
+  import {Coords} from './models/location';
 
   @Component({
     moduleId: module.id,
@@ -29,10 +30,10 @@ import { Component, OnInit,  Input,
     private leftNavState = 'close';
     private bottomNavState = 'close';
     private blackOverlayState = 'close';
+    test:Coords = new Coords(60.2224675,24.7912243);
 
     @ViewChild(MapComponent)
     private MapComponent:MapComponent;
-
 
     @ViewChild(LeftNavigation)
     private leftNav:LeftNavigation;
@@ -83,9 +84,9 @@ import { Component, OnInit,  Input,
 
   public FacilityRoute(event:any):void{
     this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+    this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
+    this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
     this.MapComponent.markers = this.FacilityComponent.markers;
-    //this.FacilityComponent.receiveCenterUpdated(this.MapComponent.centerUpdated);
-    //this.FacilityComponent.receivedClick(this.MapComponent.clickUpdated);
-
+    console.log(this.FacilityComponent.markers);
   }
 }

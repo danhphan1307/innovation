@@ -33,10 +33,10 @@ export class MapComponent{
     circles: any[] = [];
 
     @Output()
-    centerUpdated: EventEmitter<Coords> = new EventEmitter<Coords>();
+    centerUpdated: any= new EventEmitter();
 
     @Output()
-    clickUpdated: EventEmitter<Coords> = new EventEmitter<Coords>();
+    clickUpdated: any= new EventEmitter();
 
     constructor(){
 

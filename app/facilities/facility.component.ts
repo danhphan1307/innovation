@@ -7,9 +7,9 @@ import {Coords} from '../models/location';
 
 
 import {LeftNavigation} from '../component/left.navigation.component';
-import {MapComponent} from '../map/map.component';
 import {AgmCoreModule} from 'angular2-google-maps/core';
 import {Usage, PricingMethod, FacilityStatus} from '../models/model-enum';
+import {MapComponent} from '../map/map.component';
 
 @Component({
   moduleId: module.id,
@@ -20,8 +20,6 @@ import {Usage, PricingMethod, FacilityStatus} from '../models/model-enum';
 })
 
 export class FacilityComponent implements OnInit {
-  @ViewChild(MapComponent)
-  private mapComponent : MapComponent;
 
   @ViewChild(LeftNavigation)
   private leftNav:LeftNavigation;
@@ -44,14 +42,15 @@ export class FacilityComponent implements OnInit {
   receiveCenterUpdated(event: any){
     this.center.lat = event.lat;
     this.center.lon = event.lon;
+
   }
 
-  receivedClick(event: any):void{
-    this.loadFacilitiesNearby(event)
+  receivedClick(mapComponent:MapComponent, event: Coords, radius:number):void{
+    this.loadFacilitiesNearby(mapComponent, event, radius)
   }
 
-  private loadFacilitiesNearby(coord: any): void{
-    this.facilityService.getFaclitiesNearby(coord,this.radius)
+  private loadFacilitiesNearby(mapComponent: MapComponent, coord: Coords, radius:number): void{
+    this.facilityService.getFaclitiesNearby(coord,radius)
     .subscribe((facilities) => {
       //filter park and ride + active
       this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
@@ -60,7 +59,7 @@ export class FacilityComponent implements OnInit {
       for (var f of this.facilities) {
         console.log(f);
         let coords = f.location.coordinates;
-        this.mapComponent.placeMarker(coords[0][0][1],coords[0][0][0]);
+        mapComponent.placeMarker(coords[0][0][1],coords[0][0][0]);
       }
     });
   }
