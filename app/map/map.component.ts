@@ -81,7 +81,7 @@ export class MapComponent{
             icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
         });
         this.markers.push(marker);
-       google.maps.event.addListener(marker,'click',() => this.showDirection(marker));
+        google.maps.event.addListener(marker,'click',() => this.showDirection(marker));
     }
 
     placeCircle(lat: number, lon: number, radius: number): void{
@@ -92,7 +92,12 @@ export class MapComponent{
             map: this.map,
             center: new google.maps.LatLng(lat,lon),
             radius: radius
-          }));
+        }));
+    }
+    
+    clearMap(){
+        this.clearMarkers()
+        this.clearCircles();
     }
 
     //Private functions
@@ -132,13 +137,13 @@ export class MapComponent{
 
     private clearMarkers(){
         for (var i = 0; i < this.markers.length; i++) {
-          this.markers[i].setMap(null);
+            this.markers[i].setMap(null);
         }
     }
 
     private clearCircles(){
         for (var i = 0; i < this.circles.length; i++) {
-          this.circles[i].setMap(null);
+            this.circles[i].setMap(null);
         }
     }
 

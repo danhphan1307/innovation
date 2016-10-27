@@ -54,7 +54,7 @@ declare var Slider: any;
 
   <tr>
   <td class="special" colspan="3">
-  <input id="ex1" #sliderIOS data-slider-id='ex1Slider' type="text" data-slider-min="0.1" data-slider-max="5" data-slider-step="0.1" data-slider-value="1"/>
+  <input id="ex1" #sliderIOS data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="0.1" data-slider-value="1"/>
   </td>
   </tr>
   </table>
@@ -79,9 +79,9 @@ declare var Slider: any;
 export class LeftNavigation  extends AbstractComponent{
   @ViewChild('sliderIOS')sliderIOS: any;
 
-  slider="";
+  mySlider:any;
   ngAfterViewInit() {
-    this.slider = new Slider('#ex1', {
+    this.mySlider = new Slider('#ex1', {
       formatter: function(value:number) {
         return value + ' km';
       }
@@ -89,6 +89,10 @@ export class LeftNavigation  extends AbstractComponent{
     )};
     public ReturnSliderValue():number{
       return Number(this.sliderIOS.nativeElement.value)*1000;
+    }
+
+    public SetliderValue(value:number):void{
+      this.mySlider.setValue(value);
     }
   }
 

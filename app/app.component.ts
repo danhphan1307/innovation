@@ -19,6 +19,9 @@ import { Component, OnInit,  Input,
   import {NgModel} from '@angular/forms';
   import {Coords} from './models/location';
 
+  import {Injectable} from '@angular/core';
+  import {Router} from '@angular/router';
+
   @Component({
     moduleId: module.id,
     selector: 'my-app',
@@ -27,6 +30,7 @@ import { Component, OnInit,  Input,
   })
 
   export class AppComponent implements OnInit {
+    router:Router;
     private leftNavState = 'close';
     private bottomNavState = 'close';
     private blackOverlayState = 'close';
@@ -67,26 +71,35 @@ import { Component, OnInit,  Input,
   public beginLeftNav():void{
     this.leftNav.setState('open');
     this.blackOverlay.setState('open');
-    this.bottomNav.setState('close');
+    //this.bottomNav.setState('close');
   }
 
   public bottomtNav():void{
-    this.leftNav.setState('close');
-    this.blackOverlay.setState('open');
-    this.bottomNav.setState('open');
+    //this.leftNav.setState('close');
+    //this.blackOverlay.setState('open');
+    //this.bottomNav.setState('open');
+
+    this.MapComponent.clearMap();
+    this.leftNav.SetliderValue(0);
+          this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
   }
 
   public closeAll():void{
     this.leftNav.setState('close');
     this.blackOverlay.setState('close');
-    this.bottomNav.setState('close');
+    //this.bottomNav.setState('close');
+  }
+  constructor(private _router: Router ) {
+    this.router = _router;
   }
 
   public FacilityRoute(event:any):void{
-    this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
-    this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
-    this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
-    this.MapComponent.markers = this.FacilityComponent.markers;
-    console.log(this.FacilityComponent.markers);
+    if(this.router.url == "/parking"){
+      this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+      this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
+      this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
+      this.MapComponent.markers = this.FacilityComponent.markers;
+      console.log(this.FacilityComponent.markers);
+    }
   }
 }
