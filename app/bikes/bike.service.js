@@ -18,7 +18,7 @@ require('rxjs/add/operator/toPromise');
 var BikeService = (function () {
     function BikeService(http) {
         this.http = http;
-        this.bikeUrl = 'http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental';
+        this.bikeUrl = 'https://api.digitransit.fi/routing/v1/routers/hsl/bike_rental/';
     }
     BikeService.prototype.getBikeStations = function () {
         return this.http.get(this.bikeUrl, { headers: this.getHeaders() })
@@ -43,7 +43,7 @@ var BikeService = (function () {
         return Rx_1.Observable.throw(errMsg);
     };
     BikeService = __decorate([
-        core_1.Injectable(), 
+        core_1.Injectable(),
         __metadata('design:paramtypes', [http_1.Http])
     ], BikeService);
     return BikeService;
