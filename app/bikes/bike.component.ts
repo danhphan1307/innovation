@@ -28,21 +28,20 @@ export class BikeComponent implements OnInit {
   }
 
   ngOnInit(){
-    this.loadBikeStations();
+
   }
 
   ngOnChanges(){
-    console.log("change in bike")
-
+    console.log("change in bike");
   }
 
 
-  private loadBikeStations(): void{
+  public loadBikeStations(mapComponent: MapComponent): void{
     this.bikeService.getBikeStations()
     .subscribe((stations:BikeStation[]) => {
       this.stations = stations;
       for (let s of stations){
-        this.markers.push(this.mapService.placeMarkers(s.y,s.x));
+        mapComponent.placeMarker(s.y,s.x);
       }
     });
 

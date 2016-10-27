@@ -18,8 +18,6 @@ export class MapService{
 
     }
 
-
-
     public showDirection(origin: any, destionation: any){
         var start = new google.maps.LatLng(this.coords.lat,this.coords.lon);
         var end = marker.getPosition();

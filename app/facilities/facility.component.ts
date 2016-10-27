@@ -57,7 +57,6 @@ export class FacilityComponent implements OnInit {
         && f.status == FacilityStatus.IN_OPERATION
         );
       for (var f of this.facilities) {
-        console.log(f);
         let coords = f.location.coordinates;
         mapComponent.placeMarker(coords[0][0][1],coords[0][0][0]);
       }

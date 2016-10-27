@@ -13,6 +13,7 @@ import { Component, OnInit,  Input,
   import {BottomNavigation} from './component/bottom.navigation.component';
   import {BlackOverlay} from './component/blackoverlay.component';
   import {FacilityComponent} from './facilities/facility.component';
+  import {BikeComponent} from './bikes/bike.component';
 
   import {AgmCoreModule} from 'angular2-google-maps/core';
   import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
@@ -51,6 +52,9 @@ import { Component, OnInit,  Input,
     @ViewChild(FacilityComponent)
     private FacilityComponent: FacilityComponent;
 
+    @ViewChild(BikeComponent)
+    private BikeComponent: BikeComponent;
+
     stations : BikeStation[];
     data : string
 
@@ -80,8 +84,18 @@ import { Component, OnInit,  Input,
     //this.bottomNav.setState('open');
 
     this.MapComponent.clearMap();
-    this.leftNav.SetliderValue(0);
-          this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+    if(this.router.url == "/bike"){
+      this.leftNav.SetliderValue(0);
+      this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+      this.BikeComponent.loadBikeStations(this.MapComponent);
+    }
+    if(this.router.url == "/parking"){
+      this.leftNav.SetliderValue(1000);
+      this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+      this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
+      this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
+      this.MapComponent.markers = this.FacilityComponent.markers;
+    }
   }
 
   public closeAll():void{
@@ -99,7 +113,6 @@ import { Component, OnInit,  Input,
       this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
       this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
       this.MapComponent.markers = this.FacilityComponent.markers;
-      console.log(this.FacilityComponent.markers);
     }
   }
 }
