@@ -11,7 +11,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class BikeService{
 
-  private bikeUrl = 'http://api.digitransit.fi/routing/v1/routers/hsl/bike_rental';
+  private bikeUrl = 'https://api.digitransit.fi/routing/v1/routers/hsl/bike_rental/';
 
 
   constructor(private http: Http){

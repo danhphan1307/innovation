@@ -82,12 +82,12 @@ import { Component, OnInit,  Input,
     //this.leftNav.setState('close');
     //this.blackOverlay.setState('open');
     //this.bottomNav.setState('open');
-
     this.MapComponent.clearMap();
     if(this.router.url == "/bike"){
       this.leftNav.SetliderValue(0);
       this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
       this.BikeComponent.loadBikeStations(this.MapComponent);
+      this.MapComponent.markers = this.BikeComponent.markers;
     }
     if(this.router.url == "/parking"){
       this.leftNav.SetliderValue(1000);

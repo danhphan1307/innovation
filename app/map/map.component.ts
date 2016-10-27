@@ -108,7 +108,7 @@ export class MapComponent{
     private callbackForMapClickEvent(event: any): void{
         let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
         //Clear from previous searches
-        this.clearMarkers()
+        this.clearMarkers();
         this.clearCircles();
         //Create new circle and notify parent view
         this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);

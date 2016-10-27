@@ -1,6 +1,10 @@
 {
   "name": "angular-quickstart",
   "version": "1.0.0",
+"engines":{
+	"node":"6.7.0",
+	"npm":"3.10.8"
+},
   "description": "QuickStart package.json from the documentation, supplemented with testing support",
   "scripts": {
     "start": "concurrently \"npm run tsc:w\" \"npm run lite\" ",
