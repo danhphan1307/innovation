@@ -108,10 +108,11 @@ import { Component, OnInit,  Input,
   }
 
   public FacilityRoute(event:any):void{
+
     if(this.router.url == "/parking"){
       this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
-      this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
-      this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
+      this.FacilityComponent.receivedClick(this.MapComponent,event, this.leftNav.ReturnSliderValue());
+      //this.FacilityComponent.receiveCenterUpdated(this.test);
       this.MapComponent.markers = this.FacilityComponent.markers;
     }
   }
