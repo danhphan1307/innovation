@@ -38,6 +38,8 @@ export class MapComponent{
     @Output()
     clickUpdated: any= new EventEmitter();
 
+    klmSrc : String = '../files/vyohykerajat_ETRS.kml';
+
     constructor(){
 
     }
@@ -60,6 +62,8 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+        //Add KLM layer
+        this.displayKML(this.klmSrc,this.map);
         //Bind direction display to map
 
         this.directionsDisplay.setMap(this.map);
@@ -148,4 +152,17 @@ export class MapComponent{
         }
     }
 
+    displayKML(src: String, map: any){
+        var kmlLayer = new google.maps.KmlLayer(src, {
+            suppressInfoWindows: true,
+            preserveViewport: false,
+            map: map
+        });
+
+        google.maps.event.addListener(kmlLayer, 'click', function(event) {
+          var content = event.featureData.infoWindowHtml;
+          var testimonial = document.getElementById('capture');
+          testimonial.innerHTML = content;
+        });
+    }
 }
