@@ -19,6 +19,7 @@ var MapComponent = (function () {
         this.circles = [];
         this.centerUpdated = new core_1.EventEmitter();
         this.clickUpdated = new core_1.EventEmitter();
+        this.klmSrc = '../files/vyohykerajat_ETRS.kml';
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -35,6 +36,8 @@ var MapComponent = (function () {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+        //Add KLM layer
+        this.displayKML(this.klmSrc, this.map);
         //Bind direction display to map
         this.directionsDisplay.setMap(this.map);
         this.centerMarker = new google.maps.Marker({
@@ -109,6 +112,18 @@ var MapComponent = (function () {
         for (var i = 0; i < this.circles.length; i++) {
             this.circles[i].setMap(null);
         }
+    };
+    MapComponent.prototype.displayKML = function (src, map) {
+        var kmlLayer = new google.maps.KmlLayer(src, {
+            suppressInfoWindows: true,
+            preserveViewport: false,
+            map: map
+        });
+        google.maps.event.addListener(kmlLayer, 'click', function (event) {
+            var content = event.featureData.infoWindowHtml;
+            var testimonial = document.getElementById('capture');
+            testimonial.innerHTML = content;
+        });
     };
     __decorate([
         core_1.Input(), 
