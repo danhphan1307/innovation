@@ -19,7 +19,9 @@ var MapComponent = (function () {
         this.circles = [];
         this.centerUpdated = new core_1.EventEmitter();
         this.clickUpdated = new core_1.EventEmitter();
-        this.klmSrc = '../files/vyohykerajat_ETRS.kml';
+        this.klmSrcParkingZone = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/vyohykerajat_ETRS.kml';
+        this.klmSrcFreeAndPaid = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/kantakaupungin_pysakointi2014_ETRS_GK25.kml';
+        this.klmSrcInfoBar = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/tekstit_ETRS.kml';
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -37,7 +39,9 @@ var MapComponent = (function () {
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
         //Add KLM layer
-        this.displayKML(this.klmSrc, this.map);
+        this.displayKML(this.klmSrcFreeAndPaid, this.map);
+        this.displayKML(this.klmSrcParkingZone, this.map);
+        //this.displayKML(this.klmSrcInfoBar,this.map);
         //Bind direction display to map
         this.directionsDisplay.setMap(this.map);
         this.centerMarker = new google.maps.Marker({
@@ -115,14 +119,7 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.displayKML = function (src, map) {
         var kmlLayer = new google.maps.KmlLayer(src, {
-            suppressInfoWindows: true,
-            preserveViewport: false,
             map: map
-        });
-        google.maps.event.addListener(kmlLayer, 'click', function (event) {
-            var content = event.featureData.infoWindowHtml;
-            var testimonial = document.getElementById('capture');
-            testimonial.innerHTML = content;
         });
     };
     __decorate([
