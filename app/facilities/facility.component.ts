@@ -46,6 +46,7 @@ export class FacilityComponent implements OnInit {
   }
 
   receivedClick(mapComponent:MapComponent, event: Coords, radius:number):void{
+    console.log(event);
     this.loadFacilitiesNearby(mapComponent, event, radius)
   }
 

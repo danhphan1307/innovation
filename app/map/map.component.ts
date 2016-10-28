@@ -93,7 +93,7 @@ export class MapComponent{
             radius: radius
         }));
     }
-    
+
     clearMap(){
         this.clearMarkers()
         this.clearCircles();
@@ -101,6 +101,7 @@ export class MapComponent{
 
     //Private functions
     private createEventListeners(): void{
+
         this.map.addListener('click', (event: any) => this.callbackForMapClickEvent(event));
     }
 

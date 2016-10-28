@@ -107,12 +107,21 @@ import { Component, OnInit,  Input,
       this.router = _router;
     }
 
-    public FacilityRoute(event:any):void{
-      if(this.router.url == "/parking"){
-        this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
-        this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
-        this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
-        this.MapComponent.markers = this.FacilityComponent.markers;
-      }
+  public closeAll():void{
+    this.leftNav.setState('close');
+    this.blackOverlay.setState('close');
+    //this.bottomNav.setState('close');
+  }
+  constructor(private _router: Router ) {
+    this.router = _router;
+  }
+
+  public FacilityRoute(event:any):void{
+
+    if(this.router.url == "/parking"){
+      this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+      this.FacilityComponent.receivedClick(this.MapComponent,event, this.leftNav.ReturnSliderValue());
+      //this.FacilityComponent.receiveCenterUpdated(this.test);
+      this.MapComponent.markers = this.FacilityComponent.markers;
     }
   }

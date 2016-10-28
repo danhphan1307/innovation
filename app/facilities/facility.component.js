@@ -29,6 +29,7 @@ var FacilityComponent = (function () {
         this.center.lon = event.lon;
     };
     FacilityComponent.prototype.receivedClick = function (mapComponent, event, radius) {
+        console.log(event);
         this.loadFacilitiesNearby(mapComponent, event, radius);
     };
     FacilityComponent.prototype.loadFacilitiesNearby = function (mapComponent, coord, radius) {
