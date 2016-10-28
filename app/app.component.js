@@ -51,7 +51,7 @@ var AppComponent = (function () {
             this.MapComponent.markers = this.BikeComponent.markers;
         }
         if (this.router.url == "/parking") {
-            this.leftNav.SetliderValue(1000);
+            this.leftNav.SetliderValue(1);
             this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
             this.FacilityComponent.receivedClick(this.MapComponent, this.test, this.leftNav.ReturnSliderValue()); //this.MapComponent.clickUpdated
             this.FacilityComponent.receiveCenterUpdated(this.test); //this.MapComponent.centerUpdated

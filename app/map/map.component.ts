@@ -4,7 +4,6 @@ import {Coords} from '../models/location';
 
 declare var google: any;
 
-
 @Component({
     moduleId: module.id,
     selector: 'map-gg',
@@ -108,8 +107,8 @@ export class MapComponent{
     private callbackForMapClickEvent(event: any): void{
         let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
         //Clear from previous searches
-        this.clearMarkers();
-        this.clearCircles();
+        //this.clearMarkers();
+        //this.clearCircles();
         //Create new circle and notify parent view
         this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
         this.clickUpdated.emit(clickCoord);

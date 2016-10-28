@@ -58,4 +58,5 @@ import {AbstractComponent} from './abstract.class.component';
   `
 })
 export class BottomNavigation  extends AbstractComponent{
+  
 }

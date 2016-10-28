@@ -61,58 +61,58 @@ import { Component, OnInit,  Input,
     // google maps zoom level
     zoom: number = 14;
 
-  // initial center position for the map
-  lat: number = 60.1699;
-  lon: number = 24.9384;
-  iconUrl = '../img/largeBike.png';
+    // initial center position for the map
+    lat: number = 60.1699;
+    lon: number = 24.9384;
+    iconUrl = '../img/largeBike.png';
 
 
-  ngOnInit(){
+    ngOnInit(){
 
-  }
-
-
-  public beginLeftNav():void{
-    this.leftNav.setState('open');
-    this.blackOverlay.setState('open');
-    //this.bottomNav.setState('close');
-  }
-
-  public bottomtNav():void{
-    //this.leftNav.setState('close');
-    //this.blackOverlay.setState('open');
-    //this.bottomNav.setState('open');
-    this.MapComponent.clearMap();
-    if(this.router.url == "/bike"){
-      this.leftNav.SetliderValue(0);
-      this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
-      this.BikeComponent.loadBikeStations(this.MapComponent);
-      this.MapComponent.markers = this.BikeComponent.markers;
     }
-    if(this.router.url == "/parking"){
-      this.leftNav.SetliderValue(1000);
-      this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
-      this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
-      this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
-      this.MapComponent.markers = this.FacilityComponent.markers;
+
+
+    public beginLeftNav():void{
+      this.leftNav.setState('open');
+      this.blackOverlay.setState('open');
+      //this.bottomNav.setState('close');
+    }
+
+    public bottomtNav():void{
+      //this.leftNav.setState('close');
+      //this.blackOverlay.setState('open');
+      //this.bottomNav.setState('open');
+      this.MapComponent.clearMap();
+      if(this.router.url == "/bike"){
+        this.leftNav.SetliderValue(0);
+        this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+        this.BikeComponent.loadBikeStations(this.MapComponent);
+        this.MapComponent.markers = this.BikeComponent.markers;
+      }
+      if(this.router.url == "/parking"){
+        this.leftNav.SetliderValue(1);
+        this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+        this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
+        this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
+        this.MapComponent.markers = this.FacilityComponent.markers;
+      }
+    }
+
+    public closeAll():void{
+      this.leftNav.setState('close');
+      this.blackOverlay.setState('close');
+      //this.bottomNav.setState('close');
+    }
+    constructor(private _router: Router ) {
+      this.router = _router;
+    }
+
+    public FacilityRoute(event:any):void{
+      if(this.router.url == "/parking"){
+        this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+        this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
+        this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
+        this.MapComponent.markers = this.FacilityComponent.markers;
+      }
     }
   }
-
-  public closeAll():void{
-    this.leftNav.setState('close');
-    this.blackOverlay.setState('close');
-    //this.bottomNav.setState('close');
-  }
-  constructor(private _router: Router ) {
-    this.router = _router;
-  }
-
-  public FacilityRoute(event:any):void{
-    if(this.router.url == "/parking"){
-      this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
-      this.FacilityComponent.receivedClick(this.MapComponent,this.test, this.leftNav.ReturnSliderValue());//this.MapComponent.clickUpdated
-      this.FacilityComponent.receiveCenterUpdated(this.test);//this.MapComponent.centerUpdated
-      this.MapComponent.markers = this.FacilityComponent.markers;
-    }
-  }
-}

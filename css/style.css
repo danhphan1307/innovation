@@ -159,7 +159,7 @@ nav a:hover, .offcanvas a:focus{
 }
 #mySidenav .copyright{
     position: absolute;
-    bottom:3%;
+    bottom:1%;
     margin:auto 5%;
 }
 #mySidenav .copyright p{

@@ -63,8 +63,7 @@ declare var Slider: any;
   <div class="copyright">
   <hr>
   <img src="img/demo-logo-2.png" alt="config" style="width:40%;display:block;margin:5% auto;">
-  <p>Version: 0.9.1<br><br>
-  This is a free software . You must not sell or re-distribute under any circumstances. We are not responsible for any liability, or accuracy related to your use of this Site.<br><br>
+  <p>Version: 0.9.1<br>We are not responsible for any liability, or accuracy related to your use of this Site.<br><br>
   © Parking Group, Metropolia UAS. <br>
   All rights reserved.</p>
   </div>
@@ -78,21 +77,28 @@ declare var Slider: any;
 
 export class LeftNavigation  extends AbstractComponent{
   @ViewChild('sliderIOS')sliderIOS: any;
+  radius:number;
 
   mySlider:any;
   ngAfterViewInit() {
     this.mySlider = new Slider('#ex1', {
       formatter: function(value:number) {
+        this.radius = value*1000;
         return value + ' km';
       }
     }
-    )};
-    public ReturnSliderValue():number{
-      return Number(this.sliderIOS.nativeElement.value)*1000;
+    );
+    this.radius = Number(this.sliderIOS.nativeElement.value)*1000;
+  };
+
+    ReturnSliderValue():number{
+      this.radius = Number(this.sliderIOS.nativeElement.value)*1000;
+      return this.radius;
     }
 
-    public SetliderValue(value:number):void{
+    SetliderValue(value:number):void{
       this.mySlider.setValue(value);
+      this.radius = value*1000;
     }
   }
 
