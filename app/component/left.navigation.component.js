@@ -29,14 +29,21 @@ var LeftNavigation = (function (_super) {
             }
         });
         this.radius = Number(this.sliderIOS.nativeElement.value) * 1000;
+        this.oldRadius = this.radius;
     };
     ;
     LeftNavigation.prototype.ReturnSliderValue = function () {
         this.radius = Number(this.sliderIOS.nativeElement.value) * 1000;
         this.radiusUpdated.emit(this.radius);
+        if (this.radius != 0) {
+            this.oldRadius = this.radius;
+        }
         return this.radius;
     };
     LeftNavigation.prototype.SetliderValue = function (value) {
+        if (this.radius != 0) {
+            this.oldRadius = this.radius;
+        }
         this.mySlider.setValue(value);
         this.radius = value * 1000;
         this.radiusUpdated.emit(this.radius);

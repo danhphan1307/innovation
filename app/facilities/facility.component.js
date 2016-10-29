@@ -28,7 +28,27 @@ var FacilityComponent = (function () {
         this.center.lon = event.lon;
     };
     FacilityComponent.prototype.receivedClick = function (mapComponent, event, radius) {
+        this.map = mapComponent;
+        this.coords = event;
+        this.radius = radius;
+        this.oldRadius = this.radius;
         this.loadFacilitiesNearby(mapComponent, event, radius);
+    };
+    FacilityComponent.prototype.updateRadius = function (event) {
+        this.radius = event;
+        if (this.coords == null) {
+        }
+        else {
+            if (this.oldRadius == null) { }
+            else {
+                if (this.oldRadius != event) {
+                    this.map.clearMarkers();
+                    this.radius = event;
+                    this.oldRadius = this.radius;
+                    this.loadFacilitiesNearby(this.map, this.coords, this.radius);
+                }
+            }
+        }
     };
     FacilityComponent.prototype.loadFacilitiesNearby = function (mapComponent, coord, radius) {
         var _this = this;

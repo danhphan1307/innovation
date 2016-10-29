@@ -83,6 +83,7 @@ export class LeftNavigation  extends AbstractComponent{
   radiusUpdated:EventEmitter<any> = new EventEmitter<any>();
 
   radius:number;
+  oldRadius:number;
 
   mySlider:any;
   ngAfterViewInit() {
@@ -94,19 +95,25 @@ export class LeftNavigation  extends AbstractComponent{
     }
     );
     this.radius = Number(this.sliderIOS.nativeElement.value)*1000;
+    this.oldRadius = this.radius;
   };
 
   ReturnSliderValue():number{
     this.radius = Number(this.sliderIOS.nativeElement.value)*1000;
     this.radiusUpdated.emit(this.radius);
+    if(this.radius!=0){
+      this.oldRadius=this.radius;
+    }
     return this.radius;
   }
 
-
-
   SetliderValue(value:number):void{
+    if(this.radius!=0){
+      this.oldRadius=this.radius;
+    }
     this.mySlider.setValue(value);
     this.radius = value*1000;
     this.radiusUpdated.emit(this.radius);
   }
+
 }

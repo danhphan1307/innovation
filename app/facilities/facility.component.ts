@@ -29,6 +29,10 @@ export class FacilityComponent implements OnInit {
   markers : Coords[] = [];
   title = 'Park and Ride';
 
+  map:any;
+  coords:any;
+  radius:any;
+  oldRadius:any;
 
   constructor(private facilityService: FacilityService){
 
@@ -43,20 +47,42 @@ export class FacilityComponent implements OnInit {
   }
 
   receivedClick(mapComponent:MapComponent, event: Coords, radius:number):void{
+    this.map = mapComponent;
+    this.coords = event;
+    this.radius =radius;
+    this.oldRadius = this.radius;
     this.loadFacilitiesNearby(mapComponent, event, radius)
   }
 
-  private loadFacilitiesNearby(mapComponent: MapComponent, coord: Coords, radius:number): void{
-    this.facilityService.getFaclitiesNearby(coord,radius)
-    .subscribe((facilities) => {
-      //filter park and ride + active
-      this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
-        && f.status == FacilityStatus.IN_OPERATION
-        );
-      for (var f of this.facilities) {
-        let coords = f.location.coordinates;
-        mapComponent.placeMarker(coords[0][0][1],coords[0][0][0]);
+  updateRadius(event:any){
+    this.radius = event;
+    if (this.coords == null ) {
+    }else {
+      if(this.oldRadius == null){}
+        else{
+          if(this.oldRadius!=event){
+            this.map.clearMarkers();
+            this.radius = event;
+            this.oldRadius = this.radius;
+            this.loadFacilitiesNearby(this.map, this.coords, this.radius);
+          }
+
+        }
+
       }
-    });
+    }
+
+    private loadFacilitiesNearby(mapComponent: MapComponent, coord: Coords, radius:number): void{
+      this.facilityService.getFaclitiesNearby(coord,radius)
+      .subscribe((facilities) => {
+        //filter park and ride + active
+        this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
+          && f.status == FacilityStatus.IN_OPERATION
+          );
+        for (var f of this.facilities) {
+          let coords = f.location.coordinates;
+          mapComponent.placeMarker(coords[0][0][1],coords[0][0][0]);
+        }
+      });
+    }
   }
-}

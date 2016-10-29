@@ -15,7 +15,6 @@ var bottom_navigation_component_1 = require('./component/bottom.navigation.compo
 var blackoverlay_component_1 = require('./component/blackoverlay.component');
 var facility_component_1 = require('./facilities/facility.component');
 var bike_component_1 = require('./bikes/bike.component');
-var location_1 = require('./models/location');
 var router_1 = require('@angular/router');
 var AppComponent = (function () {
     function AppComponent(_router) {
@@ -23,7 +22,6 @@ var AppComponent = (function () {
         this.leftNavState = 'close';
         this.bottomNavState = 'close';
         this.blackOverlayState = 'close';
-        this.test = new location_1.Coords(60.2224675, 24.7912243);
         // google maps zoom level
         this.zoom = 14;
         // initial center position for the map
@@ -43,27 +41,26 @@ var AppComponent = (function () {
         this.MapComponent.clearMarkers();
         if (this.router.url == "/bike") {
             this.leftNav.SetliderValue(0);
-            this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
             this.BikeComponent.loadBikeStations(this.MapComponent);
             this.MapComponent.markers = this.BikeComponent.markers;
         }
         if (this.router.url == "/parking") {
-            this.leftNav.SetliderValue(1);
-            this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
-            this.FacilityComponent.receivedClick(this.MapComponent, this.test, this.leftNav.ReturnSliderValue()); //this.MapComponent.clickUpdated
-            this.FacilityComponent.receiveCenterUpdated(this.test); //this.MapComponent.centerUpdated
+            this.leftNav.SetliderValue(this.leftNav.oldRadius / 1000);
+            if (this.oldEvent == null) { }
+            else {
+                this.FacilityComponent.receivedClick(this.MapComponent, this.oldEvent, this.leftNav.ReturnSliderValue());
+            }
             this.MapComponent.markers = this.FacilityComponent.markers;
         }
     };
     AppComponent.prototype.closeAll = function () {
         this.leftNav.setState('close');
         this.blackOverlay.setState('close');
-        //this.bottomNav.setState('close');
     };
     AppComponent.prototype.FacilityRoute = function (event) {
+        this.oldEvent = event;
         if (this.router.url == "/parking") {
             this.MapComponent.clearMarkers();
-            this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
             this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
             this.MapComponent.markers = this.FacilityComponent.markers;
         }
