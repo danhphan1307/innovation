@@ -58,50 +58,17 @@ var MapComponent = (function () {
         google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
     };
     MapComponent.prototype.placeCircle = function (lat, lon, radius) {
-        this.circles.push(new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 1,
-            map: this.map,
-            center: new google.maps.LatLng(lat, lon),
-            radius: radius
-        }));
-    };
-    MapComponent.prototype.clearMap = function () {
-        this.clearMarkers();
         this.clearCircles();
-    };
-    //Private functions
-    MapComponent.prototype.createEventListeners = function () {
-        var _this = this;
-        this.map.addListener('click', function (event) { return _this.callbackForMapClickEvent(event); });
-    };
-    MapComponent.prototype.callbackForMapClickEvent = function (event) {
-        var clickCoord = new location_1.Coords(event.latLng.lat(), event.latLng.lng());
-        //Clear from previous searches
-        //this.clearMarkers();
-        //this.clearCircles();
-        //Create new circle and notify parent view
-        this.placeCircle(event.latLng.lat(), event.latLng.lng(), this.circleRadius);
-        this.clickUpdated.emit(clickCoord);
-    };
-    MapComponent.prototype.showDirection = function (marker) {
-        var _this = this;
-        var start = new google.maps.LatLng(this.centerLat, this.centerLon);
-        var end = marker.getPosition();
-        var request = {
-            origin: start,
-            destination: end,
-            travelMode: 'DRIVING'
-        };
-        var directionsService = new google.maps.DirectionsService;
-        directionsService.route(request, function (result, status) { return _this.callbackForShowDirection(result, status); });
-    };
-    MapComponent.prototype.callbackForShowDirection = function (result, status) {
-        if (status == 'OK') {
-            this.directionsDisplay.setDirections(result);
+        if (radius != 0) {
+            this.circles.push(new google.maps.Circle({
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                map: this.map,
+                center: new google.maps.LatLng(lat, lon),
+                radius: radius
+            }));
         }
-        ;
     };
     MapComponent.prototype.clearMarkers = function () {
         for (var i = 0; i < this.markers.length; i++) {
@@ -112,6 +79,12 @@ var MapComponent = (function () {
         for (var i = 0; i < this.circles.length; i++) {
             this.circles[i].setMap(null);
         }
+    };
+    MapComponent.prototype.callbackForShowDirection = function (result, status) {
+        if (status == 'OK') {
+            this.directionsDisplay.setDirections(result);
+        }
+        ;
     };
     MapComponent.prototype.displayKML = function (src, map) {
         var kmlLayer = new google.maps.KmlLayer(src, {
@@ -124,6 +97,49 @@ var MapComponent = (function () {
             var testimonial = document.getElementById('capture');
             testimonial.innerHTML = content;
         });
+    };
+    MapComponent.prototype.updateRadius = function (event) {
+        this.circleRadius = event;
+        if (this.oldLat == null) {
+        }
+        else {
+            if (this.oldRadius == null) { }
+            else {
+                if (this.oldRadius != event) {
+                    this.oldRadius = event;
+                    this.clearCircles();
+                    this.placeCircle(this.oldLat, this.oldLong, this.circleRadius);
+                }
+            }
+        }
+    };
+    //Private functions
+    MapComponent.prototype.createEventListeners = function () {
+        var _this = this;
+        this.map.addListener('click', function (event) { return _this.callbackForMapClickEvent(event); });
+    };
+    MapComponent.prototype.callbackForMapClickEvent = function (event) {
+        this.clearCircles();
+        var clickCoord = new location_1.Coords(event.latLng.lat(), event.latLng.lng());
+        this.oldLat = event.latLng.lat();
+        this.oldLong = event.latLng.lng();
+        //Clear from previous searches
+        //Create new circle and notify parent view
+        this.placeCircle(event.latLng.lat(), event.latLng.lng(), this.circleRadius);
+        this.clickUpdated.emit(clickCoord);
+        this.oldRadius = this.circleRadius;
+    };
+    MapComponent.prototype.showDirection = function (marker) {
+        var _this = this;
+        var start = new google.maps.LatLng(this.centerLat, this.centerLon);
+        var end = marker.getPosition();
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: 'DRIVING'
+        };
+        var directionsService = new google.maps.DirectionsService;
+        directionsService.route(request, function (result, status) { return _this.callbackForShowDirection(result, status); });
     };
     __decorate([
         core_1.Input(), 

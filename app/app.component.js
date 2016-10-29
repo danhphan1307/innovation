@@ -40,10 +40,7 @@ var AppComponent = (function () {
         //this.bottomNav.setState('close');
     };
     AppComponent.prototype.bottomtNav = function () {
-        //this.leftNav.setState('close');
-        //this.blackOverlay.setState('open');
-        //this.bottomNav.setState('open');
-        this.MapComponent.clearMap();
+        this.MapComponent.clearMarkers();
         if (this.router.url == "/bike") {
             this.leftNav.SetliderValue(0);
             this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
@@ -65,9 +62,9 @@ var AppComponent = (function () {
     };
     AppComponent.prototype.FacilityRoute = function (event) {
         if (this.router.url == "/parking") {
+            this.MapComponent.clearMarkers();
             this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
             this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
-            //this.FacilityComponent.receiveCenterUpdated(this.test);
             this.MapComponent.markers = this.FacilityComponent.markers;
         }
     };

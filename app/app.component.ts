@@ -79,10 +79,7 @@ import { Component, OnInit,  Input,
     }
 
     public bottomtNav():void{
-      //this.leftNav.setState('close');
-      //this.blackOverlay.setState('open');
-      //this.bottomNav.setState('open');
-      this.MapComponent.clearMap();
+       this.MapComponent.clearMarkers();
       if(this.router.url == "/bike"){
         this.leftNav.SetliderValue(0);
         this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
@@ -107,21 +104,12 @@ import { Component, OnInit,  Input,
       this.router = _router;
     }
 
-  public closeAll():void{
-    this.leftNav.setState('close');
-    this.blackOverlay.setState('close');
-    //this.bottomNav.setState('close');
-  }
-  constructor(private _router: Router ) {
-    this.router = _router;
-  }
-
-  public FacilityRoute(event:any):void{
-
-    if(this.router.url == "/parking"){
-      this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
-      this.FacilityComponent.receivedClick(this.MapComponent,event, this.leftNav.ReturnSliderValue());
-      //this.FacilityComponent.receiveCenterUpdated(this.test);
-      this.MapComponent.markers = this.FacilityComponent.markers;
+    public FacilityRoute(event:any):void{
+      if(this.router.url == "/parking"){
+        this.MapComponent.clearMarkers();
+        this.MapComponent.circleRadius = this.leftNav.ReturnSliderValue();
+        this.FacilityComponent.receivedClick(this.MapComponent,event, this.leftNav.ReturnSliderValue());
+        this.MapComponent.markers = this.FacilityComponent.markers;
+      }
     }
   }

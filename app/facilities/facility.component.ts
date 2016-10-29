@@ -15,8 +15,7 @@ import {MapComponent} from '../map/map.component';
   moduleId: module.id,
   selector: 'facility-component',
   template: ``,
-  providers: [FacilityService],
-
+  providers: [FacilityService]
 })
 
 export class FacilityComponent implements OnInit {
@@ -29,7 +28,6 @@ export class FacilityComponent implements OnInit {
   mapClicked: Coords = new Coords(0.0,0.0);
   markers : Coords[] = [];
   title = 'Park and Ride';
-  radius = 1000;
 
 
   constructor(private facilityService: FacilityService){
@@ -42,11 +40,9 @@ export class FacilityComponent implements OnInit {
   receiveCenterUpdated(event: any){
     this.center.lat = event.lat;
     this.center.lon = event.lon;
-
   }
 
   receivedClick(mapComponent:MapComponent, event: Coords, radius:number):void{
-    console.log(event);
     this.loadFacilitiesNearby(mapComponent, event, radius)
   }
 

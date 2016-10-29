@@ -1,6 +1,8 @@
 
-import { Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
 import {Coords} from '../models/location';
+import {LeftNavigation} from '../component/left.navigation.component';
 
 declare var google: any;
 
@@ -15,10 +17,15 @@ declare var google: any;
 
 export class MapComponent{
 
+    addItemStream:Observable<any>;
     centerLat: number = 0
     centerLon: number = 0
     map : any;
     centerMarker: any
+
+    oldLat:number
+    oldLong:number
+    oldRadius:number
 
     directionsDisplay = new google.maps.DirectionsRenderer;
 
@@ -37,10 +44,10 @@ export class MapComponent{
     @Output()
     clickUpdated: any= new EventEmitter();
 
+
     klmSrc : String = '../files/vyohykerajat_ETRS.kml';
 
-    constructor(){
-
+    constructor() {
     }
 
     ngOnInit(){
@@ -48,6 +55,7 @@ export class MapComponent{
             navigator.geolocation.getCurrentPosition(this.createMap.bind(this));
         }
     }
+
 
     createMap(position: any): void{
         this.centerLat = position.coords.latitude;
@@ -88,67 +96,34 @@ export class MapComponent{
     }
 
     placeCircle(lat: number, lon: number, radius: number): void{
-        this.circles.push(new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 1,
-            map: this.map,
-            center: new google.maps.LatLng(lat,lon),
-            radius: radius
-        }));
-    }
-
-    clearMap(){
-        this.clearMarkers()
         this.clearCircles();
+        if(radius != 0){
+            this.circles.push(new google.maps.Circle({
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                map: this.map,
+                center: new google.maps.LatLng(lat,lon),
+                radius: radius
+            }));
+        }
     }
-
-    //Private functions
-    private createEventListeners(): void{
-
-        this.map.addListener('click', (event: any) => this.callbackForMapClickEvent(event));
-    }
-
-    private callbackForMapClickEvent(event: any): void{
-        let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
-        //Clear from previous searches
-        //this.clearMarkers();
-        //this.clearCircles();
-        //Create new circle and notify parent view
-        this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
-        this.clickUpdated.emit(clickCoord);
-    }
-
-    private showDirection(marker: any){
-        var start = new google.maps.LatLng(this.centerLat,this.centerLon);
-        var end = marker.getPosition();
-
-        var request = {
-            origin: start,
-            destination: end,
-            travelMode: 'DRIVING'
-        };
-        var directionsService = new google.maps.DirectionsService;
-        directionsService.route(request, (result:any, status: string) => this.callbackForShowDirection(result,status));
-    }
-
-    callbackForShowDirection(result:any, status: string){
-        if (status == 'OK') {
-
-            this.directionsDisplay.setDirections(result);
-        };
-    }
-
-    private clearMarkers(){
+    clearMarkers(){
         for (var i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
         }
     }
 
-    private clearCircles(){
+    clearCircles(){
         for (var i = 0; i < this.circles.length; i++) {
             this.circles[i].setMap(null);
         }
+    }
+
+    callbackForShowDirection(result:any, status: string){
+        if (status == 'OK') {
+            this.directionsDisplay.setDirections(result);
+        };
     }
 
     displayKML(src: String, map: any){
@@ -159,9 +134,56 @@ export class MapComponent{
         });
 
         google.maps.event.addListener(kmlLayer, 'click', function(event) {
-          var content = event.featureData.infoWindowHtml;
-          var testimonial = document.getElementById('capture');
-          testimonial.innerHTML = content;
+            var content = event.featureData.infoWindowHtml;
+            var testimonial = document.getElementById('capture');
+            testimonial.innerHTML = content;
         });
     }
-}
+
+    updateRadius(event:any){
+        this.circleRadius = event;
+        if (this.oldLat == null ) {
+        }else {
+            if(this.oldRadius ==null){}
+                else{
+                    if(this.oldRadius!=event){
+                        this.oldRadius = event;
+                        this.clearCircles();
+                        this.placeCircle(this.oldLat,this.oldLong,this.circleRadius);
+                    }
+                    
+                }
+
+            }
+        }
+
+        //Private functions
+        private createEventListeners(): void{
+            this.map.addListener('click', (event: any) => this.callbackForMapClickEvent(event));
+        }
+
+        private callbackForMapClickEvent(event: any): void{
+            this.clearCircles();
+            let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
+            this.oldLat = event.latLng.lat();
+            this.oldLong = event.latLng.lng();
+            //Clear from previous searches
+            //Create new circle and notify parent view
+            this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
+            this.clickUpdated.emit(clickCoord);
+            this.oldRadius = this.circleRadius;
+        }
+
+        private showDirection(marker: any){
+            var start = new google.maps.LatLng(this.centerLat,this.centerLon);
+            var end = marker.getPosition();
+
+            var request = {
+                origin: start,
+                destination: end,
+                travelMode: 'DRIVING'
+            };
+            var directionsService = new google.maps.DirectionsService;
+            directionsService.route(request, (result:any, status: string) => this.callbackForShowDirection(result,status));
+        }
+    }
