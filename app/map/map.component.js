@@ -10,8 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var location_1 = require('../models/location');
+var router_1 = require('@angular/router');
 var MapComponent = (function () {
-    function MapComponent() {
+    function MapComponent(_router) {
+        this._router = _router;
         this.centerLat = 0;
         this.centerLon = 0;
         this.directionsDisplay = new google.maps.DirectionsRenderer;
@@ -20,6 +22,7 @@ var MapComponent = (function () {
         this.centerUpdated = new core_1.EventEmitter();
         this.clickUpdated = new core_1.EventEmitter();
         this.klmSrc = '../files/vyohykerajat_ETRS.kml';
+        this.router = _router;
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -119,15 +122,17 @@ var MapComponent = (function () {
         this.map.addListener('click', function (event) { return _this.callbackForMapClickEvent(event); });
     };
     MapComponent.prototype.callbackForMapClickEvent = function (event) {
-        this.clearCircles();
-        var clickCoord = new location_1.Coords(event.latLng.lat(), event.latLng.lng());
-        this.oldLat = event.latLng.lat();
-        this.oldLong = event.latLng.lng();
-        //Clear from previous searches
-        //Create new circle and notify parent view
-        this.placeCircle(event.latLng.lat(), event.latLng.lng(), this.circleRadius);
-        this.clickUpdated.emit(clickCoord);
-        this.oldRadius = this.circleRadius;
+        if (this.router.url == "/parking") {
+            this.clearCircles();
+            var clickCoord = new location_1.Coords(event.latLng.lat(), event.latLng.lng());
+            this.oldLat = event.latLng.lat();
+            this.oldLong = event.latLng.lng();
+            //Clear from previous searches
+            //Create new circle and notify parent view
+            this.placeCircle(event.latLng.lat(), event.latLng.lng(), this.circleRadius);
+            this.clickUpdated.emit(clickCoord);
+            this.oldRadius = this.circleRadius;
+        }
     };
     MapComponent.prototype.showDirection = function (marker) {
         var _this = this;
@@ -168,7 +173,7 @@ var MapComponent = (function () {
             template: "\n    <div id=\"mapCanvas\" ></div>\n    ",
             providers: []
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [router_1.Router])
     ], MapComponent);
     return MapComponent;
 }());

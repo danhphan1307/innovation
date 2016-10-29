@@ -3,6 +3,7 @@ import { Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angul
 import {Observable} from 'rxjs/Observable';
 import {Coords} from '../models/location';
 import {LeftNavigation} from '../component/left.navigation.component';
+import {Router} from '@angular/router';
 
 declare var google: any;
 
@@ -16,7 +17,7 @@ declare var google: any;
 })
 
 export class MapComponent{
-
+    router:Router;
     addItemStream:Observable<any>;
     centerLat: number = 0
     centerLon: number = 0
@@ -47,7 +48,8 @@ export class MapComponent{
 
     klmSrc : String = '../files/vyohykerajat_ETRS.kml';
 
-    constructor() {
+    constructor(private _router: Router ) {
+        this.router = _router;
     }
 
     ngOnInit(){
@@ -163,15 +165,18 @@ export class MapComponent{
         }
 
         private callbackForMapClickEvent(event: any): void{
-            this.clearCircles();
-            let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
-            this.oldLat = event.latLng.lat();
-            this.oldLong = event.latLng.lng();
-            //Clear from previous searches
-            //Create new circle and notify parent view
-            this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
-            this.clickUpdated.emit(clickCoord);
-            this.oldRadius = this.circleRadius;
+            if(this.router.url == "/parking"){
+
+                this.clearCircles();
+                let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
+                this.oldLat = event.latLng.lat();
+                this.oldLong = event.latLng.lng();
+                //Clear from previous searches
+                //Create new circle and notify parent view
+                this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
+                this.clickUpdated.emit(clickCoord);
+                this.oldRadius = this.circleRadius;
+            }
         }
 
         private showDirection(marker: any){

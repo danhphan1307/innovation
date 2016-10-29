@@ -58,8 +58,8 @@ var AppComponent = (function () {
         this.blackOverlay.setState('close');
     };
     AppComponent.prototype.FacilityRoute = function (event) {
-        this.oldEvent = event;
         if (this.router.url == "/parking") {
+            this.oldEvent = event;
             this.MapComponent.clearMarkers();
             this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
             this.MapComponent.markers = this.FacilityComponent.markers;
