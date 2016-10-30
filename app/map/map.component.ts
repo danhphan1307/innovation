@@ -12,6 +12,7 @@ declare var google: any;
     selector: 'map-gg',
     template: `
     <div id="mapCanvas" ></div>
+
     `,
     providers: []
 })
@@ -29,7 +30,9 @@ export class MapComponent{
     oldRadius:number
 
 
-    directionsDisplay = new google.maps.DirectionsRenderer;
+    directionsDisplay = new google.maps.DirectionsRenderer({
+        preserveViewport: true
+    });
 
     @Input()
     circleRadius: number;
@@ -88,13 +91,41 @@ export class MapComponent{
     }
 
     placeMarker(lat: number, lon: number): void{
+        var map = this.map;
+        var type:string;
+        var icons = {
+            small: {
+                icon:  'img/parkingIconSmall.png'
+            },
+            large: {
+                icon: 'img/parkingIconLarge.png'
+            }
+        }
+        var zoomLevel =  map.getZoom();
+        if(zoomLevel<14){
+            type = 'small';
+        }else{
+            type = 'large';
+        }
+
         let marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat,lon),
             map: this.map,
-            icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            icon: icons[type].icon
         });
 
         this.markers.push(marker);
+        google.maps.event.addDomListener(map,'zoom_changed',(function(marker) {
+            return function() {
+                var zoomLevel =  map.getZoom();
+                if(zoomLevel<14){
+                    type = 'small';
+                }else{
+                    type = 'large';
+                }
+                marker.setIcon(icons[type].icon);
+            }})(marker));
+
         google.maps.event.addListener(marker,'click',() => this.showDirection(marker));
     }
 
@@ -105,10 +136,10 @@ export class MapComponent{
 
         var icons = {
             small: {
-                icon:  'https://users.metropolia.fi/~thanhph/innovation/img/smallBike.png'
+                icon:  'img/smallBike.png'
             },
             large: {
-                icon: 'https://users.metropolia.fi/~thanhph/innovation/img/largeBike.png'
+                icon: 'img/largeBike.png'
             }
         }
         var zoomLevel =  map.getZoom();
@@ -117,17 +148,20 @@ export class MapComponent{
         }else{
             type = 'large';
         }
-
         for (var i = 0; i < stations.length; i++) {
+
             var markerBike = new google.maps.Marker({
                 position: new google.maps.LatLng(stations[i].y, stations[i].x),
                 map: this.map,
                 icon: icons[type].icon
             });
             this.markers.push(markerBike);
-            google.maps.event.addListener(markerBike, 'click', (function(markerBike, i) {
-                return function() {
-                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
+
+            var func = ((markerBike, i) => {
+                google.maps.event.addListener(markerBike, 'click', () => {
+                    this.showDirection(markerBike);
+
+                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img onclick="showDirection()" src="img/directionIcon.png" alt="love icon" class="directionIcon"><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
                     for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
                         content+='<div class="freeBike">&nbsp;</div>';
                     }
@@ -137,11 +171,12 @@ export class MapComponent{
                     content+='<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
                     infowindow.setContent(content);
                     infowindow.open(this.map, markerBike);
-                }
-            })(markerBike, i));
 
-            google.maps.event.addDomListener(map,'zoom_changed',(function(markerBike, i) {
-                return function() {
+                });
+                //console.log(document.getElementsByClassName('cityBike')[0]);
+               
+
+                google.maps.event.addDomListener(map,'zoom_changed',()=>{
                     var zoomLevel =  map.getZoom();
                     if(zoomLevel<14){
                         type = 'small';
@@ -149,7 +184,9 @@ export class MapComponent{
                         type = 'large';
                     }
                     markerBike.setIcon(icons[type].icon);
-                }})(markerBike, i));
+                });
+
+            })(markerBike, i);
         }
 
     }
@@ -202,50 +239,51 @@ export class MapComponent{
     updateRadius(event:any){
         this.circleRadius = event;
         if (this.oldLat == null ) {
-        }else {
-            if(this.oldRadius ==null){}
-                else{
-                    if(this.oldRadius!=event){
-                        this.oldRadius = event;
-                        this.clearCircles();
-                        this.placeCircle(this.oldLat,this.oldLong,this.circleRadius);
-                    }
+        }
+        else {
+            if(this.oldRadius ==null){
 
+            }
+            else{
+                if(this.oldRadius!=event){
+                    this.oldRadius = event;
+                    this.clearCircles();
+                    this.placeCircle(this.oldLat,this.oldLong,this.circleRadius);
                 }
-
             }
-        }
-
-        //Private functions
-        private createEventListeners(): void{
-            this.map.addListener('click', (event: any) => this.callbackForMapClickEvent(event));
-        }
-
-        private callbackForMapClickEvent(event: any): void{
-            if(this.router.url == "/parking"){
-
-                this.clearCircles();
-                let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
-                this.oldLat = event.latLng.lat();
-                this.oldLong = event.latLng.lng();
-                //Clear from previous searches
-                //Create new circle and notify parent view
-                this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
-                this.clickUpdated.emit(clickCoord);
-                this.oldRadius = this.circleRadius;
-            }
-        }
-
-        private showDirection(marker: any){
-            var start = new google.maps.LatLng(this.centerLat,this.centerLon);
-            var end = marker.getPosition();
-
-            var request = {
-                origin: start,
-                destination: end,
-                travelMode: 'DRIVING'
-            };
-            var directionsService = new google.maps.DirectionsService;
-            directionsService.route(request, (result:any, status: string) => this.callbackForShowDirection(result,status));
         }
     }
+
+    //Private functions
+    private createEventListeners(): void{
+        this.map.addListener('click', (event: any) => this.callbackForMapClickEvent(event));
+    }
+
+    private callbackForMapClickEvent(event: any): void{
+        if(this.router.url == "/parking"){
+
+            this.clearCircles();
+            let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
+            this.oldLat = event.latLng.lat();
+            this.oldLong = event.latLng.lng();
+            //Clear from previous searches
+            //Create new circle and notify parent view
+            this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
+            this.clickUpdated.emit(clickCoord);
+            this.oldRadius = this.circleRadius;
+        }
+    }
+
+    private showDirection(marker: any = null){
+        var start = new google.maps.LatLng(this.centerLat,this.centerLon);
+        var end = marker.getPosition();
+
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: 'DRIVING'
+        };
+        var directionsService = new google.maps.DirectionsService;
+        directionsService.route(request, (result:any, status: string) => this.callbackForShowDirection(result,status));
+    }
+}

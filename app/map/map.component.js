@@ -16,7 +16,9 @@ var MapComponent = (function () {
         this._router = _router;
         this.centerLat = 0;
         this.centerLon = 0;
-        this.directionsDisplay = new google.maps.DirectionsRenderer;
+        this.directionsDisplay = new google.maps.DirectionsRenderer({
+            preserveViewport: true
+        });
         this.markers = [];
         this.circles = [];
         this.centerUpdated = new core_1.EventEmitter();
@@ -52,24 +54,54 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.placeMarker = function (lat, lon) {
         var _this = this;
+        var map = this.map;
+        var type;
+        var icons = {
+            small: {
+                icon: 'img/parkingIconSmall.png'
+            },
+            large: {
+                icon: 'img/parkingIconLarge.png'
+            }
+        };
+        var zoomLevel = map.getZoom();
+        if (zoomLevel < 14) {
+            type = 'small';
+        }
+        else {
+            type = 'large';
+        }
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat, lon),
             map: this.map,
-            icon: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            icon: icons[type].icon
         });
         this.markers.push(marker);
+        google.maps.event.addDomListener(map, 'zoom_changed', (function (marker) {
+            return function () {
+                var zoomLevel = map.getZoom();
+                if (zoomLevel < 14) {
+                    type = 'small';
+                }
+                else {
+                    type = 'large';
+                }
+                marker.setIcon(icons[type].icon);
+            };
+        })(marker));
         google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
     };
     MapComponent.prototype.placeMarkerBicycle = function (stations) {
+        var _this = this;
         var infowindow = new google.maps.InfoWindow();
         var map = this.map;
         var type;
         var icons = {
             small: {
-                icon: 'https://users.metropolia.fi/~thanhph/innovation/img/smallBike.png'
+                icon: 'img/smallBike.png'
             },
             large: {
-                icon: 'https://users.metropolia.fi/~thanhph/innovation/img/largeBike.png'
+                icon: 'img/largeBike.png'
             }
         };
         var zoomLevel = map.getZoom();
@@ -86,9 +118,10 @@ var MapComponent = (function () {
                 icon: icons[type].icon
             });
             this.markers.push(markerBike);
-            google.maps.event.addListener(markerBike, 'click', (function (markerBike, i) {
-                return function () {
-                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><br><span>' + stations[i].name + '</span><h4 class="info"> Bike Available: ' + stations[i].bikesAvailable + '/' + (stations[i].bikesAvailable + stations[i].spacesAvailable) + '</h4></div>';
+            var func = (function (markerBike, i) {
+                google.maps.event.addListener(markerBike, 'click', function () {
+                    _this.showDirection(markerBike);
+                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img onclick="showDirection()" src="img/directionIcon.png" alt="love icon" class="directionIcon"><br><span>' + stations[i].name + '</span><h4 class="info"> Bike Available: ' + stations[i].bikesAvailable + '/' + (stations[i].bikesAvailable + stations[i].spacesAvailable) + '</h4></div>';
                     for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
                         content += '<div class="freeBike">&nbsp;</div>';
                     }
@@ -97,11 +130,10 @@ var MapComponent = (function () {
                     }
                     content += '<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
                     infowindow.setContent(content);
-                    infowindow.open(this.map, markerBike);
-                };
-            })(markerBike, i));
-            google.maps.event.addDomListener(map, 'zoom_changed', (function (markerBike, i) {
-                return function () {
+                    infowindow.open(_this.map, markerBike);
+                });
+                //console.log(document.getElementsByClassName('cityBike')[0]);
+                google.maps.event.addDomListener(map, 'zoom_changed', function () {
                     var zoomLevel = map.getZoom();
                     if (zoomLevel < 14) {
                         type = 'small';
@@ -110,8 +142,8 @@ var MapComponent = (function () {
                         type = 'large';
                     }
                     markerBike.setIcon(icons[type].icon);
-                };
-            })(markerBike, i));
+                });
+            })(markerBike, i);
         }
     };
     MapComponent.prototype.placeCircle = function (lat, lon, radius) {
@@ -160,7 +192,8 @@ var MapComponent = (function () {
         if (this.oldLat == null) {
         }
         else {
-            if (this.oldRadius == null) { }
+            if (this.oldRadius == null) {
+            }
             else {
                 if (this.oldRadius != event) {
                     this.oldRadius = event;
@@ -190,6 +223,7 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.showDirection = function (marker) {
         var _this = this;
+        if (marker === void 0) { marker = null; }
         var start = new google.maps.LatLng(this.centerLat, this.centerLon);
         var end = marker.getPosition();
         var request = {
@@ -224,7 +258,7 @@ var MapComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'map-gg',
-            template: "\n    <div id=\"mapCanvas\" ></div>\n    ",
+            template: "\n    <div id=\"mapCanvas\" ></div>\n\n    ",
             providers: []
         }), 
         __metadata('design:paramtypes', [router_1.Router])
