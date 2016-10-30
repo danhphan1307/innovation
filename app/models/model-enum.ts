@@ -68,3 +68,7 @@ export class PricingMethod {
     static CUSTOM: string = "CUSTOM";
 }
 
+export class PricingZone{
+    static PAID: string = "PAID";
+    static FREE: string = "FREE";
+}

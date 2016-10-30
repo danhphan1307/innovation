@@ -65,7 +65,7 @@ export class MapComponent{
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
         //Add KLM layer
         this.displayKML(this.klmSrcFreeAndPaid,this.map);
-        this.displayKML(this.klmSrcParkingZone,this.map);
+        //this.displayKML(this.klmSrcParkingZone,this.map);
         //this.displayKML(this.klmSrcInfoBar,this.map);
         //Bind direction display to map
 

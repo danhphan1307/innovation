@@ -77,4 +77,12 @@ var PricingMethod = (function () {
     return PricingMethod;
 }());
 exports.PricingMethod = PricingMethod;
+var PricingZone = (function () {
+    function PricingZone() {
+    }
+    PricingZone.PAID = "PAID";
+    PricingZone.FREE = "FREE";
+    return PricingZone;
+}());
+exports.PricingZone = PricingZone;
 //# sourceMappingURL=model-enum.js.map

@@ -25,6 +25,11 @@ export class BikeService{
       .catch(this.handleError);
     }
 
+    //Test get data from files
+    getDataFromFile() : Observable<any> {
+    return this.http.get('./app/files/free-and-paid-parking.json')
+                 .map(res => res.json().features);
+  }
     private extractData(res: Response) {
       let body = res.json();
       return body.stations || { };

@@ -25,6 +25,11 @@ var BikeService = (function () {
             .map(this.extractData)
             .catch(this.handleError);
     };
+    //Test get data from files
+    BikeService.prototype.getDataFromFile = function () {
+        return this.http.get('./app/files/free-and-paid-parking.json')
+            .map(function (res) { return res.json().features; });
+    };
     BikeService.prototype.extractData = function (res) {
         var body = res.json();
         return body.stations || {};

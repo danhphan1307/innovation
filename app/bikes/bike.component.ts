@@ -8,6 +8,7 @@ import {MapService} from '../map/map.service'
 import {AgmCoreModule} from 'angular2-google-maps/core';
 import {MapComponent} from '../map/map.component';
 
+import {ParkingType} from '../models/parking-type';
 @Component({
   selector: 'my-bike',
   template:``,
@@ -16,6 +17,8 @@ import {MapComponent} from '../map/map.component';
 
 export class BikeComponent implements OnInit {
   stations : BikeStation[];
+  zones : ParkingType[];
+
   data : string;
   title = 'Bike Station';
   markers : Marker[] = [];
@@ -37,14 +40,26 @@ export class BikeComponent implements OnInit {
 
 
   public loadBikeStations(mapComponent: MapComponent): void{
-    this.bikeService.getBikeStations()
+    /*this.bikeService.getBikeStations()
     .subscribe((stations:BikeStation[]) => {
       this.stations = stations;
       for (let s of stations){
         mapComponent.placeMarker(s.y,s.x);
       }
     });
+*/
 
-  }
+this.bikeService.getDataFromFile().subscribe((res: ParkingType[]) => {
+  this.zones = res;
+      //filter park and ride + active
+      this.zones = res.filter(f => f.properties.type == "paid");
+      for (var z of this.zones) {
+        console.log(z.properties);
+      }
+
+    });
+
+
+}
 
 }

@@ -26,13 +26,22 @@ var BikeComponent = (function () {
         console.log("change in bike");
     };
     BikeComponent.prototype.loadBikeStations = function (mapComponent) {
+        /*this.bikeService.getBikeStations()
+        .subscribe((stations:BikeStation[]) => {
+          this.stations = stations;
+          for (let s of stations){
+            mapComponent.placeMarker(s.y,s.x);
+          }
+        });
+    */
         var _this = this;
-        this.bikeService.getBikeStations()
-            .subscribe(function (stations) {
-            _this.stations = stations;
-            for (var _i = 0, stations_1 = stations; _i < stations_1.length; _i++) {
-                var s = stations_1[_i];
-                mapComponent.placeMarker(s.y, s.x);
+        this.bikeService.getDataFromFile().subscribe(function (res) {
+            _this.zones = res;
+            //filter park and ride + active
+            _this.zones = res.filter(function (f) { return f.properties.type == "paid"; });
+            for (var _i = 0, _a = _this.zones; _i < _a.length; _i++) {
+                var z = _a[_i];
+                console.log(z.properties);
             }
         });
     };
