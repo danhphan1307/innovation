@@ -120,8 +120,7 @@ var MapComponent = (function () {
             this.markers.push(markerBike);
             var func = (function (markerBike, i) {
                 google.maps.event.addListener(markerBike, 'click', function () {
-                    _this.showDirection(markerBike);
-                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img onclick="showDirection()" src="img/directionIcon.png" alt="love icon" class="directionIcon"><br><span>' + stations[i].name + '</span><h4 class="info"> Bike Available: ' + stations[i].bikesAvailable + '/' + (stations[i].bikesAvailable + stations[i].spacesAvailable) + '</h4></div>';
+                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="directionIcon"><br><span>' + stations[i].name + '</span><h4 class="info"> Bike Available: ' + stations[i].bikesAvailable + '/' + (stations[i].bikesAvailable + stations[i].spacesAvailable) + '</h4></div>';
                     for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
                         content += '<div class="freeBike">&nbsp;</div>';
                     }
@@ -131,8 +130,11 @@ var MapComponent = (function () {
                     content += '<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
                     infowindow.setContent(content);
                     infowindow.open(_this.map, markerBike);
+                    var el = document.getElementById('markerBike');
+                    google.maps.event.addDomListener(el, 'click', function () {
+                        _this.showDirection(markerBike);
+                    });
                 });
-                //console.log(document.getElementsByClassName('cityBike')[0]);
                 google.maps.event.addDomListener(map, 'zoom_changed', function () {
                     var zoomLevel = map.getZoom();
                     if (zoomLevel < 14) {
