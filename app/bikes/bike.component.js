@@ -18,7 +18,6 @@ var BikeComponent = (function () {
         this.mapService = mapService;
         this.title = 'Bike Station';
         this.markers = [];
-        this.iconUrl = 'https://c8.staticflickr.com/6/5298/29373396503_72f744d420_t.jpg';
     }
     BikeComponent.prototype.ngOnInit = function () {
     };
@@ -30,10 +29,7 @@ var BikeComponent = (function () {
         this.bikeService.getBikeStations()
             .subscribe(function (stations) {
             _this.stations = stations;
-            for (var _i = 0, stations_1 = stations; _i < stations_1.length; _i++) {
-                var s = stations_1[_i];
-                mapComponent.placeMarker(s.y, s.x);
-            }
+            mapComponent.placeMarkerBicycle(stations);
         });
     };
     __decorate([

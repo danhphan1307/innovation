@@ -19,7 +19,6 @@ export class BikeComponent implements OnInit {
   data : string;
   title = 'Bike Station';
   markers : Marker[] = [];
-  iconUrl = 'https://c8.staticflickr.com/6/5298/29373396503_72f744d420_t.jpg';
 
   @ViewChild(MarkerComponent)
   markerComponent: MarkerComponent
@@ -40,11 +39,7 @@ export class BikeComponent implements OnInit {
     this.bikeService.getBikeStations()
     .subscribe((stations:BikeStation[]) => {
       this.stations = stations;
-      for (let s of stations){
-        mapComponent.placeMarker(s.y,s.x);
-      }
+      mapComponent.placeMarkerBicycle(stations);
     });
-
   }
-
 }
