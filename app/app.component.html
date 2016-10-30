@@ -1,11 +1,11 @@
 <blackoverlay (click)="closeAll()"></blackoverlay>
-<left-nav></left-nav>
+<left-nav  (radiusUpdated)="MapComponent.updateRadius($event)" (radiusUpdated)="FacilityComponent.updateRadius($event)"></left-nav>
 <div id="controlNav">
 	<span id="cog" (click)="beginLeftNav()"  class="glyphicon glyphicon-cog " ></span><img src="img/demo-logo-2.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="beginLeftNav()"  class="glyphicon glyphicon-map-marker" ></span>
 </div>
-<map-gg (clickUpdated) = "FacilityRoute($event)"></map-gg>
+<map-gg (clickUpdated) = "FacilityRoute($event)" [circleRadius] = "leftNav.ReturnSliderValue()"></map-gg>
 <my-bike></my-bike>
 <facility-component></facility-component>
 <router-outlet></router-outlet>
-<bottom-nav (click)="bottomtNav()" ></bottom-nav>
+<bottom-nav (click)="bottomtNav($event)" ></bottom-nav>
 

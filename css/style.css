@@ -3,10 +3,13 @@
     padding:0;
     margin:0;
 }
-
+html{
+    height: 100%;
+    width:100%;
+}
 body {
-    width:100vw;
-    height:100vh;
+    height: 100%;
+    width: 100%;
     overflow-x:hidden;
     margin: 0px;
     z-index: 0;
@@ -53,12 +56,6 @@ nav a span{
     position: absolute!important;
 }
 
-/* When you mouse over the navigation links, change their color */
-nav a:hover, .offcanvas a:focus{
-    background-color: #CBDBF2;
-    color:white;
-}
-
 #logo{
     display: block;
     margin:auto;
@@ -70,7 +67,6 @@ nav a:hover, .offcanvas a:focus{
     border: 4px solid #779ECB;
     max-width: 150px;
 }
-
 
 #app-logo{
     display: block;
@@ -159,7 +155,7 @@ nav a:hover, .offcanvas a:focus{
 }
 #mySidenav .copyright{
     position: absolute;
-    bottom:3%;
+    bottom:1%;
     margin:auto 5%;
 }
 #mySidenav .copyright p{
@@ -251,9 +247,9 @@ h2{
 .cityBike h3{
     display: inline-block;
 }
-.cityBike .loveIcon{
+.cityBike .directionIcon{
     z-index: 10000;
-    margin-top:-10px;
+    margin-top:-5px;
     margin-left:10px;
 }
 
@@ -265,7 +261,7 @@ h2{
 .cityBike .info{
     margin-top:5px;
     color:#484B64;
-    font-size:17px;
+    font-size:15px;
     font-weight: normal;
 }
 .cityBike .register{
@@ -304,10 +300,10 @@ h2{
     text-transform: uppercase;
     margin:0;
     color:#484B64;
-    font-size: 19px;
+    font-size: 16px;
 }
 .cityBike span{
-    font-size: 17px;
+    font-size: 14px;
     color:#484B64;
     font-weight:normal;
 }
@@ -324,6 +320,9 @@ h2{
     height: 100%;
     margin:0;
 }
+.bottomNav nav a{
+    height:100%;
+}
 .bottomNav li{
     position: relative;
     height: 100%;
@@ -332,7 +331,6 @@ h2{
     font-weight: bold;
     height: 100%;
     color:#acacac;
-    /*width: 50%;*/
     width: 16.66%;
     float: left;
     text-align: center;
@@ -349,9 +347,13 @@ h2{
 .bottomNav img{
     background-color:#acacac;
 }
-.bottomNav .active{
-    background-color:#464962;
-    color:white;
+.custom-img-responsive{
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */

@@ -20,7 +20,6 @@ var FacilityComponent = (function () {
         this.mapClicked = new location_1.Coords(0.0, 0.0);
         this.markers = [];
         this.title = 'Park and Ride';
-        this.radius = 1000;
     }
     FacilityComponent.prototype.ngOnInit = function () {
     };
@@ -29,8 +28,27 @@ var FacilityComponent = (function () {
         this.center.lon = event.lon;
     };
     FacilityComponent.prototype.receivedClick = function (mapComponent, event, radius) {
-        console.log(event);
+        this.map = mapComponent;
+        this.coords = event;
+        this.radius = radius;
+        this.oldRadius = this.radius;
         this.loadFacilitiesNearby(mapComponent, event, radius);
+    };
+    FacilityComponent.prototype.updateRadius = function (event) {
+        this.radius = event;
+        if (this.coords == null) {
+        }
+        else {
+            if (this.oldRadius == null) { }
+            else {
+                if (this.oldRadius != event) {
+                    this.map.clearMarkers();
+                    this.radius = event;
+                    this.oldRadius = this.radius;
+                    this.loadFacilitiesNearby(this.map, this.coords, this.radius);
+                }
+            }
+        }
     };
     FacilityComponent.prototype.loadFacilitiesNearby = function (mapComponent, coord, radius) {
         var _this = this;
@@ -55,7 +73,7 @@ var FacilityComponent = (function () {
             moduleId: module.id,
             selector: 'facility-component',
             template: "",
-            providers: [facility_service_1.FacilityService],
+            providers: [facility_service_1.FacilityService]
         }), 
         __metadata('design:paramtypes', [facility_service_1.FacilityService])
     ], FacilityComponent);

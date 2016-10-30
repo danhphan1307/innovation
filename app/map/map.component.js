@@ -10,18 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var location_1 = require('../models/location');
+var router_1 = require('@angular/router');
 var MapComponent = (function () {
-    function MapComponent() {
+    function MapComponent(_router) {
+        this._router = _router;
         this.centerLat = 0;
         this.centerLon = 0;
-        this.directionsDisplay = new google.maps.DirectionsRenderer;
+        this.directionsDisplay = new google.maps.DirectionsRenderer({
+            preserveViewport: true
+        });
         this.markers = [];
         this.circles = [];
         this.centerUpdated = new core_1.EventEmitter();
         this.clickUpdated = new core_1.EventEmitter();
-        this.klmSrcParkingZone = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/vyohykerajat_ETRS.kml';
-        this.klmSrcFreeAndPaid = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/kantakaupungin_pysakointi2014_ETRS_GK25.kml';
-        this.klmSrcInfoBar = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/tekstit_ETRS.kml';
+        this.klmSrc = '../files/vyohykerajat_ETRS.kml';
+        this.router = _router;
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -39,9 +42,7 @@ var MapComponent = (function () {
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
         //Add KLM layer
-        this.displayKML(this.klmSrcFreeAndPaid, this.map);
-        //this.displayKML(this.klmSrcParkingZone,this.map);
-        //this.displayKML(this.klmSrcInfoBar,this.map);
+        this.displayKML(this.klmSrc, this.map);
         //Bind direction display to map
         this.directionsDisplay.setMap(this.map);
         this.centerMarker = new google.maps.Marker({
@@ -53,59 +54,112 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.placeMarker = function (lat, lon) {
         var _this = this;
+        var map = this.map;
+        var type;
+        var icons = {
+            small: {
+                icon: 'img/parkingIconSmall.png'
+            },
+            large: {
+                icon: 'img/parkingIconLarge.png'
+            }
+        };
+        var zoomLevel = map.getZoom();
+        if (zoomLevel < 14) {
+            type = 'small';
+        }
+        else {
+            type = 'large';
+        }
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat, lon),
             map: this.map,
-            icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+            icon: icons[type].icon
         });
         this.markers.push(marker);
+        google.maps.event.addDomListener(map, 'zoom_changed', (function (marker) {
+            return function () {
+                var zoomLevel = map.getZoom();
+                if (zoomLevel < 14) {
+                    type = 'small';
+                }
+                else {
+                    type = 'large';
+                }
+                marker.setIcon(icons[type].icon);
+            };
+        })(marker));
         google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
     };
-    MapComponent.prototype.placeCircle = function (lat, lon, radius) {
-        this.circles.push(new google.maps.Circle({
-            strokeColor: '#FF0000',
-            strokeOpacity: 0.8,
-            strokeWeight: 1,
-            map: this.map,
-            center: new google.maps.LatLng(lat, lon),
-            radius: radius
-        }));
-    };
-    MapComponent.prototype.clearMap = function () {
-        this.clearMarkers();
-        this.clearCircles();
-    };
-    //Private functions
-    MapComponent.prototype.createEventListeners = function () {
+    MapComponent.prototype.placeMarkerBicycle = function (stations) {
         var _this = this;
-        this.map.addListener('click', function (event) { return _this.callbackForMapClickEvent(event); });
-    };
-    MapComponent.prototype.callbackForMapClickEvent = function (event) {
-        var clickCoord = new location_1.Coords(event.latLng.lat(), event.latLng.lng());
-        //Clear from previous searches
-        this.clearMarkers();
-        this.clearCircles();
-        //Create new circle and notify parent view
-        this.placeCircle(event.latLng.lat(), event.latLng.lng(), this.circleRadius);
-        this.clickUpdated.emit(clickCoord);
-    };
-    MapComponent.prototype.showDirection = function (marker) {
-        var _this = this;
-        var start = new google.maps.LatLng(this.centerLat, this.centerLon);
-        var end = marker.getPosition();
-        var request = {
-            origin: start,
-            destination: end,
-            travelMode: 'DRIVING'
+        var infowindow = new google.maps.InfoWindow();
+        var map = this.map;
+        var type;
+        var icons = {
+            small: {
+                icon: 'img/smallBike.png'
+            },
+            large: {
+                icon: 'img/largeBike.png'
+            }
         };
-        var directionsService = new google.maps.DirectionsService;
-        directionsService.route(request, function (result, status) { return _this.callbackForShowDirection(result, status); });
-    };
-    MapComponent.prototype.callbackForShowDirection = function (result, status) {
-        if (status == 'OK') {
-            this.directionsDisplay.setDirections(result);
+        var zoomLevel = map.getZoom();
+        if (zoomLevel < 14) {
+            type = 'small';
         }
-        ;
+        else {
+            type = 'large';
+        }
+        for (var i = 0; i < stations.length; i++) {
+            var markerBike = new google.maps.Marker({
+                position: new google.maps.LatLng(stations[i].y, stations[i].x),
+                map: this.map,
+                icon: icons[type].icon
+            });
+            this.markers.push(markerBike);
+            var func = (function (markerBike, i) {
+                google.maps.event.addListener(markerBike, 'click', function () {
+                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="directionIcon"><br><span>' + stations[i].name + '</span><h4 class="info"> Bike Available: ' + stations[i].bikesAvailable + '/' + (stations[i].bikesAvailable + stations[i].spacesAvailable) + '</h4></div>';
+                    for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
+                        content += '<div class="freeBike">&nbsp;</div>';
+                    }
+                    for (var counter = 0; counter < (stations[i].spacesAvailable); counter++) {
+                        content += '<div class="freeSpot">&nbsp;</div>';
+                    }
+                    content += '<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
+                    infowindow.setContent(content);
+                    infowindow.open(_this.map, markerBike);
+                    var el = document.getElementById('markerBike');
+                    google.maps.event.addDomListener(el, 'click', function () {
+                        _this.showDirection(markerBike);
+                    });
+                });
+                google.maps.event.addDomListener(map, 'zoom_changed', function () {
+                    var zoomLevel = map.getZoom();
+                    if (zoomLevel < 14) {
+                        type = 'small';
+                    }
+                    else {
+                        type = 'large';
+                    }
+                    markerBike.setIcon(icons[type].icon);
+                });
+            })(markerBike, i);
+        }
+    };
+    MapComponent.prototype.placeCircle = function (lat, lon, radius) {
+        this.clearCircles();
+        if (radius != 0) {
+            this.circles.push(new google.maps.Circle({
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                map: this.map,
+                center: new google.maps.LatLng(lat, lon),
+                radius: radius
+            }));
+        }
     };
     MapComponent.prototype.clearMarkers = function () {
         for (var i = 0; i < this.markers.length; i++) {
@@ -117,10 +171,70 @@ var MapComponent = (function () {
             this.circles[i].setMap(null);
         }
     };
+    MapComponent.prototype.callbackForShowDirection = function (result, status) {
+        if (status == 'OK') {
+            this.directionsDisplay.setDirections(result);
+        }
+        ;
+    };
     MapComponent.prototype.displayKML = function (src, map) {
         var kmlLayer = new google.maps.KmlLayer(src, {
+            suppressInfoWindows: true,
+            preserveViewport: false,
             map: map
         });
+        google.maps.event.addListener(kmlLayer, 'click', function (event) {
+            var content = event.featureData.infoWindowHtml;
+            var testimonial = document.getElementById('capture');
+            testimonial.innerHTML = content;
+        });
+    };
+    MapComponent.prototype.updateRadius = function (event) {
+        this.circleRadius = event;
+        if (this.oldLat == null) {
+        }
+        else {
+            if (this.oldRadius == null) {
+            }
+            else {
+                if (this.oldRadius != event) {
+                    this.oldRadius = event;
+                    this.clearCircles();
+                    this.placeCircle(this.oldLat, this.oldLong, this.circleRadius);
+                }
+            }
+        }
+    };
+    //Private functions
+    MapComponent.prototype.createEventListeners = function () {
+        var _this = this;
+        this.map.addListener('click', function (event) { return _this.callbackForMapClickEvent(event); });
+    };
+    MapComponent.prototype.callbackForMapClickEvent = function (event) {
+        if (this.router.url == "/parking") {
+            this.clearCircles();
+            var clickCoord = new location_1.Coords(event.latLng.lat(), event.latLng.lng());
+            this.oldLat = event.latLng.lat();
+            this.oldLong = event.latLng.lng();
+            //Clear from previous searches
+            //Create new circle and notify parent view
+            this.placeCircle(event.latLng.lat(), event.latLng.lng(), this.circleRadius);
+            this.clickUpdated.emit(clickCoord);
+            this.oldRadius = this.circleRadius;
+        }
+    };
+    MapComponent.prototype.showDirection = function (marker) {
+        var _this = this;
+        if (marker === void 0) { marker = null; }
+        var start = new google.maps.LatLng(this.centerLat, this.centerLon);
+        var end = marker.getPosition();
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: 'DRIVING'
+        };
+        var directionsService = new google.maps.DirectionsService;
+        directionsService.route(request, function (result, status) { return _this.callbackForShowDirection(result, status); });
     };
     __decorate([
         core_1.Input(), 
@@ -146,10 +260,10 @@ var MapComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'map-gg',
-            template: "\n    <div id=\"mapCanvas\" ></div>\n    ",
+            template: "\n    <div id=\"mapCanvas\" ></div>\n\n    ",
             providers: []
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [router_1.Router])
     ], MapComponent);
     return MapComponent;
 }());
