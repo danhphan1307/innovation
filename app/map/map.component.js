@@ -91,6 +91,56 @@ var MapComponent = (function () {
         })(marker));
         google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
     };
+    MapComponent.prototype.placeMarkerFacility = function (f) {
+        var _this = this;
+        var infowindow = new google.maps.InfoWindow();
+        var map = this.map;
+        var type;
+        var icons = {
+            small: {
+                icon: 'img/parkingIconSmall.png'
+            },
+            large: {
+                icon: 'img/parkingIconLarge.png'
+            }
+        };
+        var zoomLevel = map.getZoom();
+        if (zoomLevel < 14) {
+            type = 'small';
+        }
+        else {
+            type = 'large';
+        }
+        for (var i = 0; i < f.length; i++) {
+            var markerFacility = new google.maps.Marker({
+                position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
+                map: this.map,
+                icon: icons[type].icon
+            });
+            this.markers.push(markerFacility);
+            var func = (function (markerFacility, i) {
+                google.maps.event.addListener(markerFacility, 'click', function () {
+                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="love icon" class="directionIcon"><br><span>' + f[i].name.en + '</span></div></div>';
+                    infowindow.setContent(content);
+                    infowindow.open(_this.map, markerFacility);
+                    var el = document.getElementById('markerFacility');
+                    google.maps.event.addDomListener(el, 'click', function () {
+                        _this.showDirection(markerFacility);
+                    });
+                });
+                google.maps.event.addDomListener(map, 'zoom_changed', function () {
+                    var zoomLevel = map.getZoom();
+                    if (zoomLevel < 14) {
+                        type = 'small';
+                    }
+                    else {
+                        type = 'large';
+                    }
+                    markerFacility.setIcon(icons[type].icon);
+                });
+            })(markerFacility, i);
+        }
+    };
     MapComponent.prototype.placeMarkerBicycle = function (stations) {
         var _this = this;
         var infowindow = new google.maps.InfoWindow();

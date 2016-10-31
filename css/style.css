@@ -248,7 +248,7 @@ h2{
     display: inline-block;
 }
 .cityBike .directionIcon{
-    z-index: 10000;
+    z-index: 10;
     margin-top:-5px;
     margin-left:10px;
 }
@@ -354,6 +354,13 @@ h2{
   height: 100%;
   max-width: 50px;
   max-height: 50px;
+}
+
+#markerFacility, #markerBike{
+    background-color: #acacac;
+}
+#markerFacility:active, #markerBike:active{
+    background-color: #4A6AA5;
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */

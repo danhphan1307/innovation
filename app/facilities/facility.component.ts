@@ -79,10 +79,7 @@ export class FacilityComponent implements OnInit {
         this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
           && f.status == FacilityStatus.IN_OPERATION
           );
-        for (var f of this.facilities) {
-          let coords = f.location.coordinates;
-          mapComponent.placeMarker(coords[0][0][1],coords[0][0][0]);
-        }
+        mapComponent.placeMarkerFacility(this.facilities);
       });
     }
   }
