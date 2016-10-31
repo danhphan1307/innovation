@@ -68,7 +68,14 @@ export class PricingMethod {
     static CUSTOM: string = "CUSTOM";
 }
 
+//Does not make sense much now since they only indicate the free and paid zone
+//Will udpate later for more clarification
 export class PricingZone{
-    static PAID: string = "PAID";
-    static FREE: string = "FREE";
+    static FREE_1: string = "ilmainen pitkaaikainen pysakointi";
+    static FREE_2: string = "ilmainen lyhytaikainen pysakointi_Kayta pysakointikiekkoa";
+
+    static PAID_1 :string = "maksullinen_pysakointialue";
+    static PAID_2 : string = "kertamaksu_enint_1_tunti_ilman_asukas_tai_yritystunnusta";
+    static PAID_3: string = "maksullinen_ma-pe_9-21_ilman_asukas_tai_yritystunnusta";
+
 }

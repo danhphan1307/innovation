@@ -13,6 +13,7 @@ var bike_service_1 = require('./bike.service');
 var marker_component_1 = require('../marker/marker.component');
 var map_service_1 = require('../map/map.service');
 var parking_zone_filter_service_1 = require('../shared/parking-zone-filter.service');
+var model_enum_1 = require('../models/model-enum');
 var BikeComponent = (function () {
     function BikeComponent(bikeService, mapService, parkingFilterService) {
         this.bikeService = bikeService;
@@ -29,19 +30,20 @@ var BikeComponent = (function () {
     };
     BikeComponent.prototype.loadBikeStations = function (mapComponent) {
         var _this = this;
+        var pricingEnum = model_enum_1.PricingZone;
         this.bikeService.getBikeStations()
             .subscribe(function (stations) {
             _this.stations = stations;
             mapComponent.placeMarkerBicycle(stations);
         });
-        this.getPaidZones("000000");
+        this.getPaidZones(pricingEnum.PAID_1);
     };
-    BikeComponent.prototype.getPaidZones = function (colorCode) {
+    BikeComponent.prototype.getPaidZones = function (pricingZone) {
         var _this = this;
         this.bikeService.getDataFromFile().subscribe(function (res) {
             _this.paidZones = res;
             //filter park and ride + active
-            _this.paidZones = res.filter(function (f) { return f.properties.stroke == colorCode; });
+            _this.paidZones = res.filter(function (f) { return f.properties.sallittu_pysakointitapa == pricingZone; });
             for (var _i = 0, _a = _this.paidZones; _i < _a.length; _i++) {
                 var z = _a[_i];
                 console.log(z.properties);
