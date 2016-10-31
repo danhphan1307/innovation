@@ -247,7 +247,7 @@ h2{
 .cityBike h3{
     display: inline-block;
 }
-.cityBike .directionIcon{
+.functionIcon{
     z-index: 10;
     margin-top:-5px;
     margin-left:10px;
@@ -356,12 +356,26 @@ h2{
   max-height: 50px;
 }
 
-#markerFacility, #markerBike{
+#markerFacility, #markerBike, #saveIcon{
     background-color: #acacac;
 }
 #markerFacility:active, #markerBike:active{
     background-color: #4A6AA5;
 }
+#saveIcon:active{
+    background-color:#779ECB;
+}
+
+.bottomDiv{
+    z-index: 2;
+    position: absolute;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    background-color: white;
+    transition: .5s;
+}
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {

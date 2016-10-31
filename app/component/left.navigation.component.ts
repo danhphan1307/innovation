@@ -14,11 +14,6 @@ declare var Slider: any;
     state("open", style({left:0})),
     state("close", style({left: "-70%" })),
     transition("open <=> close", animate( "200ms" )),
-    ]),
-  trigger("animationBlackOverlay", [
-    state("open", style({display:"block", opacity:1})),
-    state("close", style({display:"none", opacity:0})),
-    transition("open <=> close", animate( "1ms" )),
     ])
   ],
 

@@ -14,14 +14,12 @@ var map_component_1 = require('./map/map.component');
 var bottom_navigation_component_1 = require('./component/bottom.navigation.component');
 var blackoverlay_component_1 = require('./component/blackoverlay.component');
 var facility_component_1 = require('./facilities/facility.component');
+var user_panel_component_1 = require('./component/user.panel.component');
 var bike_component_1 = require('./bikes/bike.component');
 var router_1 = require('@angular/router');
 var AppComponent = (function () {
     function AppComponent(_router) {
         this._router = _router;
-        this.leftNavState = 'close';
-        this.bottomNavState = 'close';
-        this.blackOverlayState = 'close';
         // google maps zoom level
         this.zoom = 14;
         // initial center position for the map
@@ -35,7 +33,6 @@ var AppComponent = (function () {
     AppComponent.prototype.beginLeftNav = function () {
         this.leftNav.setState('open');
         this.blackOverlay.setState('open');
-        //this.bottomNav.setState('close');
     };
     AppComponent.prototype.bottomtNav = function () {
         this.MapComponent.clearMarkers();
@@ -56,6 +53,7 @@ var AppComponent = (function () {
     AppComponent.prototype.closeAll = function () {
         this.leftNav.setState('close');
         this.blackOverlay.setState('close');
+        //this.UserComponent.setState('close');
     };
     AppComponent.prototype.FacilityRoute = function (event) {
         if (this.router.url == "/parking") {
@@ -89,6 +87,10 @@ var AppComponent = (function () {
         core_1.ViewChild(bike_component_1.BikeComponent), 
         __metadata('design:type', bike_component_1.BikeComponent)
     ], AppComponent.prototype, "BikeComponent", void 0);
+    __decorate([
+        core_1.ViewChild(user_panel_component_1.UserComponent), 
+        __metadata('design:type', user_panel_component_1.UserComponent)
+    ], AppComponent.prototype, "UserComponent", void 0);
     AppComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
