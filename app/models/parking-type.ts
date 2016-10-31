@@ -1,12 +1,23 @@
 
-
+import {Coords} from './location'
 export interface ParkingType{
-    geometry: any;
+    geometry: Geometries;
     properties: ParkingTypeProperties;
 }
 
+export interface Geometries{
+    geometries: Polygon[];
+
+}
 export interface ParkingTypeProperties{
     X: number;
     Y: number;
+    type: string;
+    stroke: string;
+}
+
+
+export interface Polygon{
+    coordinates: [Coords[]] ;
     type: string;
 }

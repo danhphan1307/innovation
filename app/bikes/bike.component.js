@@ -12,10 +12,12 @@ var core_1 = require('@angular/core');
 var bike_service_1 = require('./bike.service');
 var marker_component_1 = require('../marker/marker.component');
 var map_service_1 = require('../map/map.service');
+var parking_zone_filter_service_1 = require('../shared/parking-zone-filter.service');
 var BikeComponent = (function () {
-    function BikeComponent(bikeService, mapService) {
+    function BikeComponent(bikeService, mapService, parkingFilterService) {
         this.bikeService = bikeService;
         this.mapService = mapService;
+        this.parkingFilterService = parkingFilterService;
         this.title = 'Bike Station';
         this.markers = [];
         this.iconUrl = 'https://c8.staticflickr.com/6/5298/29373396503_72f744d420_t.jpg';
@@ -26,20 +28,21 @@ var BikeComponent = (function () {
         console.log("change in bike");
     };
     BikeComponent.prototype.loadBikeStations = function (mapComponent) {
-        /*this.bikeService.getBikeStations()
-        .subscribe((stations:BikeStation[]) => {
-          this.stations = stations;
-          for (let s of stations){
-            mapComponent.placeMarker(s.y,s.x);
-          }
+        var _this = this;
+        this.bikeService.getBikeStations()
+            .subscribe(function (stations) {
+            _this.stations = stations;
+            mapComponent.placeMarkerBicycle(stations);
         });
-    */
+        this.getPaidZones("000000");
+    };
+    BikeComponent.prototype.getPaidZones = function (colorCode) {
         var _this = this;
         this.bikeService.getDataFromFile().subscribe(function (res) {
-            _this.zones = res;
+            _this.paidZones = res;
             //filter park and ride + active
-            _this.zones = res.filter(function (f) { return f.properties.type == "paid"; });
-            for (var _i = 0, _a = _this.zones; _i < _a.length; _i++) {
+            _this.paidZones = res.filter(function (f) { return f.properties.stroke == colorCode; });
+            for (var _i = 0, _a = _this.paidZones; _i < _a.length; _i++) {
                 var z = _a[_i];
                 console.log(z.properties);
             }
@@ -53,9 +56,9 @@ var BikeComponent = (function () {
         core_1.Component({
             selector: 'my-bike',
             template: "",
-            providers: [bike_service_1.BikeService, map_service_1.MapService]
+            providers: [bike_service_1.BikeService, map_service_1.MapService, parking_zone_filter_service_1.ParkingZoneFilterService]
         }), 
-        __metadata('design:paramtypes', [bike_service_1.BikeService, map_service_1.MapService])
+        __metadata('design:paramtypes', [bike_service_1.BikeService, map_service_1.MapService, parking_zone_filter_service_1.ParkingZoneFilterService])
     ], BikeComponent);
     return BikeComponent;
 }());

@@ -5,6 +5,7 @@ import {BikeStation} from './bike';
 import {Marker} from '../marker/marker';
 import {MarkerComponent} from '../marker/marker.component'
 import {MapService} from '../map/map.service'
+import {ParkingZoneFilterService} from '../shared/parking-zone-filter.service'
 import {AgmCoreModule} from 'angular2-google-maps/core';
 import {MapComponent} from '../map/map.component';
 
@@ -12,13 +13,13 @@ import {ParkingType} from '../models/parking-type';
 @Component({
   selector: 'my-bike',
   template:``,
-  providers: [BikeService, MapService]
+  providers: [BikeService, MapService,ParkingZoneFilterService]
 })
 
 export class BikeComponent implements OnInit {
   stations : BikeStation[];
-  zones : ParkingType[];
-
+  paidZones : ParkingType[];
+  freeZones: ParkingType[];
   data : string;
   title = 'Bike Station';
   markers : Marker[] = [];
@@ -26,7 +27,9 @@ export class BikeComponent implements OnInit {
 
   @ViewChild(MarkerComponent)
   markerComponent: MarkerComponent
-  constructor(private bikeService: BikeService, private mapService: MapService){
+  constructor(private bikeService: BikeService,
+    private mapService: MapService,
+    private parkingFilterService: ParkingZoneFilterService){
 
   }
 
@@ -40,24 +43,26 @@ export class BikeComponent implements OnInit {
 
 
   public loadBikeStations(mapComponent: MapComponent): void{
-    /*this.bikeService.getBikeStations()
+    this.bikeService.getBikeStations()
     .subscribe((stations:BikeStation[]) => {
       this.stations = stations;
       mapComponent.placeMarkerBicycle(stations);
     });
-*/
 
-this.bikeService.getDataFromFile().subscribe((res: ParkingType[]) => {
-  this.zones = res;
+    this.getPaidZones("000000");
+
+  }
+
+  public getPaidZones(colorCode: string): void {
+    this.bikeService.getDataFromFile().subscribe((res: ParkingType[]) => {
+      this.paidZones = res;
       //filter park and ride + active
-      this.zones = res.filter(f => f.properties.type == "paid");
-      for (var z of this.zones) {
+      this.paidZones = res.filter(f => f.properties.stroke == colorCode);
+      for (var z of this.paidZones) {
         console.log(z.properties);
       }
 
     });
-
-
-}
+  }
 
 }
