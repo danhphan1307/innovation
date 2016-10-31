@@ -52,6 +52,9 @@ var MapComponent = (function () {
         });
         this.createEventListeners();
     };
+    MapComponent.prototype.center = function () {
+        this.map.panTo(new google.maps.LatLng(this.centerLat, this.centerLon));
+    };
     MapComponent.prototype.placeMarker = function (lat, lon) {
         var _this = this;
         var map = this.map;
@@ -202,7 +205,7 @@ var MapComponent = (function () {
         this.clearCircles();
         if (radius != 0) {
             this.circles.push(new google.maps.Circle({
-                strokeColor: '#FF0000',
+                strokeColor: '#4a6aa5',
                 strokeOpacity: 0.8,
                 strokeWeight: 1,
                 map: this.map,

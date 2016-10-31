@@ -48,7 +48,7 @@ declare var Slider: any;
   <img src="img/diameter.png" alt="diameter of the search"/>
   </td>
   <td colspan="2">
-  Search Diameter
+  Search Diameter - P&R
   </td>
   </tr>
 
@@ -61,8 +61,8 @@ declare var Slider: any;
 
 
   <div class="copyright">
-  <hr>
-  <img src="img/demo-logo-2.png" alt="config" style="width:40%;display:block;margin:5% auto;">
+  <hr style="margin-top:0;margin-bottom:0;">
+  <img src="img/demo-logo-2.png" alt="config" style="width:40%;display:block;margin:2% auto;">
   <p>Version: 0.9.1<br>We are not responsible for any liability, or accuracy related to your use of this Site.<br><br>
   © Parking Group, Metropolia UAS. <br>
   All rights reserved.</p>

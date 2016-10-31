@@ -75,6 +75,7 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+
         //Add KLM layer
         this.displayKML(this.klmSrc,this.map);
         //Bind direction display to map
@@ -88,6 +89,11 @@ export class MapComponent{
         });
         this.createEventListeners();
 
+    }
+
+
+    center():void{
+        this.map.panTo(new google.maps.LatLng(this.centerLat,this.centerLon));
     }
 
     placeMarker(lat: number, lon: number): void{
@@ -245,7 +251,7 @@ export class MapComponent{
         this.clearCircles();
         if(radius != 0){
             this.circles.push(new google.maps.Circle({
-                strokeColor: '#FF0000',
+                strokeColor: '#4a6aa5',
                 strokeOpacity: 0.8,
                 strokeWeight: 1,
                 map: this.map,

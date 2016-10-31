@@ -159,7 +159,7 @@ nav a span{
     margin:auto 5%;
 }
 #mySidenav .copyright p{
-    margin-left: auto; margin-right: auto; text-align: justify; -moz-text-align-last: center; text-align-last: center; 
+    margin:auto 0; text-align: justify; -moz-text-align-last: center; text-align-last: center;
 }
 #mySidenav .copyright hr{
     margin-left:-5%;
