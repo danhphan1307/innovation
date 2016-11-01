@@ -58,11 +58,18 @@ var AppComponent = (function () {
         }
         if (this.router.url == "/paidzone") {
             this.MapComponent.clearPolygons();
+            //Show all for demo purposes
             this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_1, this.MapComponent);
+            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_2, this.MapComponent);
+            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_3, this.MapComponent);
+            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_4, this.MapComponent);
+            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_5, this.MapComponent);
         }
         if (this.router.url == "/freezone") {
             this.MapComponent.clearPolygons();
+            //Show all for demo purposes
             this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_1, this.MapComponent);
+            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_2, this.MapComponent);
         }
     };
     AppComponent.prototype.closeAll = function () {

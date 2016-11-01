@@ -31,11 +31,28 @@ var ParkZoneComponent = (function () {
             _this.paidZones = res.filter(function (f) { return f.properties.sallittu_pysakointitapa == pricingZone; });
             // && f.geometry.type=="Polygon");
             var colorCode = "";
-            if (pricingZone == (model_enum_1.PricingZoneEnum.PAID_1 || model_enum_1.PricingZoneEnum.PAID_2 || model_enum_1.PricingZoneEnum.PAID_3)) {
-                colorCode = '#FF0000';
-            }
-            else {
-                colorCode = '#0000FF';
+            switch (pricingZone) {
+                case model_enum_1.PricingZoneEnum.PAID_1:
+                    colorCode = model_enum_1.ColorCode.DoRucRo;
+                    break;
+                case model_enum_1.PricingZoneEnum.PAID_2:
+                    colorCode = model_enum_1.ColorCode.MauNuocBien;
+                    break;
+                case model_enum_1.PricingZoneEnum.PAID_3:
+                    colorCode = model_enum_1.ColorCode.TimQuyPhai;
+                    break;
+                case model_enum_1.PricingZoneEnum.PAID_4:
+                    colorCode = model_enum_1.ColorCode.HongSenSua;
+                    break;
+                case model_enum_1.PricingZoneEnum.PAID_5:
+                    colorCode = model_enum_1.ColorCode.MauDeoGiKhongBiet;
+                    break;
+                case model_enum_1.PricingZoneEnum.FREE_1:
+                    colorCode = model_enum_1.ColorCode.XanhMatDiu;
+                    break;
+                case model_enum_1.PricingZoneEnum.FREE_2:
+                    colorCode = model_enum_1.ColorCode.CamLoeLoet;
+                    break;
             }
             for (var _i = 0, _a = _this.paidZones; _i < _a.length; _i++) {
                 var z = _a[_i];

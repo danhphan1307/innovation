@@ -80,3 +80,14 @@ export class PricingZoneEnum{
     static PAID_4: string = "maksullinen_pysakointilaitos_tai_alue";
     static PAID_5: string = "kertamaksu_enint_4_tuntia";
 }
+
+//Convenient shorthand for color code in app
+export class ColorCode{
+    static DoRucRo: string = "#FF0000";
+    static XanhMatDiu: string = "#0000FF";
+    static MauNuocBien: string = "#0000FF";
+    static CamLoeLoet: string = "#FFA500";
+    static TimQuyPhai: string = "#800080";
+    static HongSenSua: string = "#FF69B4";
+    static MauDeoGiKhongBiet: string = "#1E4B3B";
+}

@@ -92,4 +92,18 @@ var PricingZoneEnum = (function () {
     return PricingZoneEnum;
 }());
 exports.PricingZoneEnum = PricingZoneEnum;
+//Convenient shorthand for color code in app
+var ColorCode = (function () {
+    function ColorCode() {
+    }
+    ColorCode.DoRucRo = "#FF0000";
+    ColorCode.XanhMatDiu = "#0000FF";
+    ColorCode.MauNuocBien = "#0000FF";
+    ColorCode.CamLoeLoet = "#FFA500";
+    ColorCode.TimQuyPhai = "#800080";
+    ColorCode.HongSenSua = "#FF69B4";
+    ColorCode.MauDeoGiKhongBiet = "#1E4B3B";
+    return ColorCode;
+}());
+exports.ColorCode = ColorCode;
 //# sourceMappingURL=model-enum.js.map

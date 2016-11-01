@@ -6,7 +6,7 @@ import {MapService} from '../map/map.service'
 import {ParkingZoneFilterService} from '../shared/parking-zone-filter.service'
 import {AgmCoreModule} from 'angular2-google-maps/core';
 import {MapComponent} from '../map/map.component';
-import {PricingZoneEnum} from '../models/model-enum'
+import {PricingZoneEnum,ColorCode} from '../models/model-enum'
 import {ParkingType} from '../models/parking-type';
 
 @Component({
@@ -47,12 +47,33 @@ export class ParkZoneComponent implements OnInit {
       this.paidZones = res.filter(f => f.properties.sallittu_pysakointitapa == pricingZone)
                                       // && f.geometry.type=="Polygon");
     var colorCode = "";
-      if (pricingZone == (PricingZoneEnum.PAID_1 ||PricingZoneEnum.PAID_2||PricingZoneEnum.PAID_3)){
-        colorCode='#FF0000'
-      } else {
-        colorCode = '#0000FF'
-      }
-      for (var z of this.paidZones) {
+
+    switch (pricingZone){
+      case PricingZoneEnum.PAID_1:
+      colorCode= ColorCode.DoRucRo;
+      break;
+      case PricingZoneEnum.PAID_2:
+      colorCode= ColorCode.MauNuocBien;
+      break;
+      case PricingZoneEnum.PAID_3:
+      colorCode= ColorCode.TimQuyPhai;
+      break;
+      case PricingZoneEnum.PAID_4:
+      colorCode= ColorCode.HongSenSua;
+      break;
+      case PricingZoneEnum.PAID_5:
+      colorCode= ColorCode.MauDeoGiKhongBiet
+      break;
+      case PricingZoneEnum.FREE_1:
+      colorCode= ColorCode.XanhMatDiu;
+      break;
+      case PricingZoneEnum.FREE_2:
+      colorCode= ColorCode.CamLoeLoet;
+      break;
+
+    }
+
+    for (var z of this.paidZones) {
 
       if (z.geometry.type == "Polygon"){
         //Draw the outbounds
@@ -69,10 +90,10 @@ export class ParkZoneComponent implements OnInit {
       }
 
 
-      }
+    }
 
 
-    });
-      }
+  });
+}
 
 }
