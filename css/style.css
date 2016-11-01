@@ -363,9 +363,8 @@ h2{
     background-color: #4A6AA5;
 }
 #saveIcon:active{
-    background-color:#779ECB;
+    background-color:#1CBB9B;
 }
-
 .bottomDiv{
     z-index: 2;
     position: absolute;
@@ -375,7 +374,21 @@ h2{
     background-color: white;
     transition: .5s;
 }
-
+.locationPanel{
+    width: 100%;
+    background: #1cbb9b;
+    display:flex;justify-content:center;align-items:center;
+    color:white;
+    height:7vh;
+}
+.content{
+    margin-top:2%;
+    width: 100%;
+    display:flex;justify-content:center;align-items:center;
+}
+.locationPanel #saveIcon{
+    background:#1cbb9b;
+}
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {

@@ -131,9 +131,7 @@ import { Component, OnInit,  Input,
 
 
       constructor(private _router: Router) {
-
         this.router = _router;
-
       }
 
       public FacilityRoute(event:any):void{

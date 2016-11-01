@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, trigger, state, style, animate, transition} from '@angular/core';
+import { Component, OnInit, ViewChild, trigger, state, style, animate, transition, Input} from '@angular/core';
 import {AbstractComponent} from './abstract.class.component';
 import {BlackOverlay} from '../component/blackoverlay.component';
 import {Coords} from '../models/location';
@@ -15,12 +15,22 @@ import {Coords} from '../models/location';
     ])
   ],
   template: `<div class="bottomDiv" [@animationBottomNav]="state">
+  <div class="locationPanel"><img src="img/mapPin.png" id="saveIcon" alt="save icon">Your car location:</div>
+  <div class="content">{{this.object.name.en}}</div>
   </div>`,
   providers: []
 })
 
 export class UserComponent extends AbstractComponent implements OnInit {
+  object: any;
+
   ngOnInit(){
     this.state='close';
+    this.object = JSON.parse(localStorage.getItem('carLocation'));
+    console.log(this.object);
+  }
+
+  updateSave(event:any){
+    this.object = event;
   }
 }

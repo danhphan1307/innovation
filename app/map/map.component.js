@@ -40,6 +40,7 @@ var MapComponent = (function () {
         this.clickUpdated = new core_1.EventEmitter();
         //Polygons array
         this.polygons = [];
+        this.saveUpdated = new core_1.EventEmitter();
         this.klmSrc = '../files/vyohykerajat_ETRS.kml';
         this.router = _router;
     }
@@ -96,7 +97,6 @@ var MapComponent = (function () {
             map: this.map,
             icon: icons[type].icon
         });
-        console.log(lat, lon);
         this.markers.push(marker);
         google.maps.event.addDomListener(map, 'zoom_changed', (function (marker) {
             return function () {
@@ -141,7 +141,7 @@ var MapComponent = (function () {
             this.markers.push(markerFacility);
             var func = (function (markerFacility, i) {
                 google.maps.event.addListener(markerFacility, 'click', function () {
-                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon"><img src="img/saveIcon.png" id="saveIcon" alt="save icon" class="functionIcon"><br><span>' + f[i].name.en + '</span></div></div>';
+                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon"><img src="img/pinSave.png" id="saveIcon" alt="save icon" class="functionIcon"><br><span>' + f[i].name.en + '</span><br>' + f[i].builtCapacity + '</div></div>';
                     infowindow.setContent(content);
                     infowindow.open(_this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
@@ -151,7 +151,9 @@ var MapComponent = (function () {
                     var el2 = document.getElementById('saveIcon');
                     google.maps.event.addDomListener(el2, 'click', function () {
                         if (localStorage_isSupported) {
-                            localStorage.setItem('carLocation', f[i].name);
+                            localStorage.setItem('carLocation', JSON.stringify(f[i]));
+                            _this.saveLocation = f[i];
+                            _this.saveUpdated.emit(_this.saveLocation);
                         }
                     });
                 });
@@ -356,6 +358,10 @@ var MapComponent = (function () {
         core_1.Output(), 
         __metadata('design:type', Object)
     ], MapComponent.prototype, "clickUpdated", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], MapComponent.prototype, "saveUpdated", void 0);
     MapComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
