@@ -121,8 +121,6 @@ import { Component, OnInit,  Input,
         }
       }
 
-
-
       public closeAll():void{
         this.leftNav.setState('close');
         this.blackOverlay.setState('close');

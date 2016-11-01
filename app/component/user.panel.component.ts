@@ -3,6 +3,22 @@ import {AbstractComponent} from './abstract.class.component';
 import {BlackOverlay} from '../component/blackoverlay.component';
 import {Coords} from '../models/location';
 
+var localStorage_isSupported = (function () {
+  try {
+    var itemBackup = localStorage.getItem("");
+    localStorage.removeItem("");
+    localStorage.setItem("", itemBackup);
+    if (itemBackup === null)
+      localStorage.removeItem("");
+    else
+      localStorage.setItem("", itemBackup);
+    return true;
+  }
+  catch (e) {
+    return false;
+  }
+})();
+
 @Component({
   moduleId: module.id,
   selector: 'user-component',
@@ -23,22 +39,6 @@ import {Coords} from '../models/location';
   providers: []
 })
 
-var localStorage_isSupported = (function () {
-  try {
-    var itemBackup = localStorage.getItem("");
-    localStorage.removeItem("");
-    localStorage.setItem("", itemBackup);
-    if (itemBackup === null)
-      localStorage.removeItem("");
-    else
-      localStorage.setItem("", itemBackup);
-    return true;
-  }
-  catch (e) {
-    return false;
-  }
-})();
-
 export class UserComponent extends AbstractComponent implements OnInit {
   object: any;
 
@@ -46,10 +46,12 @@ export class UserComponent extends AbstractComponent implements OnInit {
     this.state='close';
     if(localStorage_isSupported){
       if (localStorage.getItem("carLocation") === null) {
+        this.object.name.en = "You did not chose your car/bike location";
+      }else {
         this.object = JSON.parse(localStorage.getItem('carLocation'));
       }
     } else {
-      this.object = "Sorry, your browser does not support this function.";
+      this.object.name.en = "Sorry, your browser does not support this function.";
     }
     
   }
