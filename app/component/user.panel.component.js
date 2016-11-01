@@ -23,7 +23,6 @@ var UserComponent = (function (_super) {
     UserComponent.prototype.ngOnInit = function () {
         this.state = 'close';
         this.object = JSON.parse(localStorage.getItem('carLocation'));
-        console.log(this.object);
     };
     UserComponent.prototype.updateSave = function (event) {
         this.object = event;
@@ -39,7 +38,7 @@ var UserComponent = (function (_super) {
                     core_1.transition("open <=> close", core_1.animate("250ms")),
                 ])
             ],
-            template: "<div class=\"bottomDiv\" [@animationBottomNav]=\"state\">\n  <div class=\"locationPanel\"><img src=\"img/mapPin.png\" id=\"saveIcon\" alt=\"save icon\">Your car location:</div>\n  <div class=\"content\">{{this.object.name.en}}</div>\n  </div>",
+            template: "<div class=\"bottomDiv\" [@animationBottomNav]=\"state\">\n  <div class=\"locationPanel\"><img src=\"img/mapPin.png\" id=\"saveIcon\" alt=\"save icon\">Your car location:</div>\n  <div class=\"content\">{{this.object.name.en}}</div>\n  <div class=\"lovePanel\"><img src=\"img/mapPin.png\" id=\"saveIcon\" alt=\"save icon\">Love Bike Station</div>\n  <div class=\"content\">{{this.object.name.en}}</div>\n  </div>",
             providers: []
         }), 
         __metadata('design:paramtypes', [])

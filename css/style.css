@@ -13,6 +13,7 @@ body {
     overflow-x:hidden;
     margin: 0px;
     z-index: 0;
+    overflow-y: hidden;
 }
 
 #blackOverlay{
@@ -385,6 +386,16 @@ h2{
     margin-top:2%;
     width: 100%;
     display:flex;justify-content:center;align-items:center;
+}
+.locationPanel #saveIcon{
+    background:#1cbb9b;
+}
+.lovePanel{
+   width: 100%;
+   background: #FF9AD7;
+   display:flex;justify-content:center;align-items:center;
+   color:white;
+   height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;

@@ -125,6 +125,14 @@ var MapComponent = (function () {
                 icon: 'img/parkingIconLarge.png'
             }
         };
+        var iconsBike = {
+            small: {
+                icon: 'img/parkingIconSmall.png'
+            },
+            large: {
+                icon: 'img/bikeStationIcon.jpeg'
+            }
+        };
         var zoomLevel = map.getZoom();
         if (zoomLevel < 14) {
             type = 'small';
@@ -133,15 +141,33 @@ var MapComponent = (function () {
             type = 'large';
         }
         for (var i = 0; i < f.length; i++) {
-            var markerFacility = new google.maps.Marker({
-                position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
-                map: this.map,
-                icon: icons[type].icon
-            });
+            if (f[i].name.en.indexOf('bike') !== -1) {
+                var markerFacility = new google.maps.Marker({
+                    position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
+                    map: this.map,
+                    icon: iconsBike[type].icon
+                });
+            }
+            else {
+                var markerFacility = new google.maps.Marker({
+                    position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
+                    map: this.map,
+                    icon: icons[type].icon
+                });
+            }
             this.markers.push(markerFacility);
             var func = (function (markerFacility, i) {
                 google.maps.event.addListener(markerFacility, 'click', function () {
-                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon"><img src="img/pinSave.png" id="saveIcon" alt="save icon" class="functionIcon"><br><span>' + f[i].name.en + '</span><br>' + f[i].builtCapacity + '</div></div>';
+                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon"><img src="img/pinSave.png" id="saveIcon" alt="save icon" class="functionIcon"><br><span>' + f[i].name.en + '</span><br>';
+                    if (f[i].name.en.indexOf('bike') !== -1) {
+                        content += 'Bicycle Capacity :' + (f[i].builtCapacity.BICYCLE || 0);
+                    }
+                    else {
+                        content += 'Car Capacity :' + (f[i].builtCapacity.CAR || 0) + '<br>';
+                        content += 'Disabled Capacity:' + (f[i].builtCapacity.DISABLED || 0) + '<br>';
+                        content += 'Motorbike Capacity:' + (f[i].builtCapacity.MOTORCYCLE || 0);
+                    }
+                    content += '</div></div>';
                     infowindow.setContent(content);
                     infowindow.open(_this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
@@ -165,7 +191,12 @@ var MapComponent = (function () {
                     else {
                         type = 'large';
                     }
-                    markerFacility.setIcon(icons[type].icon);
+                    if (f[i].name.en.indexOf('bike') !== -1) {
+                        markerFacility.setIcon(iconsBike[type].icon);
+                    }
+                    else {
+                        markerFacility.setIcon(icons[type].icon);
+                    }
                 });
             })(markerFacility, i);
         }

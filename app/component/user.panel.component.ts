@@ -17,6 +17,8 @@ import {Coords} from '../models/location';
   template: `<div class="bottomDiv" [@animationBottomNav]="state">
   <div class="locationPanel"><img src="img/mapPin.png" id="saveIcon" alt="save icon">Your car location:</div>
   <div class="content">{{this.object.name.en}}</div>
+  <div class="lovePanel"><img src="img/mapPin.png" id="saveIcon" alt="save icon">Love Bike Station</div>
+  <div class="content">{{this.object.name.en}}</div>
   </div>`,
   providers: []
 })
@@ -27,7 +29,6 @@ export class UserComponent extends AbstractComponent implements OnInit {
   ngOnInit(){
     this.state='close';
     this.object = JSON.parse(localStorage.getItem('carLocation'));
-    console.log(this.object);
   }
 
   updateSave(event:any){
