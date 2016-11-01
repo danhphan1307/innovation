@@ -11,6 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var location_1 = require('../models/location');
 var router_1 = require('@angular/router');
+var localStorage_isSupported = (function () {
+    try {
+        var itemBackup = localStorage.getItem("");
+        localStorage.removeItem("");
+        localStorage.setItem("", itemBackup);
+        if (itemBackup === null)
+            localStorage.removeItem("");
+        else
+            localStorage.setItem("", itemBackup);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+})();
 var MapComponent = (function () {
     function MapComponent(_router) {
         this._router = _router;
@@ -52,6 +67,9 @@ var MapComponent = (function () {
         });
         this.createEventListeners();
     };
+    MapComponent.prototype.center = function () {
+        this.map.panTo(new google.maps.LatLng(this.centerLat, this.centerLon));
+    };
     MapComponent.prototype.placeMarker = function (lat, lon) {
         var _this = this;
         var map = this.map;
@@ -91,6 +109,62 @@ var MapComponent = (function () {
         })(marker));
         google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
     };
+    MapComponent.prototype.placeMarkerFacility = function (f) {
+        var _this = this;
+        var infowindow = new google.maps.InfoWindow();
+        var map = this.map;
+        var type;
+        var icons = {
+            small: {
+                icon: 'img/parkingIconSmall.png'
+            },
+            large: {
+                icon: 'img/parkingIconLarge.png'
+            }
+        };
+        var zoomLevel = map.getZoom();
+        if (zoomLevel < 14) {
+            type = 'small';
+        }
+        else {
+            type = 'large';
+        }
+        for (var i = 0; i < f.length; i++) {
+            var markerFacility = new google.maps.Marker({
+                position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
+                map: this.map,
+                icon: icons[type].icon
+            });
+            this.markers.push(markerFacility);
+            var func = (function (markerFacility, i) {
+                google.maps.event.addListener(markerFacility, 'click', function () {
+                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon"><img src="img/saveIcon.png" id="saveIcon" alt="save icon" class="functionIcon"><br><span>' + f[i].name.en + '</span></div></div>';
+                    infowindow.setContent(content);
+                    infowindow.open(_this.map, markerFacility);
+                    var el = document.getElementById('markerFacility');
+                    google.maps.event.addDomListener(el, 'click', function () {
+                        _this.showDirection(markerFacility);
+                    });
+                    var el2 = document.getElementById('saveIcon');
+                    google.maps.event.addDomListener(el2, 'click', function () {
+                        if (localStorage_isSupported) {
+                            localStorage.setItem('carLocation', f[i].name);
+                        }
+                    });
+                });
+                google.maps.event.addDomListener(map, 'zoom_changed', function () {
+                    var zoomLevel = map.getZoom();
+                    if (zoomLevel < 14) {
+                        type = 'small';
+                    }
+                    else {
+                        type = 'large';
+                    }
+                    markerFacility.setIcon(icons[type].icon);
+                });
+            })(markerFacility, i);
+        }
+    };
     MapComponent.prototype.placeMarkerBicycle = function (stations) {
         var _this = this;
         var infowindow = new google.maps.InfoWindow();
@@ -120,7 +194,7 @@ var MapComponent = (function () {
             this.markers.push(markerBike);
             var func = (function (markerBike, i) {
                 google.maps.event.addListener(markerBike, 'click', function () {
-                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="directionIcon"><br><span>' + stations[i].name + '</span><h4 class="info"> Bike Available: ' + stations[i].bikesAvailable + '/' + (stations[i].bikesAvailable + stations[i].spacesAvailable) + '</h4></div>';
+                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="functionIcon"><br><span>' + stations[i].name + '</span><h4 class="info"> Bike Available: ' + stations[i].bikesAvailable + '/' + (stations[i].bikesAvailable + stations[i].spacesAvailable) + '</h4></div>';
                     for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
                         content += '<div class="freeBike">&nbsp;</div>';
                     }
@@ -152,7 +226,7 @@ var MapComponent = (function () {
         this.clearCircles();
         if (radius != 0) {
             this.circles.push(new google.maps.Circle({
-                strokeColor: '#FF0000',
+                strokeColor: '#4a6aa5',
                 strokeOpacity: 0.8,
                 strokeWeight: 1,
                 map: this.map,

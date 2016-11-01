@@ -57,11 +57,7 @@ var FacilityComponent = (function () {
             //filter park and ride + active
             _this.facilities = facilities.filter(function (f) { return f.usages.indexOf(model_enum_1.Usage.PARK_AND_RIDE) != -1
                 && f.status == model_enum_1.FacilityStatus.IN_OPERATION; });
-            for (var _i = 0, _a = _this.facilities; _i < _a.length; _i++) {
-                var f = _a[_i];
-                var coords = f.location.coordinates;
-                mapComponent.placeMarker(coords[0][0][1], coords[0][0][0]);
-            }
+            mapComponent.placeMarkerFacility(_this.facilities);
         });
     };
     __decorate([

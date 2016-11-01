@@ -13,6 +13,7 @@ var platform_browser_1 = require('@angular/platform-browser');
 var left_navigation_component_1 = require('./component/left.navigation.component');
 var bottom_navigation_component_1 = require('./component/bottom.navigation.component');
 var blackoverlay_component_1 = require('./component/blackoverlay.component');
+var user_panel_component_1 = require('./component/user.panel.component');
 var hub_component_1 = require('./hubs/hub.component');
 var app_component_1 = require('./app.component');
 var bike_component_1 = require('./bikes/bike.component');
@@ -39,11 +40,11 @@ var AppModule = (function () {
                 hub_component_1.HubComponent,
                 map_component_1.MapComponent,
                 bike_component_1.BikeComponent,
+                user_panel_component_1.UserComponent,
                 facility_component_1.FacilityComponent,
                 left_navigation_component_1.LeftNavigation,
                 bottom_navigation_component_1.BottomNavigation,
                 blackoverlay_component_1.BlackOverlay, app_routing_1.routing],
-            //providers: [appRoutingProviders],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])

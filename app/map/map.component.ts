@@ -7,6 +7,22 @@ import {Router} from '@angular/router';
 
 declare var google: any;
 
+var localStorage_isSupported = (function () {
+    try {
+        var itemBackup = localStorage.getItem("");
+        localStorage.removeItem("");
+        localStorage.setItem("", itemBackup);
+        if (itemBackup === null)
+            localStorage.removeItem("");
+        else
+            localStorage.setItem("", itemBackup);
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+})();
+
 @Component({
     moduleId: module.id,
     selector: 'map-gg',
@@ -75,6 +91,7 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+
         //Add KLM layer
         this.displayKML(this.klmSrc,this.map);
         //Bind direction display to map
@@ -87,7 +104,11 @@ export class MapComponent{
             icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
         });
         this.createEventListeners();
+    }
 
+
+    center():void{
+        this.map.panTo(new google.maps.LatLng(this.centerLat,this.centerLon));
     }
 
     placeMarker(lat: number, lon: number): void{
@@ -128,6 +149,66 @@ export class MapComponent{
 
         google.maps.event.addListener(marker,'click',() => this.showDirection(marker));
     }
+
+
+    placeMarkerFacility(f:any):void{
+        var infowindow = new google.maps.InfoWindow();
+        var map = this.map;
+        var type:string;
+
+        var icons = {
+            small: {
+                icon:  'img/parkingIconSmall.png'
+            },
+            large: {
+                icon: 'img/parkingIconLarge.png'
+            }
+        }
+        var zoomLevel =  map.getZoom();
+        if(zoomLevel<14){
+            type = 'small';
+        }else{
+            type = 'large';
+        }
+        for (var i = 0; i < f.length; i++) {
+            var markerFacility = new google.maps.Marker({
+                position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
+                map: this.map,
+                icon: icons[type].icon
+            });
+            this.markers.push(markerFacility);
+            var func = ((markerFacility, i) => {
+                google.maps.event.addListener(markerFacility, 'click', () => {
+
+                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon"><img src="img/saveIcon.png" id="saveIcon" alt="save icon" class="functionIcon"><br><span>'+f[i].name.en+ '</span></div></div>' ;
+                    infowindow.setContent(content);
+                    infowindow.open(this.map, markerFacility);
+                    var el = document.getElementById('markerFacility');
+                    google.maps.event.addDomListener(el,'click',()=>{
+                        this.showDirection(markerFacility);
+                    });
+                    var el2 = document.getElementById('saveIcon');
+                    google.maps.event.addDomListener(el2,'click',()=>{
+                        if(localStorage_isSupported){
+                            localStorage.setItem('carLocation',f[i].name);
+                        }
+                    });
+
+                });
+                google.maps.event.addDomListener(map,'zoom_changed',()=>{
+                    var zoomLevel =  map.getZoom();
+                    if(zoomLevel<14){
+                        type = 'small';
+                    }else{
+                        type = 'large';
+                    }
+                    markerFacility.setIcon(icons[type].icon);
+                });
+
+            })(markerFacility, i);
+        }
+    }
+
     placeMarkerBicycle(stations:any):void{
         var infowindow = new google.maps.InfoWindow();
         var map = this.map;
@@ -148,18 +229,16 @@ export class MapComponent{
             type = 'large';
         }
         for (var i = 0; i < stations.length; i++) {
-
             var markerBike = new google.maps.Marker({
                 position: new google.maps.LatLng(stations[i].y, stations[i].x),
                 map: this.map,
                 icon: icons[type].icon
             });
             this.markers.push(markerBike);
-
             var func = ((markerBike, i) => {
                 google.maps.event.addListener(markerBike, 'click', () => {
-                    
-                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="directionIcon"><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
+
+                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="functionIcon"><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
                     for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
                         content+='<div class="freeBike">&nbsp;</div>';
                     }
@@ -175,8 +254,6 @@ export class MapComponent{
                     });
 
                 });
-
-
                 google.maps.event.addDomListener(map,'zoom_changed',()=>{
                     var zoomLevel =  map.getZoom();
                     if(zoomLevel<14){
@@ -189,14 +266,13 @@ export class MapComponent{
 
             })(markerBike, i);
         }
-
     }
 
     placeCircle(lat: number, lon: number, radius: number): void{
         this.clearCircles();
         if(radius != 0){
             this.circles.push(new google.maps.Circle({
-                strokeColor: '#FF0000',
+                strokeColor: '#4a6aa5',
                 strokeOpacity: 0.8,
                 strokeWeight: 1,
                 map: this.map,

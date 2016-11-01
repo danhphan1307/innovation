@@ -1,5 +1,7 @@
+import { Component, Injectable } from '@angular/core';
+
 export abstract class AbstractComponent {
-  private state = 'close';
+  public state = 'close';
 
   public setState(sState: string){
     this.state = sState;

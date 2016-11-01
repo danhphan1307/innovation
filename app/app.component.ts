@@ -4,7 +4,7 @@ import { Component, OnInit,  Input,
   style,
   transition,
   animate,
-  ViewChild} from '@angular/core';
+  ViewChild, ElementRef, Renderer} from '@angular/core';
 
   import {BikeService } from './bikes/bike.service';
   import {BikeStation} from './bikes/bike';
@@ -13,8 +13,8 @@ import { Component, OnInit,  Input,
   import {BottomNavigation} from './component/bottom.navigation.component';
   import {BlackOverlay} from './component/blackoverlay.component';
   import {FacilityComponent} from './facilities/facility.component';
+  import {UserComponent} from './component/user.panel.component';
   import {BikeComponent} from './bikes/bike.component';
-
   import {AgmCoreModule} from 'angular2-google-maps/core';
   import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
   import {NgModel} from '@angular/forms';
@@ -32,9 +32,6 @@ import { Component, OnInit,  Input,
 
   export class AppComponent implements OnInit {
     router:Router;
-    private leftNavState = 'close';
-    private bottomNavState = 'close';
-    private blackOverlayState = 'close';
 
     @ViewChild(MapComponent)
     private MapComponent:MapComponent;
@@ -54,6 +51,9 @@ import { Component, OnInit,  Input,
     @ViewChild(BikeComponent)
     private BikeComponent: BikeComponent;
 
+    @ViewChild(UserComponent)
+    private UserComponent: UserComponent;
+
     stations : BikeStation[];
     data : string
 
@@ -69,14 +69,15 @@ import { Component, OnInit,  Input,
 
 
     ngOnInit(){
-
+      document.getElementById('testImg').addEventListener('click',()=>{
+        this.blackOverlay.setState('open');
+        this.UserComponent.setState('open');
+      })
     }
-
 
     public beginLeftNav():void{
       this.leftNav.setState('open');
       this.blackOverlay.setState('open');
-      //this.bottomNav.setState('close');
     }
 
     public bottomtNav():void{
@@ -99,10 +100,14 @@ import { Component, OnInit,  Input,
       public closeAll():void{
         this.leftNav.setState('close');
         this.blackOverlay.setState('close');
+        this.UserComponent.setState('close');
       }
 
-      constructor(private _router: Router ) {
+
+      constructor(private _router: Router) {
+
         this.router = _router;
+
       }
 
       public FacilityRoute(event:any):void{

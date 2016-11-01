@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {AppComponent} from './app.component';
 import {HubComponent} from './hubs/hub.component';
 import {BikeComponent} from './bikes/bike.component';
+import {UserComponent} from './component/user.panel.component';
 import {FacilityComponent} from './facilities/facility.component';
 
 const appRoutes: Routes = [
@@ -11,6 +12,7 @@ const appRoutes: Routes = [
     pathMatch: 'full'},
   { path: 'parking', component: FacilityComponent },
   { path: 'bike', component: BikeComponent },
+  { path: 'user', component: UserComponent }
 ];
 
 //export const appRoutingProviders: any[] = [];
@@ -23,4 +25,4 @@ const appRoutes: Routes = [
 
 export class appRoutingProviders { }
 
-export const routing = [AppComponent, FacilityComponent, BikeComponent];
+export const routing = [AppComponent, FacilityComponent, BikeComponent, UserComponent];
