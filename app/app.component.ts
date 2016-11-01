@@ -15,6 +15,7 @@ import { Component, OnInit,  Input,
   import {FacilityComponent} from './facilities/facility.component';
   import {UserComponent} from './component/user.panel.component';
   import {BikeComponent} from './bikes/bike.component';
+  import {ParkZoneComponent} from './park-zone/parkzone.component'
   import {AgmCoreModule} from 'angular2-google-maps/core';
   import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
   import {NgModel} from '@angular/forms';
@@ -22,7 +23,7 @@ import { Component, OnInit,  Input,
 
   import {Injectable} from '@angular/core';
   import {Router} from '@angular/router';
-
+  import {PricingZoneEnum} from './models/model-enum'
   @Component({
     moduleId: module.id,
     selector: 'my-app',
@@ -54,6 +55,9 @@ import { Component, OnInit,  Input,
     @ViewChild(UserComponent)
     private UserComponent: UserComponent;
 
+    @ViewChild(ParkZoneComponent)
+    private ZoneComponent: ParkZoneComponent;
+
     stations : BikeStation[];
     data : string
 
@@ -66,6 +70,7 @@ import { Component, OnInit,  Input,
     iconUrl = '../img/largeBike.png';
 
     oldEvent: any;
+
 
 
     ngOnInit(){
@@ -82,11 +87,13 @@ import { Component, OnInit,  Input,
 
     public bottomtNav():void{
       this.MapComponent.clearMarkers();
+
       if(this.router.url == "/bike"){
         this.leftNav.SetliderValue(0);
         this.BikeComponent.loadBikeStations(this.MapComponent);
         this.MapComponent.markers = this.BikeComponent.markers;
       }
+
       if(this.router.url == "/parking"){
         this.leftNav.SetliderValue(this.leftNav.oldRadius/1000);
         if(this.oldEvent==null){}
@@ -95,7 +102,19 @@ import { Component, OnInit,  Input,
           }
           this.MapComponent.markers = this.FacilityComponent.markers;
         }
+
+        if (this.router.url == "/paidzone"){
+          this.MapComponent.clearPolygons();
+          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
+        }
+
+        if (this.router.url == "/freezone"){
+          this.MapComponent.clearPolygons();
+          this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.MapComponent);
+        }
       }
+
+
 
       public closeAll():void{
         this.leftNav.setState('close');

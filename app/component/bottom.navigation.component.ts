@@ -13,12 +13,12 @@ import {BlackOverlay} from '../component/blackoverlay.component';
   <div class="bottomNav">
   <nav>
   <ul>
-  
+
   <li>
-  <a routerLink="abc" routerLinkActive="active"><img src="img/Free Parking-50.png" alt="free parking" class="custom-img-responsive"></a>
+  <a routerLink="/freezone" routerLinkActive="active"><img src="img/Free Parking-50.png" alt="free parking" class="custom-img-responsive"></a>
   </li>
   <li>
-  <a routerLink="abc" routerLinkActive="active"><img src="img/Paid Parking-50.png" alt="paid parking"  class="custom-img-responsive"></a>
+  <a routerLink="/paidzone" routerLinkActive="active"><img src="img/Paid Parking-50.png" alt="paid parking"  class="custom-img-responsive"></a>
   </li>
   <li>
   <a routerLink="abc" routerLinkActive="active"><img src="img/Parking Zone-50.png" alt="parking zone"  class="custom-img-responsive"></a>

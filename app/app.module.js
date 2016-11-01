@@ -20,6 +20,7 @@ var bike_component_1 = require('./bikes/bike.component');
 var http_1 = require('@angular/http');
 var core_2 = require('angular2-google-maps/core');
 var map_component_1 = require('./map/map.component');
+var parkzone_component_1 = require('./park-zone/parkzone.component');
 var facility_component_1 = require('./facilities/facility.component');
 var forms_1 = require('@angular/forms');
 var ng2_bootstrap_1 = require('ng2-bootstrap/ng2-bootstrap');
@@ -37,6 +38,7 @@ var AppModule = (function () {
                 }),
                 app_routing_1.appRoutingProviders],
             declarations: [app_component_1.AppComponent,
+                parkzone_component_1.ParkZoneComponent,
                 hub_component_1.HubComponent,
                 map_component_1.MapComponent,
                 bike_component_1.BikeComponent,

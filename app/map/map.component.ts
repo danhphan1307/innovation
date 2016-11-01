@@ -65,7 +65,8 @@ export class MapComponent{
     @Output()
     clickUpdated: any= new EventEmitter();
 
-
+    //Polygons array
+    polygons : any[] = []
     klmSrc : String = '../files/vyohykerajat_ETRS.kml';
 
     constructor(private _router: Router ) {
@@ -134,6 +135,8 @@ export class MapComponent{
             map: this.map,
             icon: icons[type].icon
         });
+
+        console.log(lat,lon)
 
         this.markers.push(marker);
         google.maps.event.addDomListener(map,'zoom_changed',(function(marker) {
@@ -281,18 +284,45 @@ export class MapComponent{
             }));
         }
     }
+
+    placePolygon(coordArray: any[], colorCode : string){
+         var path : any[] = []
+        for (var i=0; i< coordArray.length;i++){
+            path.push(new google.maps.LatLng(coordArray[i][1],coordArray[i][0]))
+        }
+
+
+        var polygon = new google.maps.Polygon({
+          paths: path,
+          strokeColor: colorCode,
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillOpacity: 0
+        });
+        polygon.setMap(this.map);
+        this.polygons.push(polygon);
+    }
+
+    //Remove all markers on map
     clearMarkers(){
         for (var i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
         }
     }
 
+    //Remove all circles on map
     clearCircles(){
         for (var i = 0; i < this.circles.length; i++) {
             this.circles[i].setMap(null);
         }
     }
 
+    //Remove all polygons on map
+    clearPolygons(){
+     for (var i = 0; i < this.polygons.length; i++) {
+            this.polygons[i].setMap(null);
+        }
+    }
     callbackForShowDirection(result:any, status: string){
         if (status == 'OK') {
             this.directionsDisplay.setDirections(result);

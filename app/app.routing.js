@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var app_component_1 = require('./app.component');
+var parkzone_component_1 = require('./park-zone/parkzone.component');
 var bike_component_1 = require('./bikes/bike.component');
 var user_panel_component_1 = require('./component/user.panel.component');
 var facility_component_1 = require('./facilities/facility.component');
@@ -20,7 +21,9 @@ var appRoutes = [
         pathMatch: 'full' },
     { path: 'parking', component: facility_component_1.FacilityComponent },
     { path: 'bike', component: bike_component_1.BikeComponent },
-    { path: 'user', component: user_panel_component_1.UserComponent }
+    { path: 'user', component: user_panel_component_1.UserComponent },
+    { path: 'paidzone', component: parkzone_component_1.ParkZoneComponent },
+    { path: 'freezone', component: parkzone_component_1.ParkZoneComponent }
 ];
 //export const appRoutingProviders: any[] = [];
 //export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
@@ -37,5 +40,5 @@ var appRoutingProviders = (function () {
     return appRoutingProviders;
 }());
 exports.appRoutingProviders = appRoutingProviders;
-exports.routing = [app_component_1.AppComponent, facility_component_1.FacilityComponent, bike_component_1.BikeComponent, user_panel_component_1.UserComponent];
+exports.routing = [app_component_1.AppComponent, facility_component_1.FacilityComponent, bike_component_1.BikeComponent, user_panel_component_1.UserComponent, parkzone_component_1.ParkZoneComponent];
 //# sourceMappingURL=app.routing.js.map

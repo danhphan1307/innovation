@@ -16,7 +16,9 @@ var blackoverlay_component_1 = require('./component/blackoverlay.component');
 var facility_component_1 = require('./facilities/facility.component');
 var user_panel_component_1 = require('./component/user.panel.component');
 var bike_component_1 = require('./bikes/bike.component');
+var parkzone_component_1 = require('./park-zone/parkzone.component');
 var router_1 = require('@angular/router');
+var model_enum_1 = require('./models/model-enum');
 var AppComponent = (function () {
     function AppComponent(_router) {
         this._router = _router;
@@ -53,6 +55,14 @@ var AppComponent = (function () {
                 this.FacilityComponent.receivedClick(this.MapComponent, this.oldEvent, this.leftNav.ReturnSliderValue());
             }
             this.MapComponent.markers = this.FacilityComponent.markers;
+        }
+        if (this.router.url == "/paidzone") {
+            this.MapComponent.clearPolygons();
+            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_1, this.MapComponent);
+        }
+        if (this.router.url == "/freezone") {
+            this.MapComponent.clearPolygons();
+            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_1, this.MapComponent);
         }
     };
     AppComponent.prototype.closeAll = function () {
@@ -96,6 +106,10 @@ var AppComponent = (function () {
         core_1.ViewChild(user_panel_component_1.UserComponent), 
         __metadata('design:type', user_panel_component_1.UserComponent)
     ], AppComponent.prototype, "UserComponent", void 0);
+    __decorate([
+        core_1.ViewChild(parkzone_component_1.ParkZoneComponent), 
+        __metadata('design:type', parkzone_component_1.ParkZoneComponent)
+    ], AppComponent.prototype, "ZoneComponent", void 0);
     AppComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

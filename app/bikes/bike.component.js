@@ -12,16 +12,12 @@ var core_1 = require('@angular/core');
 var bike_service_1 = require('./bike.service');
 var marker_component_1 = require('../marker/marker.component');
 var map_service_1 = require('../map/map.service');
-var parking_zone_filter_service_1 = require('../shared/parking-zone-filter.service');
-var model_enum_1 = require('../models/model-enum');
 var BikeComponent = (function () {
-    function BikeComponent(bikeService, mapService, parkingFilterService) {
+    function BikeComponent(bikeService, mapService) {
         this.bikeService = bikeService;
         this.mapService = mapService;
-        this.parkingFilterService = parkingFilterService;
         this.title = 'Bike Station';
         this.markers = [];
-        this.iconUrl = 'https://c8.staticflickr.com/6/5298/29373396503_72f744d420_t.jpg';
     }
     BikeComponent.prototype.ngOnInit = function () {
     };
@@ -30,24 +26,10 @@ var BikeComponent = (function () {
     };
     BikeComponent.prototype.loadBikeStations = function (mapComponent) {
         var _this = this;
-        var pricingEnum = model_enum_1.PricingZone;
         this.bikeService.getBikeStations()
             .subscribe(function (stations) {
             _this.stations = stations;
             mapComponent.placeMarkerBicycle(stations);
-        });
-        this.getPaidZones(pricingEnum.PAID_1);
-    };
-    BikeComponent.prototype.getPaidZones = function (pricingZone) {
-        var _this = this;
-        this.bikeService.getDataFromFile().subscribe(function (res) {
-            _this.paidZones = res;
-            //filter park and ride + active
-            _this.paidZones = res.filter(function (f) { return f.properties.sallittu_pysakointitapa == pricingZone; });
-            for (var _i = 0, _a = _this.paidZones; _i < _a.length; _i++) {
-                var z = _a[_i];
-                console.log(z.properties);
-            }
         });
     };
     __decorate([
@@ -58,9 +40,9 @@ var BikeComponent = (function () {
         core_1.Component({
             selector: 'my-bike',
             template: "",
-            providers: [bike_service_1.BikeService, map_service_1.MapService, parking_zone_filter_service_1.ParkingZoneFilterService]
+            providers: [bike_service_1.BikeService, map_service_1.MapService]
         }), 
-        __metadata('design:paramtypes', [bike_service_1.BikeService, map_service_1.MapService, parking_zone_filter_service_1.ParkingZoneFilterService])
+        __metadata('design:paramtypes', [bike_service_1.BikeService, map_service_1.MapService])
     ], BikeComponent);
     return BikeComponent;
 }());

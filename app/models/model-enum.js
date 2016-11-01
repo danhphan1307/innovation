@@ -79,15 +79,17 @@ var PricingMethod = (function () {
 exports.PricingMethod = PricingMethod;
 //Does not make sense much now since they only indicate the free and paid zone
 //Will udpate later for more clarification
-var PricingZone = (function () {
-    function PricingZone() {
+var PricingZoneEnum = (function () {
+    function PricingZoneEnum() {
     }
-    PricingZone.FREE_1 = "ilmainen pitkaaikainen pysakointi";
-    PricingZone.FREE_2 = "ilmainen lyhytaikainen pysakointi_Kayta pysakointikiekkoa";
-    PricingZone.PAID_1 = "maksullinen_pysakointialue";
-    PricingZone.PAID_2 = "kertamaksu_enint_1_tunti_ilman_asukas_tai_yritystunnusta";
-    PricingZone.PAID_3 = "maksullinen_ma-pe_9-21_ilman_asukas_tai_yritystunnusta";
-    return PricingZone;
+    PricingZoneEnum.FREE_1 = "ilmainen pitkaaikainen pysakointi";
+    PricingZoneEnum.FREE_2 = "ilmainen lyhytaikainen pysakointi_Kayta pysakointikiekkoa";
+    PricingZoneEnum.PAID_1 = "maksullinen_pysakointialue";
+    PricingZoneEnum.PAID_2 = "kertamaksu_enint_1_tunti_ilman_asukas_tai_yritystunnusta";
+    PricingZoneEnum.PAID_3 = "maksullinen_ma-pe_9-21_ilman_asukas_tai_yritystunnusta";
+    PricingZoneEnum.PAID_4 = "maksullinen_pysakointilaitos_tai_alue";
+    PricingZoneEnum.PAID_5 = "kertamaksu_enint_4_tuntia";
+    return PricingZoneEnum;
 }());
-exports.PricingZone = PricingZone;
+exports.PricingZoneEnum = PricingZoneEnum;
 //# sourceMappingURL=model-enum.js.map

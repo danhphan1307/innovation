@@ -38,6 +38,8 @@ var MapComponent = (function () {
         this.circles = [];
         this.centerUpdated = new core_1.EventEmitter();
         this.clickUpdated = new core_1.EventEmitter();
+        //Polygons array
+        this.polygons = [];
         this.klmSrc = '../files/vyohykerajat_ETRS.kml';
         this.router = _router;
     }
@@ -94,6 +96,7 @@ var MapComponent = (function () {
             map: this.map,
             icon: icons[type].icon
         });
+        console.log(lat, lon);
         this.markers.push(marker);
         google.maps.event.addDomListener(map, 'zoom_changed', (function (marker) {
             return function () {
@@ -235,14 +238,37 @@ var MapComponent = (function () {
             }));
         }
     };
+    MapComponent.prototype.placePolygon = function (coordArray, colorCode) {
+        var path = [];
+        for (var i = 0; i < coordArray.length; i++) {
+            path.push(new google.maps.LatLng(coordArray[i][1], coordArray[i][0]));
+        }
+        var polygon = new google.maps.Polygon({
+            paths: path,
+            strokeColor: colorCode,
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillOpacity: 0
+        });
+        polygon.setMap(this.map);
+        this.polygons.push(polygon);
+    };
+    //Remove all markers on map
     MapComponent.prototype.clearMarkers = function () {
         for (var i = 0; i < this.markers.length; i++) {
             this.markers[i].setMap(null);
         }
     };
+    //Remove all circles on map
     MapComponent.prototype.clearCircles = function () {
         for (var i = 0; i < this.circles.length; i++) {
             this.circles[i].setMap(null);
+        }
+    };
+    //Remove all polygons on map
+    MapComponent.prototype.clearPolygons = function () {
+        for (var i = 0; i < this.polygons.length; i++) {
+            this.polygons[i].setMap(null);
         }
     };
     MapComponent.prototype.callbackForShowDirection = function (result, status) {

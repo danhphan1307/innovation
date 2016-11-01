@@ -17,7 +17,7 @@ export class ParkingZoneFilterService{
 
 
     //Test get data from files
-    getParkingZone() : Observable<ParkingType> {
+    getParkingZone() : Observable<ParkingType[]> {
         return this.http.get('./app/files/free-and-paid-parking.json')
         .map(res => res.json().features)
         .catch(this.handleError);
