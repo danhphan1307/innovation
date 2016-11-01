@@ -23,15 +23,40 @@ import {Coords} from '../models/location';
   providers: []
 })
 
+var localStorage_isSupported = (function () {
+  try {
+    var itemBackup = localStorage.getItem("");
+    localStorage.removeItem("");
+    localStorage.setItem("", itemBackup);
+    if (itemBackup === null)
+      localStorage.removeItem("");
+    else
+      localStorage.setItem("", itemBackup);
+    return true;
+  }
+  catch (e) {
+    return false;
+  }
+})();
+
 export class UserComponent extends AbstractComponent implements OnInit {
   object: any;
 
   ngOnInit(){
     this.state='close';
-    this.object = JSON.parse(localStorage.getItem('carLocation'));
+    if(localStorage_isSupported){
+      if (localStorage.getItem("carLocation") === null) {
+        this.object = JSON.parse(localStorage.getItem('carLocation'));
+      }
+    } else {
+      this.object = "Sorry, your browser does not support this function.";
+    }
+    
   }
 
   updateSave(event:any){
-    this.object = event;
+    if(localStorage_isSupported){
+      this.object = event;
+    }
   }
 }
