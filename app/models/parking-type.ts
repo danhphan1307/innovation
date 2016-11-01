@@ -14,6 +14,7 @@ export interface ParkingTypeProperties{
     Y: number;
     type: string;
     stroke: string;
+    sallittu_pysakointitapa: string;
 }
 
 

@@ -1,0 +1,1 @@
+paidzone.component.ts
