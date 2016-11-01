@@ -29,6 +29,11 @@ var AppComponent = (function () {
         this.router = _router;
     }
     AppComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        document.getElementById('testImg').addEventListener('click', function () {
+            _this.blackOverlay.setState('open');
+            _this.UserComponent.setState('open');
+        });
     };
     AppComponent.prototype.beginLeftNav = function () {
         this.leftNav.setState('open');
@@ -53,7 +58,7 @@ var AppComponent = (function () {
     AppComponent.prototype.closeAll = function () {
         this.leftNav.setState('close');
         this.blackOverlay.setState('close');
-        //this.UserComponent.setState('close');
+        this.UserComponent.setState('close');
     };
     AppComponent.prototype.FacilityRoute = function (event) {
         if (this.router.url == "/parking") {

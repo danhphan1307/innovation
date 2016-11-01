@@ -20,6 +20,9 @@ var UserComponent = (function (_super) {
     function UserComponent() {
         _super.apply(this, arguments);
     }
+    UserComponent.prototype.ngOnInit = function () {
+        this.state = 'close';
+    };
     UserComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

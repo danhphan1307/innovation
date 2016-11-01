@@ -4,7 +4,7 @@ import { Component, OnInit,  Input,
   style,
   transition,
   animate,
-  ViewChild} from '@angular/core';
+  ViewChild, ElementRef, Renderer} from '@angular/core';
 
   import {BikeService } from './bikes/bike.service';
   import {BikeStation} from './bikes/bike';
@@ -69,9 +69,11 @@ import { Component, OnInit,  Input,
 
 
     ngOnInit(){
-
+      document.getElementById('testImg').addEventListener('click',()=>{
+        this.blackOverlay.setState('open');
+        this.UserComponent.setState('open');
+      })
     }
-
 
     public beginLeftNav():void{
       this.leftNav.setState('open');
@@ -98,11 +100,14 @@ import { Component, OnInit,  Input,
       public closeAll():void{
         this.leftNav.setState('close');
         this.blackOverlay.setState('close');
-        //this.UserComponent.setState('close');
+        this.UserComponent.setState('close');
       }
 
-      constructor(private _router: Router ) {
+
+      constructor(private _router: Router) {
+
         this.router = _router;
+
       }
 
       public FacilityRoute(event:any):void{

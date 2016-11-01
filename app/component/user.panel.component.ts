@@ -19,5 +19,8 @@ import {Coords} from '../models/location';
   providers: []
 })
 
-export class UserComponent extends AbstractComponent{
+export class UserComponent extends AbstractComponent implements OnInit {
+  ngOnInit(){
+    this.state='close';
+  }
 }
