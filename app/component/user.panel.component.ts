@@ -34,20 +34,24 @@ var localStorage_isSupported = (function () {
   <div class="locationPanel"><img src="img/mapPin.png" id="saveIcon" alt="save icon">Your car location:</div>
   <div class="content">{{this.object.name.en}}</div>
   <div class="lovePanel"><img src="img/mapPin.png" id="saveIcon" alt="save icon">Love Bike Station</div>
-  <div class="content">{{this.object.name.en}}</div>
+  <div class="content"></div>
   </div>`,
   providers: []
 })
 
 export class UserComponent extends AbstractComponent implements OnInit {
-  object: any;
+  object: any ={
+    "name": {
+      "fi": "Sorry, you did not save your car/bike location",
+      "sv": "Sorry, you did not save your car/bike location",
+      "en": "Sorry, you did not save your car/bike location"
+    }
+  };
 
   ngOnInit(){
     this.state='close';
     if(localStorage_isSupported){
-      if (localStorage.getItem("carLocation") === null) {
-        this.object.name.en = "You did not chose your car/bike location";
-      }else {
+      if (localStorage.getItem("carLocation") !== null) {
         this.object = JSON.parse(localStorage.getItem('carLocation'));
       }
     } else {

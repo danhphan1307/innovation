@@ -34,14 +34,18 @@ var UserComponent = (function (_super) {
     __extends(UserComponent, _super);
     function UserComponent() {
         _super.apply(this, arguments);
+        this.object = {
+            "name": {
+                "fi": "Sorry, you did not save your car/bike location",
+                "sv": "Sorry, you did not save your car/bike location",
+                "en": "Sorry, you did not save your car/bike location"
+            }
+        };
     }
     UserComponent.prototype.ngOnInit = function () {
         this.state = 'close';
         if (localStorage_isSupported) {
-            if (localStorage.getItem("carLocation") === null) {
-                this.object.name.en = "You did not chose your car/bike location";
-            }
-            else {
+            if (localStorage.getItem("carLocation") !== null) {
                 this.object = JSON.parse(localStorage.getItem('carLocation'));
             }
         }
@@ -65,7 +69,7 @@ var UserComponent = (function (_super) {
                     core_1.transition("open <=> close", core_1.animate("250ms")),
                 ])
             ],
-            template: "<div class=\"bottomDiv\" [@animationBottomNav]=\"state\">\n  <div class=\"locationPanel\"><img src=\"img/mapPin.png\" id=\"saveIcon\" alt=\"save icon\">Your car location:</div>\n  <div class=\"content\">{{this.object.name.en}}</div>\n  <div class=\"lovePanel\"><img src=\"img/mapPin.png\" id=\"saveIcon\" alt=\"save icon\">Love Bike Station</div>\n  <div class=\"content\">{{this.object.name.en}}</div>\n  </div>",
+            template: "<div class=\"bottomDiv\" [@animationBottomNav]=\"state\">\n  <div class=\"locationPanel\"><img src=\"img/mapPin.png\" id=\"saveIcon\" alt=\"save icon\">Your car location:</div>\n  <div class=\"content\">{{this.object.name.en}}</div>\n  <div class=\"lovePanel\"><img src=\"img/mapPin.png\" id=\"saveIcon\" alt=\"save icon\">Love Bike Station</div>\n  <div class=\"content\"></div>\n  </div>",
             providers: []
         }), 
         __metadata('design:paramtypes', [])
