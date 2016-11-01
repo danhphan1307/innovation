@@ -44,7 +44,7 @@ export class MapComponent{
     oldLat:number
     oldLong:number
     oldRadius:number
-
+    saveLocation:any;
 
     directionsDisplay = new google.maps.DirectionsRenderer({
         preserveViewport: true
@@ -65,6 +65,8 @@ export class MapComponent{
     @Output()
     clickUpdated: any= new EventEmitter();
 
+    @Output()
+    saveUpdated: any= new EventEmitter();
 
     klmSrc : String = '../files/vyohykerajat_ETRS.kml';
 
@@ -180,7 +182,7 @@ export class MapComponent{
             var func = ((markerFacility, i) => {
                 google.maps.event.addListener(markerFacility, 'click', () => {
 
-                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon"><img src="img/saveIcon.png" id="saveIcon" alt="save icon" class="functionIcon"><br><span>'+f[i].name.en+ '</span></div></div>' ;
+                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon"><img src="img/pinSave.png" id="saveIcon" alt="save icon" class="functionIcon"><br><span>'+f[i].name.en+ '</span><br>'+f[i].builtCapacity+'</div></div>' ;
                     infowindow.setContent(content);
                     infowindow.open(this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
@@ -190,7 +192,9 @@ export class MapComponent{
                     var el2 = document.getElementById('saveIcon');
                     google.maps.event.addDomListener(el2,'click',()=>{
                         if(localStorage_isSupported){
-                            localStorage.setItem('carLocation',f[i].name);
+                            localStorage.setItem('carLocation',JSON.stringify(f[i]));
+                            this.saveLocation = f[i];
+                            this.saveUpdated.emit(this.saveLocation);
                         }
                     });
 
