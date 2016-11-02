@@ -66,12 +66,14 @@ var MapComponent = (function () {
         this.centerMarker = new google.maps.Marker({
             position: new google.maps.LatLng(this.centerLat, this.centerLon),
             map: this.map,
-            icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+            icon: "img/red-dot.png"
         });
         this.createEventListeners();
     };
-    MapComponent.prototype.center = function () {
-        this.map.panTo(new google.maps.LatLng(this.centerLat, this.centerLon));
+    MapComponent.prototype.center = function (lat, long) {
+        if (lat === void 0) { lat = this.centerLat; }
+        if (long === void 0) { long = this.centerLon; }
+        this.map.panTo(new google.maps.LatLng(lat, long));
     };
     MapComponent.prototype.placeMarker = function (lat, lon) {
         var _this = this;
@@ -127,10 +129,10 @@ var MapComponent = (function () {
         };
         var iconsBike = {
             small: {
-                icon: 'img/parkingIconSmall.png'
+                icon: 'img/bikeStationIconSmall.png'
             },
             large: {
-                icon: 'img/bikeStationIcon.jpeg'
+                icon: 'img/bikeStationIcon.png'
             }
         };
         var zoomLevel = map.getZoom();

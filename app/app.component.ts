@@ -87,11 +87,13 @@ import { Component, OnInit,  Input,
 
     public bottomtNav():void{
       this.MapComponent.clearMarkers();
+      this.MapComponent.clearPolygons();
 
       if(this.router.url == "/bike"){
         this.leftNav.SetliderValue(0);
         this.BikeComponent.loadBikeStations(this.MapComponent);
         this.MapComponent.markers = this.BikeComponent.markers;
+        this.MapComponent.center(60.1712179,24.9418765);
       }
 
       if(this.router.url == "/parking"){
@@ -101,23 +103,22 @@ import { Component, OnInit,  Input,
             this.FacilityComponent.receivedClick(this.MapComponent,this.oldEvent, this.leftNav.ReturnSliderValue());
           }
           this.MapComponent.markers = this.FacilityComponent.markers;
+          this.MapComponent.center();
         }
 
         if (this.router.url == "/paidzone"){
-          this.MapComponent.clearPolygons();
-          //Show all for demo purposes
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
+          this.MapComponent.center(60.1712179,24.9418765);
         }
 
         if (this.router.url == "/freezone"){
-          this.MapComponent.clearPolygons();
-          //Show all for demo purposes
           this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.MapComponent);
+          this.MapComponent.center(60.1712179,24.9418765);
         }
       }
 

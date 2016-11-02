@@ -105,14 +105,15 @@ export class MapComponent{
         this.centerMarker = new google.maps.Marker({
             position: new google.maps.LatLng(this.centerLat,this.centerLon),
             map: this.map,
-            icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+            icon: "img/red-dot.png"
         });
         this.createEventListeners();
     }
 
 
-    center():void{
-        this.map.panTo(new google.maps.LatLng(this.centerLat,this.centerLon));
+    center(lat:number = this.centerLat,long:number = this.centerLon):void{
+
+        this.map.panTo(new google.maps.LatLng(lat,long));
     }
 
     placeMarker(lat: number, lon: number): void{
@@ -171,10 +172,10 @@ export class MapComponent{
 
         var iconsBike = {
             small: {
-                icon:  'img/parkingIconSmall.png'
+                icon:  'img/bikeStationIconSmall.png'
             },
             large: {
-                icon: 'img/bikeStationIcon.jpeg'
+                icon: 'img/bikeStationIcon.png'
             }
         }
         var zoomLevel =  map.getZoom();
