@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
+var bike_service_1 = require('./bikes/bike.service');
 var left_navigation_component_1 = require('./component/left.navigation.component');
 var bottom_navigation_component_1 = require('./component/bottom.navigation.component');
 var blackoverlay_component_1 = require('./component/blackoverlay.component');
@@ -20,6 +21,8 @@ var bike_component_1 = require('./bikes/bike.component');
 var http_1 = require('@angular/http');
 var core_2 = require('angular2-google-maps/core');
 var map_component_1 = require('./map/map.component');
+var map_service_1 = require('./map/map.service');
+var facility_service_1 = require('./facilities/facility.service');
 var parkzone_component_1 = require('./park-zone/parkzone.component');
 var facility_component_1 = require('./facilities/facility.component');
 var forms_1 = require('@angular/forms');
@@ -47,6 +50,8 @@ var AppModule = (function () {
                 left_navigation_component_1.LeftNavigation,
                 bottom_navigation_component_1.BottomNavigation,
                 blackoverlay_component_1.BlackOverlay, app_routing_1.routing],
+            providers: [facility_service_1.FacilityService,
+                map_service_1.MapService, bike_service_1.BikeService],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])
