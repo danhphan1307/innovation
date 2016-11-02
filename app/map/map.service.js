@@ -18,24 +18,16 @@ require('rxjs/add/operator/toPromise');
 var MapService = (function () {
     function MapService() {
     }
-    MapService.prototype.showDirection = function (origin, destionation) {
-        var _this = this;
-        var start = new google.maps.LatLng(this.coords.lat, this.coords.lon);
+    MapService.prototype.showDirection = function (origin, marker, callback) {
+        var start = new google.maps.LatLng(origin.lat, origin.lon);
         var end = marker.getPosition();
-        console.log(end.lat(), end.lng());
         var request = {
             origin: start,
             destination: end,
             travelMode: 'DRIVING'
         };
         var directionsService = new google.maps.DirectionsService;
-        directionsService.route(request, function (result, status) { return _this.callback(result, status); });
-    };
-    MapService.prototype.callback = function (result, status) {
-        if (status == 'OK') {
-            global.directionsDisplay.setDirections(result);
-        }
-        ;
+        directionsService.route(request, function (result, status) { return callback(result, status); });
     };
     MapService.prototype.placeMarkers = function (lat, lon, map) {
         var m = new google.maps.Marker({

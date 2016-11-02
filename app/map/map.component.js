@@ -33,6 +33,7 @@ var MapComponent = (function () {
         this._mapService = _mapService;
         this.centerLat = 0;
         this.centerLon = 0;
+        this.centerCoords = new location_1.Coords(0.0, 0.0);
         this.directionsDisplay = new google.maps.DirectionsRenderer({
             preserveViewport: true
         });
@@ -59,6 +60,7 @@ var MapComponent = (function () {
     MapComponent.prototype.createMap = function (position) {
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
+        this.centerCoords = new location_1.Coords(this.centerLat, this.centerLon);
         this.centerUpdated.emit(new location_1.Coords(this.centerLat, this.centerLon));
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
@@ -120,7 +122,7 @@ var MapComponent = (function () {
                 marker.setIcon(icons[type].icon);
             };
         })(marker));
-        google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
+        google.maps.event.addListener(marker, 'click', function () { return _this.service.showDirection(_this.centerCoords, marker, function (result, status) { return _this.callbackForShowDirection(result, status); }); });
     };
     MapComponent.prototype.placeMarkerFacility = function (f) {
         var _this = this;
@@ -182,7 +184,7 @@ var MapComponent = (function () {
                     infowindow.open(_this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
                     google.maps.event.addDomListener(el, 'click', function () {
-                        _this.showDirection(markerFacility);
+                        _this.service.showDirection(_this.centerCoords, markerFacility, function (result, status) { return _this.callbackForShowDirection(result, status); });
                     });
                     var el2 = document.getElementById('saveIcon');
                     google.maps.event.addDomListener(el2, 'click', function () {
@@ -252,7 +254,7 @@ var MapComponent = (function () {
                     infowindow.open(_this.map, markerBike);
                     var el = document.getElementById('markerBike');
                     google.maps.event.addDomListener(el, 'click', function () {
-                        _this.showDirection(markerBike);
+                        _this.service.showDirection(_this.centerCoords, markerBike, function (result, status) { return _this.callbackForShowDirection(result, status); });
                     });
                 });
                 google.maps.event.addDomListener(map, 'zoom_changed', function () {
@@ -360,19 +362,6 @@ var MapComponent = (function () {
             this.clickUpdated.emit(clickCoord);
             this.oldRadius = this.circleRadius;
         }
-    };
-    MapComponent.prototype.showDirection = function (marker) {
-        var _this = this;
-        if (marker === void 0) { marker = null; }
-        var start = new google.maps.LatLng(this.centerLat, this.centerLon);
-        var end = marker.getPosition();
-        var request = {
-            origin: start,
-            destination: end,
-            travelMode: 'DRIVING'
-        };
-        var directionsService = new google.maps.DirectionsService;
-        directionsService.route(request, function (result, status) { return _this.callbackForShowDirection(result, status); });
     };
     __decorate([
         core_1.Input(), 

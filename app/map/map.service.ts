@@ -5,7 +5,7 @@ import global = require('../globals');
 
 import {Observable} from 'rxjs/Rx';
 import {Marker} from '../marker/marker';
-
+import {Coords} from '../models/location';
 declare var google : any;
 //Requiered method
 import 'rxjs/add/operator/map';
@@ -18,24 +18,16 @@ export class MapService{
 
     }
 
-    public showDirection(origin: any, destionation: any){
-        var start = new google.maps.LatLng(this.coords.lat,this.coords.lon);
+    public showDirection(origin: Coords,marker: any, callback: (result:any, status:string) => void){
+        var start = new google.maps.LatLng(origin.lat,origin.lon);
         var end = marker.getPosition();
-        console.log(end.lat(),end.lng());
         var request = {
             origin: start,
             destination: end,
             travelMode: 'DRIVING'
         };
         var directionsService = new google.maps.DirectionsService;
-        directionsService.route(request, (result:any, status: string) => this.callback(result,status));
-    }
-
-    private callback(result:any, status: string){
-        if (status == 'OK') {
-
-            global.directionsDisplay.setDirections(result);
-        };
+        directionsService.route(request, (result:any, status: string) => callback(result,status));
     }
 
     public placeMarkers(lat: number, lon: number, map?: any): Marker{

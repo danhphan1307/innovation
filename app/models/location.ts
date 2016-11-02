@@ -10,7 +10,6 @@ export class Coords{
 }
 
 export interface Location {
-    testCoord : Coords;
     coordinates: number[];
     bbox: number[];
 }
