@@ -21,7 +21,7 @@ import {BlackOverlay} from '../component/blackoverlay.component';
   <a routerLink="/paidzone" routerLinkActive="active"><img src="img/Paid Parking-50.png" alt="paid parking"  class="custom-img-responsive"></a>
   </li>
   <li>
-  <a routerLink="abc" routerLinkActive="active"><img src="img/Parking Zone-50.png" alt="parking zone"  class="custom-img-responsive"></a>
+  <a routerLink="/layer" routerLinkActive="active"><img src="img/Parking Zone-50.png" alt="parking zone"  class="custom-img-responsive"></a>
   </li>
   <li>
   <a routerLink="/parking" routerLinkActive="active"><img src="img/Park Ride-50.png" alt="park ride"  class="custom-img-responsive"></a>

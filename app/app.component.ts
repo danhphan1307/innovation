@@ -88,6 +88,7 @@ import { Component, OnInit,  Input,
     public bottomtNav():void{
       this.MapComponent.clearMarkers();
       this.MapComponent.clearPolygons();
+      this.MapComponent.clearKML();
 
       if(this.router.url == "/bike"){
         this.leftNav.SetliderValue(0);
@@ -118,6 +119,11 @@ import { Component, OnInit,  Input,
         if (this.router.url == "/freezone"){
           this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.MapComponent);
+          this.MapComponent.center(60.1712179,24.9418765);
+        }
+
+        if (this.router.url == "/layer"){
+          this.MapComponent.displayKML();
           this.MapComponent.center(60.1712179,24.9418765);
         }
       }

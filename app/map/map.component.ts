@@ -70,7 +70,12 @@ export class MapComponent{
     @Output()
     saveUpdated: any= new EventEmitter();
 
-    klmSrc : String = '../files/vyohykerajat_ETRS.kml';
+    klmSrc : String = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/vyohykerajat_ETRS.kml';
+    kmlLayer : any = new google.maps.KmlLayer(this.klmSrc, {
+            suppressInfoWindows: true,
+            preserveViewport: true
+
+        });
 
     constructor(private _router: Router ) {
         this.router = _router;
@@ -97,7 +102,7 @@ export class MapComponent{
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
 
         //Add KLM layer
-        this.displayKML(this.klmSrc,this.map);
+        //this.displayKML(this.klmSrc,this.map);
         //Bind direction display to map
 
         this.directionsDisplay.setMap(this.map);
@@ -240,7 +245,7 @@ export class MapComponent{
                     }else{
                         markerFacility.setIcon(icons[type].icon);
                     }
-                    
+
 
 
                 });
@@ -360,24 +365,21 @@ export class MapComponent{
             this.polygons[i].setMap(null);
         }
     }
+
+    //Remove KML layers
+    clearKML(){
+        this.kmlLayer.setMap(null);
+    }
+
     callbackForShowDirection(result:any, status: string){
         if (status == 'OK') {
             this.directionsDisplay.setDirections(result);
         };
     }
 
-    displayKML(src: String, map: any){
-        var kmlLayer = new google.maps.KmlLayer(src, {
-            suppressInfoWindows: true,
-            preserveViewport: false,
-            map: map
-        });
 
-        google.maps.event.addListener(kmlLayer, 'click', function(event) {
-            var content = event.featureData.infoWindowHtml;
-            var testimonial = document.getElementById('capture');
-            testimonial.innerHTML = content;
-        });
+    displayKML(){
+       this.kmlLayer.setMap(this.map);
     }
 
     updateRadius(event:any){

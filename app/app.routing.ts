@@ -14,7 +14,8 @@ const appRoutes: Routes = [
   { path: 'bike', component: BikeComponent },
   { path: 'user', component: UserComponent },
   { path: 'paidzone',component: ParkZoneComponent},
-  { path: 'freezone',component: ParkZoneComponent}
+  { path: 'freezone',component: ParkZoneComponent},
+  { path: 'layer',component: FacilityComponent}
 ];
 
 //export const appRoutingProviders: any[] = [];

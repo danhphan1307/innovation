@@ -23,7 +23,8 @@ var appRoutes = [
     { path: 'bike', component: bike_component_1.BikeComponent },
     { path: 'user', component: user_panel_component_1.UserComponent },
     { path: 'paidzone', component: parkzone_component_1.ParkZoneComponent },
-    { path: 'freezone', component: parkzone_component_1.ParkZoneComponent }
+    { path: 'freezone', component: parkzone_component_1.ParkZoneComponent },
+    { path: 'layer', component: facility_component_1.FacilityComponent }
 ];
 //export const appRoutingProviders: any[] = [];
 //export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

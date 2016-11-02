@@ -41,7 +41,11 @@ var MapComponent = (function () {
         //Polygons array
         this.polygons = [];
         this.saveUpdated = new core_1.EventEmitter();
-        this.klmSrc = '../files/vyohykerajat_ETRS.kml';
+        this.klmSrc = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/vyohykerajat_ETRS.kml';
+        this.kmlLayer = new google.maps.KmlLayer(this.klmSrc, {
+            suppressInfoWindows: true,
+            preserveViewport: true
+        });
         this.router = _router;
     }
     MapComponent.prototype.ngOnInit = function () {
@@ -60,7 +64,7 @@ var MapComponent = (function () {
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
         //Add KLM layer
-        this.displayKML(this.klmSrc, this.map);
+        //this.displayKML(this.klmSrc,this.map);
         //Bind direction display to map
         this.directionsDisplay.setMap(this.map);
         this.centerMarker = new google.maps.Marker({
@@ -306,23 +310,18 @@ var MapComponent = (function () {
             this.polygons[i].setMap(null);
         }
     };
+    //Remove KML layers
+    MapComponent.prototype.clearKML = function () {
+        this.kmlLayer.setMap(null);
+    };
     MapComponent.prototype.callbackForShowDirection = function (result, status) {
         if (status == 'OK') {
             this.directionsDisplay.setDirections(result);
         }
         ;
     };
-    MapComponent.prototype.displayKML = function (src, map) {
-        var kmlLayer = new google.maps.KmlLayer(src, {
-            suppressInfoWindows: true,
-            preserveViewport: false,
-            map: map
-        });
-        google.maps.event.addListener(kmlLayer, 'click', function (event) {
-            var content = event.featureData.infoWindowHtml;
-            var testimonial = document.getElementById('capture');
-            testimonial.innerHTML = content;
-        });
+    MapComponent.prototype.displayKML = function () {
+        this.kmlLayer.setMap(this.map);
     };
     MapComponent.prototype.updateRadius = function (event) {
         this.circleRadius = event;

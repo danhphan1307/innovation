@@ -44,6 +44,7 @@ var AppComponent = (function () {
     AppComponent.prototype.bottomtNav = function () {
         this.MapComponent.clearMarkers();
         this.MapComponent.clearPolygons();
+        this.MapComponent.clearKML();
         if (this.router.url == "/bike") {
             this.leftNav.SetliderValue(0);
             this.BikeComponent.loadBikeStations(this.MapComponent);
@@ -70,6 +71,10 @@ var AppComponent = (function () {
         if (this.router.url == "/freezone") {
             this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_1, this.MapComponent);
             this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_2, this.MapComponent);
+            this.MapComponent.center(60.1712179, 24.9418765);
+        }
+        if (this.router.url == "/layer") {
+            this.MapComponent.displayKML();
             this.MapComponent.center(60.1712179, 24.9418765);
         }
     };
