@@ -50,6 +50,14 @@ export class MapService{
          return new Marker(m.getIcon(),
           m.getPosition().lat(),
          m.getPosition().lng());
+    }
 
+    public geocodeTesting(address: string){
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': 'Kilonrinne'}, function(res: any,status: any){
+            if (status == google.maps.GeocoderStatus.OK){
+                console.log(res)
+            }
+        })
     }
 }

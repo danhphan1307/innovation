@@ -46,6 +46,14 @@ var MapService = (function () {
         console.log(global.map);
         return new marker_1.Marker(m.getIcon(), m.getPosition().lat(), m.getPosition().lng());
     };
+    MapService.prototype.geocodeTesting = function (address) {
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ 'address': 'Kilonrinne' }, function (res, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                console.log(res);
+            }
+        });
+    };
     MapService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [])

@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var location_1 = require('../models/location');
 var router_1 = require('@angular/router');
+var map_service_1 = require('./map.service');
 var localStorage_isSupported = (function () {
     try {
         var itemBackup = localStorage.getItem("");
@@ -27,8 +28,9 @@ var localStorage_isSupported = (function () {
     }
 })();
 var MapComponent = (function () {
-    function MapComponent(_router) {
+    function MapComponent(_router, _mapService) {
         this._router = _router;
+        this._mapService = _mapService;
         this.centerLat = 0;
         this.centerLon = 0;
         this.directionsDisplay = new google.maps.DirectionsRenderer({
@@ -47,6 +49,7 @@ var MapComponent = (function () {
             preserveViewport: true
         });
         this.router = _router;
+        this.service = _mapService;
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -73,6 +76,7 @@ var MapComponent = (function () {
             icon: "img/red-dot.png"
         });
         this.createEventListeners();
+        this.service.geocodeTesting("Kilo");
     };
     MapComponent.prototype.center = function (lat, long) {
         if (lat === void 0) { lat = this.centerLat; }
@@ -399,9 +403,9 @@ var MapComponent = (function () {
             moduleId: module.id,
             selector: 'map-gg',
             template: "\n    <div id=\"mapCanvas\" ></div>\n\n    ",
-            providers: []
+            providers: [map_service_1.MapService]
         }), 
-        __metadata('design:paramtypes', [router_1.Router])
+        __metadata('design:paramtypes', [router_1.Router, map_service_1.MapService])
     ], MapComponent);
     return MapComponent;
 }());

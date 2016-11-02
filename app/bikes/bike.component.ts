@@ -44,6 +44,8 @@ export class BikeComponent implements OnInit {
       this.stations = stations;
       mapComponent.placeMarkerBicycle(stations);
     });
+
+
   }
 
 }

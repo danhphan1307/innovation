@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import {Coords} from '../models/location';
 import {LeftNavigation} from '../component/left.navigation.component';
 import {Router} from '@angular/router';
-
+import {MapService} from './map.service'
 declare var google: any;
 
 var localStorage_isSupported = (function () {
@@ -30,10 +30,12 @@ var localStorage_isSupported = (function () {
     <div id="mapCanvas" ></div>
 
     `,
-    providers: []
+    providers: [MapService]
 })
 
 export class MapComponent{
+    //Service
+    service: MapService;
     router:Router;
     addItemStream:Observable<any>;
     centerLat: number = 0
@@ -77,8 +79,9 @@ export class MapComponent{
 
         });
 
-    constructor(private _router: Router ) {
+    constructor(private _router: Router, private _mapService: MapService ) {
         this.router = _router;
+        this.service = _mapService;
     }
 
     ngOnInit(){
@@ -113,6 +116,7 @@ export class MapComponent{
             icon: "img/red-dot.png"
         });
         this.createEventListeners();
+        this.service.geocodeTesting("Kilo");
     }
 
 
@@ -433,4 +437,5 @@ export class MapComponent{
         var directionsService = new google.maps.DirectionsService;
         directionsService.route(request, (result:any, status: string) => this.callbackForShowDirection(result,status));
     }
+
 }
