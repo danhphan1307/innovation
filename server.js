@@ -8,8 +8,12 @@ var port = process.env.PORT || 8080;
 
 // make express look in the public directory for assets (css/js/img)
 app.use(express.static(__dirname + '/'));
-app.use('/bike', express.static(__dirname + '/bike'));
-
+app.use('/paidzone', express.static(__dirname + '/'));
+app.use('/bike', express.static(__dirname + '/'));
+app.use('/parking', express.static(__dirname + '/'));
+app.use('/freezone', express.static(__dirname + '/'));
+app.use('/layer', express.static(__dirname + '/'));
+app.use('/user', express.static(__dirname + '/'));
 // set the home page route
 app.get('/', function(req, res) {
 
