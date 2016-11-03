@@ -6,6 +6,13 @@ var app = express();
 // process.env.PORT lets the port be set by Heroku
 var port = process.env.PORT || 8080;
 
+/* At the top, with other redirect methods before other routes */
+app.get('*',function(req,res,next){
+  if(req.headers['x-forwarded-proto']!='https')
+    res.redirect('https://hsl-parking.herokuapp.com'+req.url)
+  else
+    next() /* Continue to other routes if we're not redirecting */
+})
 // make express look in the public directory for assets (css/js/img)
 app.use(express.static(__dirname + '/'));
 app.use('/paidzone', express.static(__dirname + '/'));

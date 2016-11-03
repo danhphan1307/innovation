@@ -348,6 +348,10 @@ h2{
 .bottomNav img{
     background-color:#acacac;
 }
+
+.bottomNav li.active, .bottomNav li.active img{
+    background-color:#2A6785;
+}
 .custom-img-responsive{
   position: relative;
   top: 50%;
@@ -357,14 +361,25 @@ h2{
   max-height: 50px;
 }
 
-#markerFacility, #markerBike, #saveIcon{
+#markerFacility, #markerBike{
     background-color: #acacac;
 }
 #markerFacility:active, #markerBike:active{
     background-color: #4A6AA5;
 }
-#saveIcon:active{
+#saveButton{
+    outline:none;
+    margin-left:25%;
+    width: 50%;
+    min-height: 30px;
+    border-radius: 5%;
+    background-color:white;
+    border:1px solid #1CBB9B;
+    color:#1CBB9B;
+}
+#saveButton:active{
     background-color:#1CBB9B;
+    color:white;
 }
 .bottomDiv{
     z-index: 2;
@@ -383,9 +398,9 @@ h2{
     height:7vh;
 }
 .content{
-    margin-top:2%;
+    margin:2% 4%;
     width: 100%;
-    display:flex;justify-content:center;align-items:center;
+
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
