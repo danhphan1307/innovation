@@ -348,6 +348,10 @@ h2{
 .bottomNav img{
     background-color:#acacac;
 }
+
+.bottomNav li.active, .bottomNav li.active img{
+    background-color:#2A6785;
+}
 .custom-img-responsive{
   position: relative;
   top: 50%;
@@ -394,9 +398,9 @@ h2{
     height:7vh;
 }
 .content{
-    margin-top:2%;
+    margin:2% 4%;
     width: 100%;
-    display:flex;justify-content:center;align-items:center;
+
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;

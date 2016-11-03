@@ -69,7 +69,7 @@ var UserComponent = (function (_super) {
                     core_1.transition("open <=> close", core_1.animate("250ms")),
                 ])
             ],
-            template: "<div class=\"bottomDiv\" [@animationBottomNav]=\"state\">\n  <div class=\"locationPanel\"><span class=\"glyphicon glyphicon-map-marker\" style=\"margin-right:5px;\"></span> Your car location</div>\n  <div class=\"content\">{{this.object.name.en}}</div>\n  <div class=\"lovePanel\"><span class=\"glyphicon glyphicon-heart\" style=\"margin-right:5px;\"></span>Favorite bike station</div>\n  <div class=\"content\"></div>\n  </div>",
+            template: "<div class=\"bottomDiv\" [@animationBottomNav]=\"state\">\n  <div class=\"locationPanel\"><span class=\"glyphicon glyphicon-map-marker\" style=\"margin-right:5px;\"></span> Your car location</div>\n  <div class=\"content\">You left your car/bike at<br>\n  Location: {{this.object.name.en}}<br>\n  Time: Thu Nov 03 2016 10:16:45 GMT</div>\n  <div class=\"lovePanel\"><span class=\"glyphicon glyphicon-heart\" style=\"margin-right:5px;\"></span>Favorite bike station</div>\n  <div class=\"content\">\n  Sorry, there is no bike station in your favorite list\n  </div>\n  </div>",
             providers: []
         }), 
         __metadata('design:paramtypes', [])
