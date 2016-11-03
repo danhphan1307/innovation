@@ -16,7 +16,7 @@ import { Component, OnInit,  Input,
   import {UserComponent} from './component/user.panel.component';
   import {BikeComponent} from './bikes/bike.component';
   import {ParkZoneComponent} from './park-zone/parkzone.component'
-  import {AgmCoreModule} from 'angular2-google-maps/core';
+
   import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
   import {NgModel} from '@angular/forms';
   import {Coords} from './models/location';

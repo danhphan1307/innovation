@@ -12,6 +12,7 @@ var core_1 = require('@angular/core');
 var location_1 = require('../models/location');
 var router_1 = require('@angular/router');
 var map_service_1 = require('./map.service');
+var google_service_1 = require('../google/google.service');
 var localStorage_isSupported = (function () {
     try {
         var itemBackup = localStorage.getItem("");
@@ -28,9 +29,10 @@ var localStorage_isSupported = (function () {
     }
 })();
 var MapComponent = (function () {
-    function MapComponent(_router, _mapService) {
+    function MapComponent(_router, _mapService, _googleService) {
         this._router = _router;
         this._mapService = _mapService;
+        this._googleService = _googleService;
         this.centerLat = 0;
         this.centerLon = 0;
         this.centerCoords = new location_1.Coords(0.0, 0.0);
@@ -54,6 +56,7 @@ var MapComponent = (function () {
         });
         this.router = _router;
         this.service = _mapService;
+        this.googleService = _googleService;
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -65,18 +68,10 @@ var MapComponent = (function () {
         this.centerLon = position.coords.longitude;
         this.centerCoords = new location_1.Coords(this.centerLat, this.centerLon);
         this.centerUpdated.emit(this.centerCoords);
-        var mapProp = {
-            center: new google.maps.LatLng(this.centerLat, this.centerLon),
-            zoom: 13,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+        this.map = this.googleService.createMap(this.centerCoords, 13);
         this.directionsDisplay.setMap(this.map);
-        this.centerMarker = new google.maps.Marker({
-            position: new google.maps.LatLng(this.centerLat, this.centerLon),
-            map: this.map,
-            icon: "img/red-dot.png"
-        });
+        this.centerMarker = this.googleService.createMarker(this.centerCoords, "img/red-dot.png");
+        this.centerMarker.setMap(this.map);
         this.createEventListeners();
         //Geocoding
         this.service.geocodeTesting("Kilo");
@@ -421,9 +416,9 @@ var MapComponent = (function () {
             moduleId: module.id,
             selector: 'map-gg',
             template: "\n    <div id=\"mapCanvas\" ></div>\n\n    ",
-            providers: [map_service_1.MapService]
+            providers: [map_service_1.MapService, google_service_1.GoogleService]
         }), 
-        __metadata('design:paramtypes', [router_1.Router, map_service_1.MapService])
+        __metadata('design:paramtypes', [router_1.Router, map_service_1.MapService, google_service_1.GoogleService])
     ], MapComponent);
     return MapComponent;
 }());

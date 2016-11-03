@@ -5,6 +5,7 @@ import {LeftNavigation} from '../component/left.navigation.component';
 import {Router} from '@angular/router';
 import {MapService} from './map.service'
 import {ActiveComponent} from '../models/model-enum';
+import {GoogleService} from '../google/google.service'
 declare var google: any;
 
 var localStorage_isSupported = (function () {
@@ -30,14 +31,17 @@ var localStorage_isSupported = (function () {
     <div id="mapCanvas" ></div>
 
     `,
-    providers: [MapService]
+    providers: [MapService, GoogleService]
 })
 
 export class MapComponent{
-    //Service
+    //Service for map
     service: MapService;
+    //Google service
+    googleService: GoogleService;
+    //Router
     router:Router;
-    addItemStream:Observable<any>;
+
     centerLat: number = 0
     centerLon: number = 0
     map : any;
@@ -87,9 +91,10 @@ export class MapComponent{
 
     });
 
-    constructor(private _router: Router, private _mapService: MapService ) {
+    constructor(private _router: Router, private _mapService: MapService, private _googleService: GoogleService ) {
         this.router = _router;
         this.service = _mapService;
+        this.googleService = _googleService
     }
 
     ngOnInit(){
@@ -106,19 +111,13 @@ export class MapComponent{
 
         this.centerUpdated.emit(this.centerCoords);
 
-        var mapProp = {
-            center: new google.maps.LatLng(this.centerLat, this.centerLon),
-            zoom: 13,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+
+        this.map = this.googleService.createMap(this.centerCoords,13);
         this.directionsDisplay.setMap(this.map);
 
-        this.centerMarker = new google.maps.Marker({
-            position: new google.maps.LatLng(this.centerLat,this.centerLon),
-            map: this.map,
-            icon: "img/red-dot.png"
-        });
+        this.centerMarker = this.googleService.createMarker(this.centerCoords,"img/red-dot.png")
+        this.centerMarker.setMap(this.map)
+
         this.createEventListeners();
 
         //Geocoding
@@ -443,7 +442,7 @@ export class MapComponent{
             origin: start0,
             destination: start,
             travelMode: google.maps.DirectionsTravelMode.DRIVING,
-            
+
         }, (result:any) =>{
             this.renderDirections(result);
         });
