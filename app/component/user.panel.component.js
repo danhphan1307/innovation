@@ -61,7 +61,7 @@ var UserComponent = (function (_super) {
     UserComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: 'user-component',
+            selector: 'router-outlet',
             animations: [
                 core_1.trigger("animationBottomNav", [
                     core_1.state("open", core_1.style({ height: "70%" })),

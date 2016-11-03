@@ -58,9 +58,8 @@ declare var Slider: any;
   <div class="copyright">
   <hr style="margin-top:0;margin-bottom:0;">
   <img src="img/demo-logo-2.png" alt="config" style="width:40%;display:block;margin:2% auto;">
-  <p>Version: 0.9.1<br>We are not responsible for any liability, or accuracy related to your use of this Site.<br><br>
-  © Parking Group, Metropolia UAS. <br>
-  All rights reserved.</p>
+  <p>Version: 0.9.1<br>
+  © Parking Group<br></p>
   </div>
   </div>
   <script>

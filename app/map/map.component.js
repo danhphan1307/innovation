@@ -60,8 +60,17 @@ var MapComponent = (function () {
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(this.createMap.bind(this));
+            navigator.geolocation.getCurrentPosition(this.createMap.bind(this), this.noGeolocation);
         }
+        else {
+            this.geolocationNotSupported();
+        }
+    };
+    MapComponent.prototype.noGeolocation = function () {
+        document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Please enable Geolocation to use our service.</div>';
+    };
+    MapComponent.prototype.geolocationNotSupported = function () {
+        document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> This browser does not support Geolocation.</div>';
     };
     MapComponent.prototype.createMap = function (position) {
         this.centerLat = position.coords.latitude;
@@ -76,10 +85,8 @@ var MapComponent = (function () {
         this.service.geocodeTesting("Kilo");
         //Signal that map has done loading
         this.doneLoading.emit(true);
-        var mev = {
-            latLng: new google.maps.LatLng(this.centerLat, this.centerLon)
-        };
-        google.maps.event.trigger(this.map, 'click', mev);
+        this.clickUpdated.emit(this.centerCoords);
+        this.placeCircle(this.centerLat, this.centerLon, this.circleRadius);
     };
     MapComponent.prototype.center = function (lat, long) {
         if (lat === void 0) { lat = this.centerLat; }
@@ -298,18 +305,11 @@ var MapComponent = (function () {
     MapComponent.prototype.callbackForMapClickEvent = function (event) {
         if (this.router.url == "/parking") {
             this.counter++;
-            //this.clearCircles();
             var clickCoord = new location_1.Coords(event.latLng.lat(), event.latLng.lng());
             this.oldLat = event.latLng.lat();
             this.oldLong = event.latLng.lng();
-            if (this.counter < 2) {
-                this.clickUpdated.emit(clickCoord);
-                this.placeCircle(event.latLng.lat(), event.latLng.lng(), this.circleRadius);
-            }
-            else {
-                this.clearMarkers();
-                this.placeMarker(event.latLng.lat(), event.latLng.lng());
-            }
+            this.clearMarkers();
+            this.placeMarker(event.latLng.lat(), event.latLng.lng());
             this.oldRadius = this.circleRadius;
         }
     };

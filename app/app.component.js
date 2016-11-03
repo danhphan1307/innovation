@@ -22,12 +22,12 @@ var model_enum_1 = require('./models/model-enum');
 var AppComponent = (function () {
     function AppComponent(_router) {
         this._router = _router;
+        this.bMapDone = false;
         // google maps zoom level
         this.zoom = 14;
         // initial center position for the map
         this.lat = 60.1699;
         this.lon = 24.9384;
-        this.iconUrl = '../img/largeBike.png';
         this.router = _router;
     }
     AppComponent.prototype.ngOnInit = function () {
@@ -40,26 +40,6 @@ var AppComponent = (function () {
     AppComponent.prototype.beginLeftNav = function () {
         this.leftNav.setState('open');
         this.blackOverlay.setState('open');
-    };
-    AppComponent.prototype.bottomtNav = function () {
-        this.MapComponent.clearMarkers();
-        this.MapComponent.clearPolygons();
-        this.MapComponent.clearKML();
-        if (this.router.url == "/bike") {
-            this.displayBikes();
-        }
-        if (this.router.url == "/parking") {
-            this.displayParking();
-        }
-        if (this.router.url == "/paidzone") {
-            this.displayPaidZone();
-        }
-        if (this.router.url == "/freezone") {
-            this.displayFreeZone();
-        }
-        if (this.router.url == "/layer") {
-            this.displayLayer();
-        }
     };
     AppComponent.prototype.closeAll = function () {
         this.leftNav.setState('close');
@@ -77,7 +57,30 @@ var AppComponent = (function () {
     AppComponent.prototype.loadData = function (event) {
         //call only if map is completely loaded
         if (event == true) {
+            this.bMapDone = true;
             this.bottomtNav();
+        }
+    };
+    AppComponent.prototype.bottomtNav = function () {
+        if (this.bMapDone == true) {
+            this.MapComponent.clearMarkers();
+            this.MapComponent.clearPolygons();
+            this.MapComponent.clearKML();
+            if (this.router.url == "/bike") {
+                this.displayBikes();
+            }
+            if (this.router.url == "/parking") {
+                this.displayParking();
+            }
+            if (this.router.url == "/paidzone") {
+                this.displayPaidZone();
+            }
+            if (this.router.url == "/freezone") {
+                this.displayFreeZone();
+            }
+            if (this.router.url == "/layer") {
+                this.displayLayer();
+            }
         }
     };
     /* Methods for displaying markers*/
