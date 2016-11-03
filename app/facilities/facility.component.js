@@ -16,12 +16,14 @@ var model_enum_1 = require('../models/model-enum');
 var FacilityComponent = (function () {
     function FacilityComponent(facilityService) {
         this.facilityService = facilityService;
+        this.triggered = new core_1.EventEmitter();
         this.center = new location_1.Coords(0.0, 0.0);
         this.mapClicked = new location_1.Coords(0.0, 0.0);
         this.markers = [];
         this.title = 'Park and Ride';
     }
     FacilityComponent.prototype.ngOnInit = function () {
+        this.triggered.emit(model_enum_1.ActiveComponent.PARKING);
     };
     FacilityComponent.prototype.receiveCenterUpdated = function (event) {
         this.center.lat = event.lat;
@@ -64,6 +66,10 @@ var FacilityComponent = (function () {
         core_1.ViewChild(left_navigation_component_1.LeftNavigation), 
         __metadata('design:type', left_navigation_component_1.LeftNavigation)
     ], FacilityComponent.prototype, "leftNav", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], FacilityComponent.prototype, "triggered", void 0);
     FacilityComponent = __decorate([
         core_1.Component({
             moduleId: module.id,

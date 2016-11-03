@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var marker_component_1 = require('../marker/marker.component');
 var map_service_1 = require('../map/map.service');
 var parking_zone_filter_service_1 = require('../shared/parking-zone-filter.service');
 var model_enum_1 = require('../models/model-enum');
@@ -18,18 +17,18 @@ var ParkZoneComponent = (function () {
         this.mapService = mapService;
         this.parkingFilterService = parkingFilterService;
         this.markers = [];
+        this.triggered = new core_1.EventEmitter();
     }
     ParkZoneComponent.prototype.ngOnInit = function () {
+        this.triggered.emit(model_enum_1.ActiveComponent.PAIDZONE);
     };
     ParkZoneComponent.prototype.ngOnChanges = function () {
     };
     ParkZoneComponent.prototype.loadZones = function (pricingZone, map) {
         var _this = this;
         this.parkingFilterService.getParkingZone().subscribe(function (res) {
-            _this.paidZones = res;
-            //filter park and ride + active
-            _this.paidZones = res.filter(function (f) { return f.properties.sallittu_pysakointitapa == pricingZone; });
-            // && f.geometry.type=="Polygon");
+            _this.parkZones = res;
+            _this.parkZones = res.filter(function (f) { return f.properties.sallittu_pysakointitapa == pricingZone; });
             var colorCode = "";
             switch (pricingZone) {
                 case model_enum_1.PricingZoneEnum.PAID_1:
@@ -54,7 +53,7 @@ var ParkZoneComponent = (function () {
                     colorCode = model_enum_1.ColorCode.CamLoeLoet;
                     break;
             }
-            for (var _i = 0, _a = _this.paidZones; _i < _a.length; _i++) {
+            for (var _i = 0, _a = _this.parkZones; _i < _a.length; _i++) {
                 var z = _a[_i];
                 if (z.geometry.type == "Polygon") {
                     //Draw the outbounds
@@ -73,9 +72,9 @@ var ParkZoneComponent = (function () {
         });
     };
     __decorate([
-        core_1.ViewChild(marker_component_1.MarkerComponent), 
-        __metadata('design:type', marker_component_1.MarkerComponent)
-    ], ParkZoneComponent.prototype, "markerComponent", void 0);
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], ParkZoneComponent.prototype, "triggered", void 0);
     ParkZoneComponent = __decorate([
         core_1.Component({
             selector: 'park-zone',

@@ -5,8 +5,8 @@
 </div>
 <map-gg (clickUpdated) = "FacilityRoute($event)" [circleRadius] = "leftNav.ReturnSliderValue()" (saveUpdated)="UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
 <my-bike (triggered) = "setStatus($event)"></my-bike>
-<park-zone></park-zone>
-<facility-component></facility-component>
+<park-zone (triggered) = "setStatus($event)"></park-zone>
+<facility-component (triggered) = "setStatus($event)"></facility-component>
 <user-component></user-component>
 <router-outlet></router-outlet>
 <bottom-nav (click)="bottomtNav($event)" ></bottom-nav>

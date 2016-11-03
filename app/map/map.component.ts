@@ -5,6 +5,7 @@ import {Coords} from '../models/location';
 import {LeftNavigation} from '../component/left.navigation.component';
 import {Router} from '@angular/router';
 import {MapService} from './map.service'
+import {ActiveComponent} from '../models/model-enum';
 declare var google: any;
 
 var localStorage_isSupported = (function () {
