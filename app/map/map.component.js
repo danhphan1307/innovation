@@ -41,6 +41,7 @@ var MapComponent = (function () {
         this.circles = [];
         this.centerUpdated = new core_1.EventEmitter();
         this.clickUpdated = new core_1.EventEmitter();
+        this.doneLoading = new core_1.EventEmitter();
         //Polygons array
         this.polygons = [];
         this.saveUpdated = new core_1.EventEmitter();
@@ -61,16 +62,13 @@ var MapComponent = (function () {
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
         this.centerCoords = new location_1.Coords(this.centerLat, this.centerLon);
-        this.centerUpdated.emit(new location_1.Coords(this.centerLat, this.centerLon));
+        this.centerUpdated.emit(this.centerCoords);
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
             zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
-        //Add KLM layer
-        //this.displayKML(this.klmSrc,this.map);
-        //Bind direction display to map
         this.directionsDisplay.setMap(this.map);
         this.centerMarker = new google.maps.Marker({
             position: new google.maps.LatLng(this.centerLat, this.centerLon),
@@ -78,7 +76,10 @@ var MapComponent = (function () {
             icon: "img/red-dot.png"
         });
         this.createEventListeners();
+        //Geocoding
         this.service.geocodeTesting("Kilo");
+        //Signal that map has done loading
+        this.doneLoading.emit(true);
     };
     MapComponent.prototype.center = function (lat, long) {
         if (lat === void 0) { lat = this.centerLat; }
@@ -383,6 +384,10 @@ var MapComponent = (function () {
         core_1.Output(), 
         __metadata('design:type', Object)
     ], MapComponent.prototype, "clickUpdated", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], MapComponent.prototype, "doneLoading", void 0);
     __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)

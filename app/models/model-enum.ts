@@ -56,6 +56,8 @@ export enum PaymentMethod {
     "OTHER"
 }
 
+
+
 export class FacilityStatus {
     static IN_OPERATION: string = "IN_OPERATION";
     static INACTIVE: string = "INACTIVE";
@@ -90,4 +92,9 @@ export class ColorCode{
     static TimQuyPhai: string = "#800080";
     static HongSenSua: string = "#FF69B4";
     static MauDeoGiKhongBiet: string = "#1E4B3B";
+}
+
+//Enum for switching between components
+export enum ActiveComponent{
+    BIKE,PARKING,PAIDZONE,FREEZONE,USER,LAYER
 }

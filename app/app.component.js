@@ -22,6 +22,7 @@ var model_enum_1 = require('./models/model-enum');
 var AppComponent = (function () {
     function AppComponent(_router) {
         this._router = _router;
+        this.active = model_enum_1.ActiveComponent.PARKING;
         // google maps zoom level
         this.zoom = 14;
         // initial center position for the map
@@ -46,6 +47,7 @@ var AppComponent = (function () {
         this.MapComponent.clearPolygons();
         this.MapComponent.clearKML();
         if (this.router.url == "/bike") {
+            console.log("in bike");
             this.leftNav.SetliderValue(0);
             this.BikeComponent.loadBikeStations(this.MapComponent);
             this.MapComponent.markers = this.BikeComponent.markers;
@@ -90,6 +92,30 @@ var AppComponent = (function () {
             this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
             this.MapComponent.markers = this.FacilityComponent.markers;
         }
+    };
+    AppComponent.prototype.loadBikes = function (event) {
+        if (event == true) {
+            this.displayBikes();
+            console.log("in bike from map");
+        }
+    };
+    AppComponent.prototype.loadData = function (event) {
+        switch (this.active) {
+            case model_enum_1.ActiveComponent.BIKE:
+                this.displayBikes();
+                break;
+        }
+    };
+    //Display markers for bikes
+    AppComponent.prototype.displayBikes = function () {
+        this.leftNav.SetliderValue(0);
+        this.BikeComponent.loadBikeStations(this.MapComponent);
+        this.MapComponent.markers = this.BikeComponent.markers;
+        this.MapComponent.center(60.1712179, 24.9418765);
+    };
+    //Set active component
+    AppComponent.prototype.setStatus = function (event) {
+        this.active = event;
     };
     __decorate([
         core_1.ViewChild(map_component_1.MapComponent), 

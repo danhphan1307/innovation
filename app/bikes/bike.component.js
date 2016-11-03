@@ -12,14 +12,17 @@ var core_1 = require('@angular/core');
 var bike_service_1 = require('./bike.service');
 var marker_component_1 = require('../marker/marker.component');
 var map_service_1 = require('../map/map.service');
+var model_enum_1 = require('../models/model-enum');
 var BikeComponent = (function () {
     function BikeComponent(bikeService, mapService) {
         this.bikeService = bikeService;
         this.mapService = mapService;
         this.title = 'Bike Station';
         this.markers = [];
+        this.triggered = new core_1.EventEmitter();
     }
     BikeComponent.prototype.ngOnInit = function () {
+        this.triggered.emit(model_enum_1.ActiveComponent.BIKE);
     };
     BikeComponent.prototype.ngOnChanges = function () {
         console.log("change in bike");
@@ -36,6 +39,10 @@ var BikeComponent = (function () {
         core_1.ViewChild(marker_component_1.MarkerComponent), 
         __metadata('design:type', marker_component_1.MarkerComponent)
     ], BikeComponent.prototype, "markerComponent", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], BikeComponent.prototype, "triggered", void 0);
     BikeComponent = __decorate([
         core_1.Component({
             selector: 'my-bike',

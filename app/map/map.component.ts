@@ -69,6 +69,9 @@ export class MapComponent{
     @Output()
     clickUpdated: any= new EventEmitter();
 
+    @Output()
+    doneLoading: any = new EventEmitter<boolean>();
+
     //Polygons array
     polygons : any[] = []
     @Output()
@@ -98,7 +101,7 @@ export class MapComponent{
         this.centerLon = position.coords.longitude;
         this.centerCoords = new Coords(this.centerLat,this.centerLon);
 
-        this.centerUpdated.emit( new Coords(this.centerLat,this.centerLon));
+        this.centerUpdated.emit(this.centerCoords);
 
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
@@ -106,10 +109,6 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
-
-        //Add KLM layer
-        //this.displayKML(this.klmSrc,this.map);
-        //Bind direction display to map
 
         this.directionsDisplay.setMap(this.map);
 
@@ -119,7 +118,12 @@ export class MapComponent{
             icon: "img/red-dot.png"
         });
         this.createEventListeners();
+
+        //Geocoding
         this.service.geocodeTesting("Kilo");
+
+        //Signal that map has done loading
+        this.doneLoading.emit(true)
     }
 
 
@@ -164,7 +168,8 @@ export class MapComponent{
                 marker.setIcon(icons[type].icon);
             }})(marker));
 
-        google.maps.event.addListener(marker,'click',() => this.service.showDirection(this.centerCoords,marker,(result,status) => this.callbackForShowDirection(result,status));
+        google.maps.event.addListener(marker,'click',() => this.service.showDirection(this.centerCoords,marker,
+                    (result,status) => this.callbackForShowDirection(result,status)))
     }
 
     placeMarkerFacility(f:any):void{
@@ -415,7 +420,6 @@ placePolygon(coordArray: any[], colorCode : string){
 
     private callbackForMapClickEvent(event: any): void{
         if(this.router.url == "/parking"){
-
             this.clearCircles();
             let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
             this.oldLat = event.latLng.lat();

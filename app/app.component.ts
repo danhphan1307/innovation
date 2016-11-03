@@ -23,7 +23,7 @@ import { Component, OnInit,  Input,
 
   import {Injectable} from '@angular/core';
   import {Router} from '@angular/router';
-  import {PricingZoneEnum} from './models/model-enum'
+  import {PricingZoneEnum, ActiveComponent} from './models/model-enum'
   @Component({
     moduleId: module.id,
     selector: 'my-app',
@@ -61,6 +61,7 @@ import { Component, OnInit,  Input,
     stations : BikeStation[];
     data : string
 
+    active = ActiveComponent.PARKING
     // google maps zoom level
     zoom: number = 14;
 
@@ -78,6 +79,8 @@ import { Component, OnInit,  Input,
         this.blackOverlay.setState('open');
         this.UserComponent.setState('open');
       })
+
+
     }
 
     public beginLeftNav():void{
@@ -91,6 +94,7 @@ import { Component, OnInit,  Input,
       this.MapComponent.clearKML();
 
       if(this.router.url == "/bike"){
+        console.log("in bike")
         this.leftNav.SetliderValue(0);
         this.BikeComponent.loadBikeStations(this.MapComponent);
         this.MapComponent.markers = this.BikeComponent.markers;
@@ -146,5 +150,34 @@ import { Component, OnInit,  Input,
           this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
           this.MapComponent.markers = this.FacilityComponent.markers;
         }
+      }
+
+      public loadBikes(event:boolean):void{
+          if (event==true){this.displayBikes()
+            console.log("in bike from map")
+
+          }
+      }
+
+      public loadData(event:boolean){
+        switch (this.active){
+          case ActiveComponent.BIKE:
+              this.displayBikes()
+              break
+
+        }
+      }
+
+      //Display markers for bikes
+      displayBikes(){
+        this.leftNav.SetliderValue(0);
+        this.BikeComponent.loadBikeStations(this.MapComponent);
+        this.MapComponent.markers = this.BikeComponent.markers;
+        this.MapComponent.center(60.1712179,24.9418765);
+      }
+
+      //Set active component
+      setStatus(event: ActiveComponent){
+        this.active = event
       }
     }
