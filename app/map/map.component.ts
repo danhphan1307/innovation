@@ -93,17 +93,25 @@ export class MapComponent{
     }
 
     ngOnInit(){
-        if (navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(this.createMap.bind(this));
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(this.createMap.bind(this), this.noGeolocation);
+        } else {
+            this.geolocationNotSupported();
         }
     }
 
+    noGeolocation() {
+        document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Please enable Geolocation to use our service.</div>';
+    }
+
+    geolocationNotSupported() {
+        document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> This browser does not support Geolocation.</div>';
+    }
 
     createMap(position: any): void{
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
         this.centerCoords = new Coords(this.centerLat,this.centerLon);
-
         this.centerUpdated.emit(this.centerCoords);
 
         var mapProp = {
@@ -120,21 +128,17 @@ export class MapComponent{
             icon: "img/red-dot.png"
         });
         this.createEventListeners();
-
         //Geocoding
         this.service.geocodeTesting("Kilo");
-
         //Signal that map has done loading
-        this.doneLoading.emit(true)
-        var mev = {
-            latLng: new google.maps.LatLng(this.centerLat, this.centerLon)
-        }
-        google.maps.event.trigger(this.map, 'click', mev);
+        this.doneLoading.emit(true);
+
+        this.clickUpdated.emit(this.centerCoords);
+        this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);
     }
 
 
     center(lat:number = this.centerLat,long:number = this.centerLon):void{
-
         this.map.panTo(new google.maps.LatLng(lat,long));
     }
 
@@ -373,8 +377,7 @@ export class MapComponent{
         else {
             if(this.oldRadius ==null){
 
-            }
-            else{
+            }else{
                 if(this.oldRadius!=event){
                     this.oldRadius = event;
                     this.clearCircles();
@@ -390,20 +393,13 @@ export class MapComponent{
     }
 
     private callbackForMapClickEvent(event: any): void{
-
         if(this.router.url == "/parking"){
             this.counter++;
-            //this.clearCircles();
             let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
             this.oldLat = event.latLng.lat();
             this.oldLong = event.latLng.lng();
-            if(this.counter<2){
-                this.clickUpdated.emit(clickCoord);
-                this.placeCircle(event.latLng.lat(),event.latLng.lng(),this.circleRadius);
-            }else{
-                this.clearMarkers()
-                this.placeMarker(event.latLng.lat(),event.latLng.lng());
-            }
+            this.clearMarkers()
+            this.placeMarker(event.latLng.lat(),event.latLng.lng());
             this.oldRadius = this.circleRadius;
         }
     }

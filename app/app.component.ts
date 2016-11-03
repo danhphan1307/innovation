@@ -33,6 +33,7 @@ import { Component, OnInit,  Input,
 
   export class AppComponent implements OnInit {
     router:Router;
+    bMapDone:boolean = false;
 
     @ViewChild(MapComponent)
     private MapComponent:MapComponent;
@@ -68,19 +69,18 @@ import { Component, OnInit,  Input,
     // initial center position for the map
     lat: number = 60.1699;
     lon: number = 24.9384;
-    iconUrl = '../img/largeBike.png';
 
     oldEvent: any;
-
-
 
     ngOnInit(){
       document.getElementById('testImg').addEventListener('click',()=>{
         this.blackOverlay.setState('open');
         this.UserComponent.setState('open');
       })
+    }
 
-
+    constructor(private _router: Router) {
+      this.router = _router;
     }
 
     public beginLeftNav():void{
@@ -88,41 +88,10 @@ import { Component, OnInit,  Input,
       this.blackOverlay.setState('open');
     }
 
-    public bottomtNav():void{
-      this.MapComponent.clearMarkers();
-      this.MapComponent.clearPolygons();
-      this.MapComponent.clearKML();
-
-      if(this.router.url == "/bike"){
-        this.displayBikes()
-      }
-
-      if(this.router.url == "/parking"){
-        this.displayParking()
-      }
-
-      if (this.router.url == "/paidzone"){
-        this.displayPaidZone()
-      }
-
-      if (this.router.url == "/freezone"){
-        this.displayFreeZone()
-      }
-
-      if (this.router.url == "/layer"){
-        this.displayLayer()
-      }
-    }
-
     public closeAll():void{
       this.leftNav.setState('close');
       this.blackOverlay.setState('close');
       this.UserComponent.setState('close');
-    }
-
-
-    constructor(private _router: Router) {
-      this.router = _router;
     }
 
     public FacilityRoute(event:any):void{
@@ -137,32 +106,59 @@ import { Component, OnInit,  Input,
     public loadData(event:boolean){
       //call only if map is completely loaded
       if (event==true){
-        this.bottomtNav()
-
+        this.bMapDone = true;
+        this.bottomtNav();
       }
     }
 
-    /* Methods for displaying markers*/
-      //Display markers for bikes
-      displayBikes(){
-        console.log("active comp is bike")
-        this.leftNav.SetliderValue(0);
-        this.BikeComponent.loadBikeStations(this.MapComponent);
-        this.MapComponent.markers = this.BikeComponent.markers;
-        this.MapComponent.center(60.1712179,24.9418765);
-      }
+    public bottomtNav():void{
+      if(this.bMapDone == true){
+        this.MapComponent.clearMarkers();
+        this.MapComponent.clearPolygons();
+        this.MapComponent.clearKML();
 
-      //Parking
-      displayParking(){
-        console.log("active comp is parking")
-        this.leftNav.SetliderValue(this.leftNav.oldRadius/1000);
-        if(this.oldEvent==null){}
-          else{
-            this.FacilityComponent.receivedClick(this.MapComponent,this.oldEvent, this.leftNav.ReturnSliderValue());
-          }
-          this.MapComponent.markers = this.FacilityComponent.markers;
-          this.MapComponent.center();
+        if(this.router.url == "/bike"){
+          this.displayBikes()
         }
+
+        if(this.router.url == "/parking"){
+          this.displayParking()
+        }
+
+        if (this.router.url == "/paidzone"){
+          this.displayPaidZone()
+        }
+
+        if (this.router.url == "/freezone"){
+          this.displayFreeZone()
+        }
+
+        if (this.router.url == "/layer"){
+          this.displayLayer()
+        }
+      }
+    }
+    /* Methods for displaying markers*/
+    //Display markers for bikes
+    displayBikes(){
+      console.log("active comp is bike")
+      this.leftNav.SetliderValue(0);
+      this.BikeComponent.loadBikeStations(this.MapComponent);
+      this.MapComponent.markers = this.BikeComponent.markers;
+      this.MapComponent.center(60.1712179,24.9418765);
+    }
+
+    //Parking
+    displayParking(){
+      console.log("active comp is parking")
+      this.leftNav.SetliderValue(this.leftNav.oldRadius/1000);
+      if(this.oldEvent==null){}
+        else{
+          this.FacilityComponent.receivedClick(this.MapComponent,this.oldEvent, this.leftNav.ReturnSliderValue());
+        }
+        this.MapComponent.markers = this.FacilityComponent.markers;
+        this.MapComponent.center();
+      }
 
       //Layer for freezone
       displayFreeZone(){

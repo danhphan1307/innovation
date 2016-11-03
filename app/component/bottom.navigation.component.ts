@@ -15,22 +15,22 @@ import {BlackOverlay} from '../component/blackoverlay.component';
   <ul>
 
   <li routerLink="/freezone" routerLinkActive="active">
-  <a><img src="img/Free Parking-50.png" alt="free parking" class="custom-img-responsive"></a>
+  <img src="img/Free Parking-50.png" alt="free parking" class="custom-img-responsive">
   </li>
   <li routerLink="/paidzone" routerLinkActive="active">
-  <a ><img src="img/Paid Parking-50.png" alt="paid parking"  class="custom-img-responsive"></a>
+  <img src="img/Paid Parking-50.png" alt="paid parking"  class="custom-img-responsive">
   </li>
   <li routerLink="/layer" routerLinkActive="active">
-  <a ><img src="img/Parking Zone-50.png" alt="parking zone"  class="custom-img-responsive"></a>
+  <img src="img/Parking Zone-50.png" alt="parking zone"  class="custom-img-responsive">
   </li>
   <li routerLink="/parking" routerLinkActive="active">
-  <a ><img src="img/Park Ride-50.png" alt="park ride"  class="custom-img-responsive"></a>
+  <img src="img/Park Ride-50.png" alt="park ride"  class="custom-img-responsive">
   </li>
   <li routerLink="/bike" routerLinkActive="active">
-  <a ><img src="img/Bicycle-50.png" alt="bike icon"  class="custom-img-responsive"></a>
+  <img src="img/Bicycle-50.png" alt="bike icon"  class="custom-img-responsive">
   </li>
   <li routeLink="/user" routerLinkActive="active" >
-  <a ><img id="testImg" #testImg src="img/User-Info.png" alt="user info"  class="custom-img-responsive"></a>
+  <img id="testImg" #testImg src="img/User-Info.png" alt="user info"  class="custom-img-responsive">
   </li>
   </ul>
   </nav>

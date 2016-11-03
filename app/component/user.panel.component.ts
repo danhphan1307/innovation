@@ -21,7 +21,7 @@ var localStorage_isSupported = (function () {
 
 @Component({
   moduleId: module.id,
-  selector: 'user-component',
+  selector: 'router-outlet',
   animations: [
 
   trigger("animationBottomNav", [

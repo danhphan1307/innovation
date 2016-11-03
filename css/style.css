@@ -16,6 +16,17 @@ body {
     overflow-y: hidden;
 }
 
+a{
+    text-decoration: none!important;
+    outline:0!important;
+}
+
+.alert-danger{
+    width: 70%;
+    text-align:center;
+    position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);
+}
+
 #blackOverlay{
     display:none;
     position:absolute;
@@ -38,24 +49,6 @@ body {
 }
 
 /* The navigation menu links */
-nav a {
-    position: relative;
-    text-decoration: none!important;
-    font-size: 15px;
-    color: black;
-    display: block;
-    transition: 0.3s
-}
-
-nav a.active img{
-    background-color: #2A6785;
-    color:white;
-}
-nav a span{
-    top: 50%!important;
-    transform: translate(-50%, -50%)!important;
-    position: absolute!important;
-}
 
 #logo{
     display: block;
@@ -157,7 +150,7 @@ nav a span{
 #mySidenav .copyright{
     position: absolute;
     bottom:1%;
-    margin:auto 5%;
+    width:100%;
 }
 #mySidenav .copyright p{
     margin:auto 0; text-align: justify; -moz-text-align-last: center; text-align-last: center;
@@ -311,7 +304,6 @@ h2{
 .bottomNav{
     border-top:1px solid #ddd;
     height: 9%;
-    /*min-height: 60px;*/
 }
 .bottomNav nav{
     height: 100%;
@@ -326,7 +318,6 @@ h2{
 }
 .bottomNav li{
     position: relative;
-    height: 100%;
     list-style-type: none;
     font-size: 0.8em;
     font-weight: bold;
@@ -336,9 +327,11 @@ h2{
     float: left;
     text-align: center;
     text-transform: uppercase;
+    /*
     display:flex;
     justify-content:center;
     align-items:center;
+    */
 }
 
 .bottomNav li:not(:first-child){
@@ -406,11 +399,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
-   width: 100%;
-   background: #FF9AD7;
-   display:flex;justify-content:center;align-items:center;
-   color:white;
-   height:7vh;   
+ width: 100%;
+ background: #FF9AD7;
+ display:flex;justify-content:center;align-items:center;
+ color:white;
+ height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
