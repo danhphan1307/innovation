@@ -75,25 +75,9 @@ var AppComponent = (function () {
         }
     };
     AppComponent.prototype.loadData = function (event) {
+        //call only if map is completely loaded
         if (event == true) {
-            console.log("event", this.active);
-            switch (this.active) {
-                case model_enum_1.ActiveComponent.BIKE:
-                    this.displayBikes();
-                    break;
-                case model_enum_1.ActiveComponent.FREEZONE:
-                    this.displayFreeZone();
-                    break;
-                case model_enum_1.ActiveComponent.PAIDZONE:
-                    this.displayPaidZone();
-                    break;
-                case model_enum_1.ActiveComponent.PARKING:
-                    this.displayParking();
-                    break;
-                case model_enum_1.ActiveComponent.LAYER:
-                    this.displayLayer();
-                    break;
-            }
+            this.bottomtNav();
         }
     };
     /* Methods for displaying markers*/

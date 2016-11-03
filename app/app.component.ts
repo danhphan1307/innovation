@@ -135,28 +135,11 @@ import { Component, OnInit,  Input,
     }
 
     public loadData(event:boolean){
+      //call only if map is completely loaded
       if (event==true){
-        console.log("event",this.active)
-        switch (this.active){
-          case ActiveComponent.BIKE:
-          this.displayBikes()
-          break
-          case ActiveComponent.FREEZONE:
-          this.displayFreeZone()
-          break
-          case ActiveComponent.PAIDZONE:
-          this.displayPaidZone()
-          break
-          case ActiveComponent.PARKING:
-          this.displayParking()
-          break
-          case ActiveComponent.LAYER:
-          this.displayLayer()
-          break
-        }
+        this.bottomtNav()
+
       }
-
-
     }
 
     /* Methods for displaying markers*/
