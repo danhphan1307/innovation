@@ -43,19 +43,16 @@ export class MapComponent{
     map : any;
     centerMarker: any;
     centerCoords : Coords = new Coords(0.0,0.0);
-    counter:number = 0
 
 
     oldLat:number
     oldLong:number
     oldRadius:number
     saveLocation:any;
+    counter:number=0;
 
     facilitymarkers:any[] = [];
-
-    directionsDisplay = new google.maps.DirectionsRenderer({
-        preserveViewport: true
-    });
+    directionArray:any[] = [];
 
     @Input()
     circleRadius: number;
@@ -116,23 +113,20 @@ export class MapComponent{
 
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
-            zoom: 13,
+            zoom: 12,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
-        this.directionsDisplay.setMap(this.map);
 
         this.centerMarker = new google.maps.Marker({
             position: new google.maps.LatLng(this.centerLat,this.centerLon),
             map: this.map,
-            icon: "img/red-dot.png"
         });
         this.createEventListeners();
         //Geocoding
         this.service.geocodeTesting("Kilo");
         //Signal that map has done loading
         this.doneLoading.emit(true);
-
         this.clickUpdated.emit(this.centerCoords);
         this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);
     }
@@ -142,15 +136,15 @@ export class MapComponent{
         this.map.panTo(new google.maps.LatLng(lat,long));
     }
 
-    placeMarker(lat: number, lon: number): void{
+    placeMarker(lat: number, lon: number): any{
         let marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat,lon),
             map: this.map,
         });
         this.markers.push(marker);
         google.maps.event.addListener(marker,'click',() => this.showDirection(marker));
+        return marker;
     }
-
 
     placeMarkerFacility(f:any):void{
         var infowindow = new google.maps.InfoWindow();
@@ -175,7 +169,7 @@ export class MapComponent{
             }
         }
         var zoomLevel =  map.getZoom();
-        if(zoomLevel<14){
+        if(zoomLevel<13){
             type = 'small';
         }else{
             type = 'large';
@@ -205,17 +199,19 @@ export class MapComponent{
                         content+='Disabled Capacity:'+ (f[i].builtCapacity.DISABLED|| 0)+'<br>';
                         content+='Motorbike Capacity:'+ (f[i].builtCapacity.MOTORCYCLE|| 0);
                     }
-                    content+='<hr class="separate"><button id="saveButton">I park here</button></div></div>' ;
+                    content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
                     infowindow.setContent(content);
                     infowindow.open(this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
                     google.maps.event.addDomListener(el,'click',()=>{
-                        this.service.showDirection(this.centerCoords,markerFacility,(result,status) => this.callbackForShowDirection(result,status));
+                        this.showDirection(markerFacility,false);
                     });
                     var el2 = document.getElementById('saveButton');
                     google.maps.event.addDomListener(el2,'click',()=>{
                         if(localStorage_isSupported){
-                            localStorage.setItem('carLocation',JSON.stringify(f[i]));
+                            var temp = f[i];
+                            temp.date=Date();
+                            localStorage.setItem('carLocation',JSON.stringify(temp));
                             this.saveLocation = f[i];
                             this.saveUpdated.emit(this.saveLocation);
                         }
@@ -224,7 +220,7 @@ export class MapComponent{
                 });
                 google.maps.event.addDomListener(map,'zoom_changed',()=>{
                     var zoomLevel =  map.getZoom();
-                    if(zoomLevel<14){
+                    if(zoomLevel<13){
                         type = 'small';
                     }else{
                         type = 'large';
@@ -242,7 +238,6 @@ export class MapComponent{
 
     placeMarkerBicycle(stations:any):void{
         var infowindow = new google.maps.InfoWindow();
-
         var map = this.map;
         var type:string;
 
@@ -255,7 +250,7 @@ export class MapComponent{
             }
         }
         var zoomLevel =  map.getZoom();
-        if(zoomLevel<14){
+        if(zoomLevel<13){
             type = 'small';
         }else{
             type = 'large';
@@ -288,7 +283,7 @@ export class MapComponent{
                 });
                 google.maps.event.addDomListener(map,'zoom_changed',()=>{
                     var zoomLevel =  map.getZoom();
-                    if(zoomLevel<14){
+                    if(zoomLevel<13){
                         type = 'small';
                     }else{
                         type = 'large';
@@ -331,40 +326,30 @@ export class MapComponent{
         polygon.setMap(this.map);
         this.polygons.push(polygon);
     }
-
-    //Remove all markers on map
     clearMarkers(){
-        for (var i = 0; i < this.markers.length; i++) {
-            this.markers[i].setMap(null);
-        }
+        this.markers.forEach((item, index) => {
+            item.setMap(null);
+        });
     }
-
-    //Remove all circles on map
     clearCircles(){
-        for (var i = 0; i < this.circles.length; i++) {
-            this.circles[i].setMap(null);
-        }
+        this.circles.forEach((item, index) => {
+            item.setMap(null);
+        });
     }
-
-    //Remove all polygons on map
     clearPolygons(){
-        for (var i = 0; i < this.polygons.length; i++) {
-            this.polygons[i].setMap(null);
-        }
+        this.polygons.forEach((item, index) => {
+            item.setMap(null);
+        });
+    }
+    clearDirection(){
+        this.directionArray.forEach((item, index) => {
+            item.setMap(null);
+        });
     }
 
-    //Remove KML layers
     clearKML(){
         this.kmlLayer.setMap(null);
     }
-
-    callbackForShowDirection(result:any, status: string) {
-        if (status == 'OK') {
-
-            this.directionsDisplay.setDirections(result);
-        };
-    }
-
 
     displayKML(){
         this.kmlLayer.setMap(this.map);
@@ -381,7 +366,14 @@ export class MapComponent{
                 if(this.oldRadius!=event){
                     this.oldRadius = event;
                     this.clearCircles();
-                    this.placeCircle(this.oldLat,this.oldLong,this.circleRadius);
+                    /*this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);*/
+                    this.counter=0;
+                    this.facilitymarkers.forEach((item, index) => {
+                        item.setMap(null);
+                    });
+                    
+                    var mev={latLng: new google.maps.LatLng(this.centerLat, this.centerLon)};
+                    google.maps.event.trigger(this.map, 'click', mev);
                 }
             }
         }
@@ -393,65 +385,154 @@ export class MapComponent{
     }
 
     private callbackForMapClickEvent(event: any): void{
+
         if(this.router.url == "/parking"){
             this.counter++;
             let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
             this.oldLat = event.latLng.lat();
             this.oldLong = event.latLng.lng();
-            this.clearMarkers()
-            this.placeMarker(event.latLng.lat(),event.latLng.lng());
+            this.clearMarkers();
+            this.clearDirection();
+            var tempMarker = this.placeMarker(event.latLng.lat(),event.latLng.lng());
+            if(this.counter<2){
+                this.clickUpdated.emit(clickCoord);
+                this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);
+            }else{
+                this.showDirection(tempMarker,true);
+            }
             this.oldRadius = this.circleRadius;
+        }else {
+            this.counter=0;
         }
     }
 
-    renderDirections(result:any) {
-        var directionsRenderer = new google.maps.DirectionsRenderer;
-        directionsRenderer.setMap(this.map);
-        directionsRenderer.setDirections(result);
+    private renderDirections(result:any,status:any, clearOldDirection:boolean = false) {
+        if ( status == google.maps.DirectionsStatus.OK ) {
+            if(clearOldDirection){
+                this.clearDirection();
+                document.getElementById('direction').innerHTML='';
+            }
+            var directionsRenderer = new google.maps.DirectionsRenderer({
+                map:this.map,
+                //suppressMarkers: true,
+                draggable:true,
+                //infoWindow:true,
+                preserveViewport: true,
+            });
+            directionsRenderer.setPanel(document.getElementById('direction'));
+            document.getElementById('direction').style.display="block";
+            this.directionArray.push(directionsRenderer);
+            directionsRenderer.setDirections(result);
+        }
     }
-    private showDirection(marker: any = null){
-
-        /*This is hot fix only.*/
-        var start = new google.maps.LatLng(this.centerLat,this.centerLon);
-        var min:number;
-        var chosenMarker:any;
-        for (var i = 0; i < this.facilitymarkers.length; i++) {
-            var temp = google.maps.geometry.spherical.computeDistanceBetween (this.facilitymarkers[i].getPosition(), start);
-            if(i==0 || min>temp){
-                min = temp;
-                chosenMarker = this.facilitymarkers[i];
-            }
-        }
-        for (var i = 0; i < this.facilitymarkers.length; i++) {
-            if(chosenMarker!=this.facilitymarkers[i]){
-                this.facilitymarkers[i].setMap(null);
-            }
-
-        }
-
-        var start0 = new google.maps.LatLng(this.centerLat,this.centerLon);
-        start = chosenMarker.getPosition();
-        var end = marker.getPosition();
-
+/*
+    private test(a:any,b:any,c:any){
         var directionsService = new google.maps.DirectionsService;
-
         directionsService.route({
-            origin: start0,
-            destination: start,
+            origin: a,
+            destination: b.getPosition(),
             travelMode: google.maps.DirectionsTravelMode.DRIVING,
-            
-        }, (result:any) =>{
-            this.renderDirections(result);
+
+        }, (result:any, status:any) =>{
+            this.renderDirections(result,status, true);
         });
 
         directionsService.route({
-            origin: start,
-            destination: end,
+            origin: b.getPosition(),
+            destination: c,
             travelMode: google.maps.DirectionsTravelMode.TRANSIT
-        }, (result:any) =>{
-            this.renderDirections(result);
+        }, (result:any, status:any) =>{
+            this.renderDirections(result,status);
         });
+    }
+    */
+    private showDirection(marker: any = null, multiDirection:boolean = true){
+        var current = new google.maps.LatLng(this.centerLat,this.centerLon);
+        var parkCar:any ;
+        var chosenMarker:any;
+        var min:number;
+        var destination = marker.getPosition();
+        var directionsService = new google.maps.DirectionsService;
+        var temp_end:any;
+        var temp_start:any;
+        var temp_distance:any;
 
+        if(multiDirection){
+            /*
+            Promise.all([this.facilitymarkers.forEach((item, index) => {
+                directionsService.route({
+                    origin: current,
+                    destination: item.getPosition(),
+                    travelMode: google.maps.DirectionsTravelMode.DRIVING,
+
+                }, (result:any, status:any) =>{
+                    if(status == google.maps.DirectionsStatus.OK){
+                        temp_start = result.routes[ 0 ].legs[ 0 ].end_location;
+                        
+                    }
+                });
+
+                directionsService.route({
+                    origin: item.getPosition(),
+                    destination: destination,
+                    travelMode: google.maps.DirectionsTravelMode.TRANSIT
+                }, (result:any, status:any) =>{
+                    if(status == google.maps.DirectionsStatus.OK){
+                        temp_end = result.routes[ 0 ].legs[ 0 ].start_location;
+                        
+                        temp_distance = google.maps.geometry.spherical.computeDistanceBetween(temp_start, temp_end);
+                        if(index==0 || min>temp_distance){
+                            console.log(temp_distance);
+                            min = temp_distance;
+                            chosenMarker = item;
+                        }
+                    }
+                });
+            })]).then(()=>this.test(current,chosenMarker,destination));
+            */
+            this.facilitymarkers.forEach((item, index) => {
+                var temp = google.maps.geometry.spherical.computeDistanceBetween (item.getPosition(), current);
+                if(index==0 || min>temp){
+                    min = temp;
+                    chosenMarker = item;
+                }
+            });
+            this.facilitymarkers.forEach((item, index) => {
+                if(chosenMarker!=item){
+                    item.setMap(null);
+                }
+            }); 
+
+
+
+            parkCar = chosenMarker.getPosition();
+
+            directionsService.route({
+                origin: current,
+                destination: parkCar,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING,
+
+            }, (result:any, status:any) =>{
+                this.renderDirections(result,status, true);
+            });
+
+            directionsService.route({
+                origin: parkCar,
+                destination: destination,
+                travelMode: google.maps.DirectionsTravelMode.TRANSIT
+            }, (result:any, status:any) =>{
+                this.renderDirections(result,status);
+            }); 
+
+        }else {
+            directionsService.route({
+                origin: current,
+                destination: destination,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+            }, (result:any, status:any) =>{
+                this.renderDirections(result,status,true);
+            }); 
+        }
 
     }
 }

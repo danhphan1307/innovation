@@ -3,6 +3,7 @@
 <div id="controlNav">
 	<span id="cog" (click)="beginLeftNav()"  class="glyphicon glyphicon-cog " ></span><img src="img/demo-logo-2.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="MapComponent.center()"  class="glyphicon glyphicon-map-marker" ></span>
 </div>
+<div id="direction"></div>
 <map-gg (clickUpdated) = "FacilityRoute($event)" [circleRadius] = "leftNav.ReturnSliderValue()" (saveUpdated)="UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
 <my-bike ></my-bike>
 <park-zone ></park-zone>

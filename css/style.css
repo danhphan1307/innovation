@@ -408,6 +408,18 @@ h2{
 .locationPanel #saveIcon{
     background:#1cbb9b;
 }
+#direction{
+    position:absolute;
+    z-index: 10;
+    top:8%;
+    height: 40vh;
+    width: 100%;
+    overflow-y: scroll;
+    background: rgba(255,255,255,0.9);
+    display:none;
+    padding-left:5%;
+     padding-right:5%;
+}
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {

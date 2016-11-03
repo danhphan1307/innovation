@@ -23,7 +23,9 @@ import { Component, OnInit,  Input,
 
   import {Injectable} from '@angular/core';
   import {Router} from '@angular/router';
-  import {PricingZoneEnum, ActiveComponent} from './models/model-enum'
+  import {PricingZoneEnum, ActiveComponent} from './models/model-enum';
+
+  declare var google: any;
   @Component({
     moduleId: module.id,
     selector: 'my-app',
@@ -67,10 +69,8 @@ import { Component, OnInit,  Input,
     zoom: number = 14;
 
     // initial center position for the map
-    lat: number = 60.1699;
-    lon: number = 24.9384;
-
-    oldEvent: any;
+    lat: number = 60.1712179;
+    long: number = 24.9418765;
 
     ngOnInit(){
       document.getElementById('testImg').addEventListener('click',()=>{
@@ -96,8 +96,6 @@ import { Component, OnInit,  Input,
 
     public FacilityRoute(event:any):void{
       if(this.router.url == "/parking"){
-        this.oldEvent = event;
-        this.MapComponent.clearMarkers();
         this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
         this.MapComponent.markers = this.FacilityComponent.markers;
       }
@@ -113,80 +111,77 @@ import { Component, OnInit,  Input,
 
     public bottomtNav():void{
       if(this.bMapDone == true){
+        this.MapComponent.clearCircles();
         this.MapComponent.clearMarkers();
         this.MapComponent.clearPolygons();
         this.MapComponent.clearKML();
-
-        if(this.router.url == "/bike"){
-          this.displayBikes()
-        }
+        document.getElementById('direction').style.display="none";
 
         if(this.router.url == "/parking"){
-          this.displayParking()
+          this.displayParking();
+          this.MapComponent.center();
+        }else {
+          if(this.router.url == "/bike"){
+            this.displayBikes()
+          }
+          if (this.router.url == "/paidzone"){
+            this.displayPaidZone()
+          }
+          if (this.router.url == "/freezone"){
+            this.displayFreeZone()
+          }
+          if (this.router.url == "/layer"){
+            this.displayLayer()
+          }
+          this.MapComponent.center(this.lat,this.long);
         }
-
-        if (this.router.url == "/paidzone"){
-          this.displayPaidZone()
-        }
-
-        if (this.router.url == "/freezone"){
-          this.displayFreeZone()
-        }
-
-        if (this.router.url == "/layer"){
-          this.displayLayer()
-        }
+        
       }
+
+      
     }
     /* Methods for displaying markers*/
     //Display markers for bikes
     displayBikes(){
-      console.log("active comp is bike")
       this.leftNav.SetliderValue(0);
       this.BikeComponent.loadBikeStations(this.MapComponent);
       this.MapComponent.markers = this.BikeComponent.markers;
-      this.MapComponent.center(60.1712179,24.9418765);
+
     }
 
     //Parking
     displayParking(){
-      console.log("active comp is parking")
+
+      this.MapComponent.counter=0;
+      this.MapComponent.clearDirection();
+      var mev={latLng: new google.maps.LatLng(this.MapComponent.centerLat, this.MapComponent.centerLon)};
+      google.maps.event.trigger(this.MapComponent.map, 'click', mev);
       this.leftNav.SetliderValue(this.leftNav.oldRadius/1000);
-      if(this.oldEvent==null){}
-        else{
-          this.FacilityComponent.receivedClick(this.MapComponent,this.oldEvent, this.leftNav.ReturnSliderValue());
-        }
-        this.MapComponent.markers = this.FacilityComponent.markers;
-        this.MapComponent.center();
-      }
+      this.MapComponent.markers = this.FacilityComponent.markers;
 
-      //Layer for freezone
-      displayFreeZone(){
-        console.log("active comp is free")
-        this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.MapComponent);
-        this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.MapComponent);
-        this.MapComponent.center(60.1712179,24.9418765);
-      }
-
-      //Layer for paid zones
-      displayPaidZone(){
-        console.log("active comp is paid")
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.MapComponent);
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.MapComponent);
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
-        this.MapComponent.center(60.1712179,24.9418765);
-      }
-
-      //Layer for parking area
-      displayLayer(){
-        console.log("active comp is layer")
-        this.MapComponent.displayKML();
-        this.MapComponent.center(60.1712179,24.9418765);
-      }
-      //Set active component
-      setStatus(event: ActiveComponent){
-        this.active = event
-      }
     }
+
+    //Layer for freezone
+    displayFreeZone(){
+      this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.MapComponent);
+      this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.MapComponent);
+    }
+
+    //Layer for paid zones
+    displayPaidZone(){
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.MapComponent);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.MapComponent);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
+    }
+
+    //Layer for parking area
+    displayLayer(){
+      this.MapComponent.displayKML();
+    }
+    //Set active component
+    setStatus(event: ActiveComponent){
+      this.active = event
+    }
+  }

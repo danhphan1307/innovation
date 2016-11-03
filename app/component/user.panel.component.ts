@@ -34,7 +34,7 @@ var localStorage_isSupported = (function () {
   <div class="locationPanel"><span class="glyphicon glyphicon-map-marker" style="margin-right:5px;"></span> Your car location</div>
   <div class="content">You left your car/bike at<br>
   Location: {{this.object.name.en}}<br>
-  Time: Thu Nov 03 2016 10:16:45 GMT</div>
+  Time: {{this.object.date}}</div>
   <div class="lovePanel"><span class="glyphicon glyphicon-heart" style="margin-right:5px;"></span>Favorite bike station</div>
   <div class="content">
   Sorry, there is no bike station in your favorite list
@@ -49,7 +49,8 @@ export class UserComponent extends AbstractComponent implements OnInit {
       "fi": "Sorry, you did not save your car/bike location",
       "sv": "Sorry, you did not save your car/bike location",
       "en": "Sorry, you did not save your car/bike location"
-    }
+    },
+    "date":Date()
   };
 
   ngOnInit(){
