@@ -31,9 +31,9 @@ var localStorage_isSupported = (function () {
     ])
   ],
   template: `<div class="bottomDiv" [@animationBottomNav]="state">
-  <div class="locationPanel"><img src="img/mapPin.png" id="saveIcon" alt="save icon">Your car location:</div>
+  <div class="locationPanel"><span class="glyphicon glyphicon-map-marker" style="margin-right:5px;"></span> Your car location</div>
   <div class="content">{{this.object.name.en}}</div>
-  <div class="lovePanel"><img src="img/mapPin.png" id="saveIcon" alt="save icon">Love Bike Station</div>
+  <div class="lovePanel"><span class="glyphicon glyphicon-heart" style="margin-right:5px;"></span>Favorite bike station</div>
   <div class="content"></div>
   </div>`,
   providers: []
