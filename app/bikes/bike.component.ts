@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild , Output, EventEmitter} from '@angular/core';
 
 import { BikeService } from './bike.service';
 import {BikeStation} from './bike';
@@ -7,6 +7,7 @@ import {MarkerComponent} from '../marker/marker.component'
 import {MapService} from '../map/map.service'
 import {AgmCoreModule} from 'angular2-google-maps/core';
 import {MapComponent} from '../map/map.component';
+import {ActiveComponent} from '../models/model-enum';
 
 @Component({
   selector: 'my-bike',
@@ -23,6 +24,10 @@ export class BikeComponent implements OnInit {
 
   @ViewChild(MarkerComponent)
   markerComponent: MarkerComponent
+
+  @Output()
+  triggered = new EventEmitter<ActiveComponent>();
+
   constructor(private bikeService: BikeService,
     private mapService: MapService){
 
@@ -30,6 +35,7 @@ export class BikeComponent implements OnInit {
 
   ngOnInit(){
 
+    this.triggered.emit(ActiveComponent.BIKE)
   }
 
   ngOnChanges(){
@@ -44,6 +50,8 @@ export class BikeComponent implements OnInit {
       this.stations = stations;
       mapComponent.placeMarkerBicycle(stations);
     });
+
+
   }
 
 }

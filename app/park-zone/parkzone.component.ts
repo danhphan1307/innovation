@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, Output, EventEmitter } from '@angular/core';
 
 import {Marker} from '../marker/marker';
 import {MarkerComponent} from '../marker/marker.component'
@@ -6,7 +6,7 @@ import {MapService} from '../map/map.service'
 import {ParkingZoneFilterService} from '../shared/parking-zone-filter.service'
 import {AgmCoreModule} from 'angular2-google-maps/core';
 import {MapComponent} from '../map/map.component';
-import {PricingZoneEnum,ColorCode} from '../models/model-enum'
+import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
 import {ParkingType} from '../models/parking-type';
 
 @Component({
@@ -17,14 +17,13 @@ import {ParkingType} from '../models/parking-type';
 
 export class ParkZoneComponent implements OnInit {
 
-  paidZones : ParkingType[];
+  parkZones : ParkingType[];
   freeZones: ParkingType[];
   data : string;
   markers : Marker[] = [];
 
-
-  @ViewChild(MarkerComponent)
-  markerComponent: MarkerComponent
+  @Output()
+  triggered = new EventEmitter<ActiveComponent>();
 
   constructor(private mapService: MapService,
     private parkingFilterService: ParkingZoneFilterService){
@@ -32,7 +31,7 @@ export class ParkZoneComponent implements OnInit {
   }
 
   ngOnInit(){
-
+    this.triggered.emit(ActiveComponent.PAIDZONE)
   }
 
   ngOnChanges(){
@@ -42,10 +41,10 @@ export class ParkZoneComponent implements OnInit {
 
   public loadZones(pricingZone: PricingZoneEnum, map: MapComponent): void {
     this.parkingFilterService.getParkingZone().subscribe((res: ParkingType[]) => {
-      this.paidZones = res;
-      //filter park and ride + active
-      this.paidZones = res.filter(f => f.properties.sallittu_pysakointitapa == pricingZone)
-                                      // && f.geometry.type=="Polygon");
+      this.parkZones = res;
+
+      this.parkZones = res.filter(f => f.properties.sallittu_pysakointitapa == pricingZone)
+
     var colorCode = "";
 
     switch (pricingZone){
@@ -73,7 +72,7 @@ export class ParkZoneComponent implements OnInit {
 
     }
 
-    for (var z of this.paidZones) {
+    for (var z of this.parkZones) {
 
       if (z.geometry.type == "Polygon"){
         //Draw the outbounds
@@ -88,11 +87,7 @@ export class ParkZoneComponent implements OnInit {
         map.placePolygon(path2[0],colorCode)
         map.placePolygon(path2[1],colorCode)
       }
-
-
     }
-
-
   });
 }
 

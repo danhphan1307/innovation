@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 
 import {FacilityService} from './facility.service';
 import { Facility } from './facility';
@@ -8,7 +8,7 @@ import {Coords} from '../models/location';
 
 import {LeftNavigation} from '../component/left.navigation.component';
 import {AgmCoreModule} from 'angular2-google-maps/core';
-import {Usage, PricingMethod, FacilityStatus} from '../models/model-enum';
+import {Usage, PricingMethod, FacilityStatus, ActiveComponent} from '../models/model-enum';
 import {MapComponent} from '../map/map.component';
 
 @Component({
@@ -22,6 +22,9 @@ export class FacilityComponent implements OnInit {
 
   @ViewChild(LeftNavigation)
   private leftNav:LeftNavigation;
+
+  @Output()
+  triggered = new EventEmitter<ActiveComponent>();
 
   facilities : Facility[];
   center: Coords = new Coords(0.0,0.0);
@@ -39,6 +42,8 @@ export class FacilityComponent implements OnInit {
   }
 
   ngOnInit(){
+    this.triggered.emit(ActiveComponent.PARKING)
+
   }
 
   receiveCenterUpdated(event: any){

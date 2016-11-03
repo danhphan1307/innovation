@@ -3,7 +3,8 @@ import {Observable} from 'rxjs/Observable';
 import {Coords} from '../models/location';
 import {LeftNavigation} from '../component/left.navigation.component';
 import {Router} from '@angular/router';
-
+import {MapService} from './map.service'
+import {ActiveComponent} from '../models/model-enum';
 declare var google: any;
 
 var localStorage_isSupported = (function () {
@@ -29,17 +30,21 @@ var localStorage_isSupported = (function () {
     <div id="mapCanvas" ></div>
 
     `,
-    providers: []
+    providers: [MapService]
 })
 
 export class MapComponent{
+    //Service
+    service: MapService;
     router:Router;
     addItemStream:Observable<any>;
     centerLat: number = 0
     centerLon: number = 0
     map : any;
     centerMarker: any;
+    centerCoords : Coords = new Coords(0.0,0.0);
     counter:number = 0
+
 
     oldLat:number
     oldLong:number
@@ -67,6 +72,9 @@ export class MapComponent{
     @Output()
     clickUpdated: any= new EventEmitter();
 
+    @Output()
+    doneLoading: any = new EventEmitter<boolean>();
+
     //Polygons array
     polygons : any[] = []
     @Output()
@@ -79,8 +87,9 @@ export class MapComponent{
 
     });
 
-    constructor(private _router: Router ) {
+    constructor(private _router: Router, private _mapService: MapService ) {
         this.router = _router;
+        this.service = _mapService;
     }
 
     ngOnInit(){
@@ -93,8 +102,9 @@ export class MapComponent{
     createMap(position: any): void{
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
+        this.centerCoords = new Coords(this.centerLat,this.centerLon);
 
-        this.centerUpdated.emit( new Coords(this.centerLat,this.centerLon));
+        this.centerUpdated.emit(this.centerCoords);
 
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
@@ -110,6 +120,12 @@ export class MapComponent{
             icon: "img/red-dot.png"
         });
         this.createEventListeners();
+
+        //Geocoding
+        this.service.geocodeTesting("Kilo");
+
+        //Signal that map has done loading
+        this.doneLoading.emit(true)
         var mev = {
             latLng: new google.maps.LatLng(this.centerLat, this.centerLon)
         }
@@ -190,7 +206,7 @@ export class MapComponent{
                     infowindow.open(this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
                     google.maps.event.addDomListener(el,'click',()=>{
-                        this.showDirection(markerFacility);
+                        this.service.showDirection(this.centerCoords,markerFacility,(result,status) => this.callbackForShowDirection(result,status));
                     });
                     var el2 = document.getElementById('saveButton');
                     google.maps.event.addDomListener(el2,'click',()=>{
@@ -338,15 +354,14 @@ export class MapComponent{
         this.kmlLayer.setMap(null);
     }
 
-/*
-    callbackForShowDirection(result:any, status: string){
-        console.log("call");
+    callbackForShowDirection(result:any, status: string) {
         if (status == 'OK') {
+
             this.directionsDisplay.setDirections(result);
         };
     }
 
-    */
+
     displayKML(){
         this.kmlLayer.setMap(this.map);
     }

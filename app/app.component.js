@@ -46,36 +46,19 @@ var AppComponent = (function () {
         this.MapComponent.clearPolygons();
         this.MapComponent.clearKML();
         if (this.router.url == "/bike") {
-            this.leftNav.SetliderValue(0);
-            this.BikeComponent.loadBikeStations(this.MapComponent);
-            this.MapComponent.markers = this.BikeComponent.markers;
-            this.MapComponent.center(60.1712179, 24.9418765);
+            this.displayBikes();
         }
         if (this.router.url == "/parking") {
-            this.leftNav.SetliderValue(this.leftNav.oldRadius / 1000);
-            if (this.oldEvent == null) { }
-            else {
-                this.FacilityComponent.receivedClick(this.MapComponent, this.oldEvent, this.leftNav.ReturnSliderValue());
-            }
-            this.MapComponent.markers = this.FacilityComponent.markers;
-            this.MapComponent.center();
+            this.displayParking();
         }
         if (this.router.url == "/paidzone") {
-            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_1, this.MapComponent);
-            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_2, this.MapComponent);
-            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_3, this.MapComponent);
-            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_4, this.MapComponent);
-            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_5, this.MapComponent);
-            this.MapComponent.center(60.1712179, 24.9418765);
+            this.displayPaidZone();
         }
         if (this.router.url == "/freezone") {
-            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_1, this.MapComponent);
-            this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_2, this.MapComponent);
-            this.MapComponent.center(60.1712179, 24.9418765);
+            this.displayFreeZone();
         }
         if (this.router.url == "/layer") {
-            this.MapComponent.displayKML();
-            this.MapComponent.center(60.1712179, 24.9418765);
+            this.displayLayer();
         }
     };
     AppComponent.prototype.closeAll = function () {
@@ -90,6 +73,59 @@ var AppComponent = (function () {
             this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
             this.MapComponent.markers = this.FacilityComponent.markers;
         }
+    };
+    AppComponent.prototype.loadData = function (event) {
+        //call only if map is completely loaded
+        if (event == true) {
+            this.bottomtNav();
+        }
+    };
+    /* Methods for displaying markers*/
+    //Display markers for bikes
+    AppComponent.prototype.displayBikes = function () {
+        console.log("active comp is bike");
+        this.leftNav.SetliderValue(0);
+        this.BikeComponent.loadBikeStations(this.MapComponent);
+        this.MapComponent.markers = this.BikeComponent.markers;
+        this.MapComponent.center(60.1712179, 24.9418765);
+    };
+    //Parking
+    AppComponent.prototype.displayParking = function () {
+        console.log("active comp is parking");
+        this.leftNav.SetliderValue(this.leftNav.oldRadius / 1000);
+        if (this.oldEvent == null) { }
+        else {
+            this.FacilityComponent.receivedClick(this.MapComponent, this.oldEvent, this.leftNav.ReturnSliderValue());
+        }
+        this.MapComponent.markers = this.FacilityComponent.markers;
+        this.MapComponent.center();
+    };
+    //Layer for freezone
+    AppComponent.prototype.displayFreeZone = function () {
+        console.log("active comp is free");
+        this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_1, this.MapComponent);
+        this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.FREE_2, this.MapComponent);
+        this.MapComponent.center(60.1712179, 24.9418765);
+    };
+    //Layer for paid zones
+    AppComponent.prototype.displayPaidZone = function () {
+        console.log("active comp is paid");
+        this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_1, this.MapComponent);
+        this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_2, this.MapComponent);
+        this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_3, this.MapComponent);
+        this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_4, this.MapComponent);
+        this.ZoneComponent.loadZones(model_enum_1.PricingZoneEnum.PAID_5, this.MapComponent);
+        this.MapComponent.center(60.1712179, 24.9418765);
+    };
+    //Layer for parking area
+    AppComponent.prototype.displayLayer = function () {
+        console.log("active comp is layer");
+        this.MapComponent.displayKML();
+        this.MapComponent.center(60.1712179, 24.9418765);
+    };
+    //Set active component
+    AppComponent.prototype.setStatus = function (event) {
+        this.active = event;
     };
     __decorate([
         core_1.ViewChild(map_component_1.MapComponent), 

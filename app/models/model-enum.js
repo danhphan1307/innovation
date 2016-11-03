@@ -106,4 +106,14 @@ var ColorCode = (function () {
     return ColorCode;
 }());
 exports.ColorCode = ColorCode;
+//Enum for switching between components
+(function (ActiveComponent) {
+    ActiveComponent[ActiveComponent["BIKE"] = 0] = "BIKE";
+    ActiveComponent[ActiveComponent["PARKING"] = 1] = "PARKING";
+    ActiveComponent[ActiveComponent["PAIDZONE"] = 2] = "PAIDZONE";
+    ActiveComponent[ActiveComponent["FREEZONE"] = 3] = "FREEZONE";
+    ActiveComponent[ActiveComponent["USER"] = 4] = "USER";
+    ActiveComponent[ActiveComponent["LAYER"] = 5] = "LAYER";
+})(exports.ActiveComponent || (exports.ActiveComponent = {}));
+var ActiveComponent = exports.ActiveComponent;
 //# sourceMappingURL=model-enum.js.map

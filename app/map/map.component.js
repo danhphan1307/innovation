@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var location_1 = require('../models/location');
 var router_1 = require('@angular/router');
+var map_service_1 = require('./map.service');
 var localStorage_isSupported = (function () {
     try {
         var itemBackup = localStorage.getItem("");
@@ -27,10 +28,12 @@ var localStorage_isSupported = (function () {
     }
 })();
 var MapComponent = (function () {
-    function MapComponent(_router) {
+    function MapComponent(_router, _mapService) {
         this._router = _router;
+        this._mapService = _mapService;
         this.centerLat = 0;
         this.centerLon = 0;
+        this.centerCoords = new location_1.Coords(0.0, 0.0);
         this.counter = 0;
         this.facilitymarkers = [];
         this.directionsDisplay = new google.maps.DirectionsRenderer({
@@ -40,6 +43,7 @@ var MapComponent = (function () {
         this.circles = [];
         this.centerUpdated = new core_1.EventEmitter();
         this.clickUpdated = new core_1.EventEmitter();
+        this.doneLoading = new core_1.EventEmitter();
         //Polygons array
         this.polygons = [];
         this.saveUpdated = new core_1.EventEmitter();
@@ -49,6 +53,7 @@ var MapComponent = (function () {
             preserveViewport: true
         });
         this.router = _router;
+        this.service = _mapService;
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -58,7 +63,8 @@ var MapComponent = (function () {
     MapComponent.prototype.createMap = function (position) {
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
-        this.centerUpdated.emit(new location_1.Coords(this.centerLat, this.centerLon));
+        this.centerCoords = new location_1.Coords(this.centerLat, this.centerLon);
+        this.centerUpdated.emit(this.centerCoords);
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
             zoom: 13,
@@ -72,6 +78,10 @@ var MapComponent = (function () {
             icon: "img/red-dot.png"
         });
         this.createEventListeners();
+        //Geocoding
+        this.service.geocodeTesting("Kilo");
+        //Signal that map has done loading
+        this.doneLoading.emit(true);
         var mev = {
             latLng: new google.maps.LatLng(this.centerLat, this.centerLon)
         };
@@ -151,7 +161,7 @@ var MapComponent = (function () {
                     infowindow.open(_this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
                     google.maps.event.addDomListener(el, 'click', function () {
-                        _this.showDirection(markerFacility);
+                        _this.service.showDirection(_this.centerCoords, markerFacility, function (result, status) { return _this.callbackForShowDirection(result, status); });
                     });
                     var el2 = document.getElementById('saveButton');
                     google.maps.event.addDomListener(el2, 'click', function () {
@@ -287,15 +297,12 @@ var MapComponent = (function () {
     MapComponent.prototype.clearKML = function () {
         this.kmlLayer.setMap(null);
     };
-    /*
-        callbackForShowDirection(result:any, status: string){
-            console.log("call");
-            if (status == 'OK') {
-                this.directionsDisplay.setDirections(result);
-            };
+    MapComponent.prototype.callbackForShowDirection = function (result, status) {
+        if (status == 'OK') {
+            this.directionsDisplay.setDirections(result);
         }
-    
-        */
+        ;
+    };
     MapComponent.prototype.displayKML = function () {
         this.kmlLayer.setMap(this.map);
     };
@@ -404,15 +411,19 @@ var MapComponent = (function () {
     __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
+    ], MapComponent.prototype, "doneLoading", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
     ], MapComponent.prototype, "saveUpdated", void 0);
     MapComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'map-gg',
             template: "\n    <div id=\"mapCanvas\" ></div>\n\n    ",
-            providers: []
+            providers: [map_service_1.MapService]
         }), 
-        __metadata('design:paramtypes', [router_1.Router])
+        __metadata('design:paramtypes', [router_1.Router, map_service_1.MapService])
     ], MapComponent);
     return MapComponent;
 }());
