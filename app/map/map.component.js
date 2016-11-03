@@ -70,8 +70,7 @@ var MapComponent = (function () {
         this.centerUpdated.emit(this.centerCoords);
         this.map = this.googleService.createMap(this.centerCoords, 13);
         this.directionsDisplay.setMap(this.map);
-        this.centerMarker = this.googleService.createMarker(this.centerCoords, "img/red-dot.png");
-        this.centerMarker.setMap(this.map);
+        this.centerMarker = this.googleService.createMarker(this.centerCoords, "img/red-dot.png", this.map);
         this.createEventListeners();
         //Geocoding
         this.service.geocodeTesting("Kilo");
@@ -89,10 +88,7 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.placeMarker = function (lat, lon) {
         var _this = this;
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(lat, lon),
-            map: this.map,
-        });
+        var marker = this.googleService.createMarker(new location_1.Coords(lat, lon), "", this.map);
         this.markers.push(marker);
         google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
     };
@@ -125,19 +121,12 @@ var MapComponent = (function () {
             type = 'large';
         }
         for (var i = 0; i < f.length; i++) {
+            var coordinate = new location_1.Coords(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]);
             if (f[i].name.en.indexOf('bike') !== -1) {
-                var markerFacility = new google.maps.Marker({
-                    position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
-                    map: this.map,
-                    icon: iconsBike[type].icon
-                });
+                var markerFacility = this.googleService.createMarker(coordinate, iconsBike[type].icon, this.map);
             }
             else {
-                var markerFacility = new google.maps.Marker({
-                    position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
-                    map: this.map,
-                    icon: icons[type].icon
-                });
+                var markerFacility = this.googleService.createMarker(coordinate, icons[type].icon, this.map);
             }
             this.facilitymarkers.push(markerFacility);
             var func = (function (markerFacility, i) {
@@ -206,11 +195,8 @@ var MapComponent = (function () {
             type = 'large';
         }
         for (var i = 0; i < stations.length; i++) {
-            var markerBike = new google.maps.Marker({
-                position: new google.maps.LatLng(stations[i].y, stations[i].x),
-                map: this.map,
-                icon: icons[type].icon
-            });
+            var coordinate = new location_1.Coords(stations[i].y, stations[i].x);
+            var markerBike = this.googleService.createMarker(coordinate, icons[type].icon, this.map);
             this.markers.push(markerBike);
             var func = (function (markerBike, i) {
                 google.maps.event.addListener(markerBike, 'click', function () {
@@ -245,14 +231,7 @@ var MapComponent = (function () {
     MapComponent.prototype.placeCircle = function (lat, lon, radius) {
         this.clearCircles();
         if (radius != 0) {
-            this.circles.push(new google.maps.Circle({
-                strokeColor: '#4a6aa5',
-                strokeOpacity: 0.8,
-                strokeWeight: 1,
-                map: this.map,
-                center: new google.maps.LatLng(lat, lon),
-                radius: radius
-            }));
+            this.circles.push(this.googleService.createCircle(new location_1.Coords(lat, lon), radius, this.map));
         }
     };
     MapComponent.prototype.placePolygon = function (coordArray, colorCode) {
@@ -260,13 +239,7 @@ var MapComponent = (function () {
         for (var i = 0; i < coordArray.length; i++) {
             path.push(new google.maps.LatLng(coordArray[i][1], coordArray[i][0]));
         }
-        var polygon = new google.maps.Polygon({
-            paths: path,
-            strokeColor: colorCode,
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillOpacity: 0
-        });
+        var polygon = this.googleService.createPolygon(path, colorCode);
         polygon.setMap(this.map);
         this.polygons.push(polygon);
     };
@@ -380,6 +353,7 @@ var MapComponent = (function () {
             destination: end,
             travelMode: google.maps.DirectionsTravelMode.TRANSIT
         }, function (result) {
+            console.log(result);
             _this.renderDirections(result);
         });
     };

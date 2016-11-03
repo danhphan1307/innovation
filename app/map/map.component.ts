@@ -115,8 +115,7 @@ export class MapComponent{
         this.map = this.googleService.createMap(this.centerCoords,13);
         this.directionsDisplay.setMap(this.map);
 
-        this.centerMarker = this.googleService.createMarker(this.centerCoords,"img/red-dot.png")
-        this.centerMarker.setMap(this.map)
+        this.centerMarker = this.googleService.createMarker(this.centerCoords,"img/red-dot.png",this.map)
 
         this.createEventListeners();
 
@@ -138,14 +137,10 @@ export class MapComponent{
     }
 
     placeMarker(lat: number, lon: number): void{
-        let marker = new google.maps.Marker({
-            position: new google.maps.LatLng(lat,lon),
-            map: this.map,
-        });
+        let marker = this.googleService.createMarker(new Coords(lat,lon),"",this.map)
         this.markers.push(marker);
         google.maps.event.addListener(marker,'click',() => this.showDirection(marker));
     }
-
 
     placeMarkerFacility(f:any):void{
         var infowindow = new google.maps.InfoWindow();
@@ -176,18 +171,11 @@ export class MapComponent{
             type = 'large';
         }
         for (var i = 0; i < f.length; i++) {
+            var coordinate = new Coords(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0])
             if(f[i].name.en.indexOf('bike') !== -1){
-                var markerFacility = new google.maps.Marker({
-                    position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
-                    map: this.map,
-                    icon: iconsBike[type].icon
-                });
+                var markerFacility = this.googleService.createMarker(coordinate,iconsBike[type].icon,this.map)
             }else {
-                var markerFacility = new google.maps.Marker({
-                    position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
-                    map: this.map,
-                    icon: icons[type].icon
-                });
+                var markerFacility = this.googleService.createMarker(coordinate,icons[type].icon,this.map)
             }
             this.facilitymarkers.push(markerFacility);
             var func = ((markerFacility, i) => {
@@ -217,115 +205,99 @@ export class MapComponent{
                     });
 
                 });
-                google.maps.event.addDomListener(map,'zoom_changed',()=>{
-                    var zoomLevel =  map.getZoom();
-                    if(zoomLevel<14){
-                        type = 'small';
-                    }else{
-                        type = 'large';
-                    }
-                    if(f[i].name.en.indexOf('bike') !== -1){
-                        markerFacility.setIcon(iconsBike[type].icon);
-                    }else{
-                        markerFacility.setIcon(icons[type].icon);
-                    }
-                });
+google.maps.event.addDomListener(map,'zoom_changed',()=>{
+    var zoomLevel =  map.getZoom();
+    if(zoomLevel<14){
+        type = 'small';
+    }else{
+        type = 'large';
+    }
+    if(f[i].name.en.indexOf('bike') !== -1){
+        markerFacility.setIcon(iconsBike[type].icon);
+    }else{
+        markerFacility.setIcon(icons[type].icon);
+    }
+});
 
-            })(markerFacility, i);
+})(markerFacility, i);
+}
+}
+
+placeMarkerBicycle(stations:any):void{
+    var infowindow = new google.maps.InfoWindow();
+
+    var map = this.map;
+    var type:string;
+
+    var icons = {
+        small: {
+            icon:  'img/smallBike.png'
+        },
+        large: {
+            icon: 'img/largeBike.png'
         }
     }
+    var zoomLevel =  map.getZoom();
+    if(zoomLevel<14){
+        type = 'small';
+    }else{
+        type = 'large';
+    }
+    for (var i = 0; i < stations.length; i++) {
+        var coordinate = new Coords(stations[i].y,stations[i].x)
+        var markerBike = this.googleService.createMarker(coordinate,icons[type].icon,this.map)
+        this.markers.push(markerBike);
+        var func = ((markerBike, i) => {
+            google.maps.event.addListener(markerBike, 'click', () => {
 
-    placeMarkerBicycle(stations:any):void{
-        var infowindow = new google.maps.InfoWindow();
+                var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="functionIcon"><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
+                for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
+                    content+='<div class="freeBike">&nbsp;</div>';
+                }
+                for (var counter = 0; counter < (stations[i].spacesAvailable); counter++) {
+                    content+='<div class="freeSpot">&nbsp;</div>';
+                }
+                content+='<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
+                infowindow.setContent(content);
+                infowindow.open(this.map, markerBike);
+                var el = document.getElementById('markerBike');
+                google.maps.event.addDomListener(el,'click',()=>{
+                    this.showDirection(markerBike);
+                });
 
-        var map = this.map;
-        var type:string;
-
-        var icons = {
-            small: {
-                icon:  'img/smallBike.png'
-            },
-            large: {
-                icon: 'img/largeBike.png'
-            }
-        }
-        var zoomLevel =  map.getZoom();
-        if(zoomLevel<14){
-            type = 'small';
-        }else{
-            type = 'large';
-        }
-        for (var i = 0; i < stations.length; i++) {
-            var markerBike = new google.maps.Marker({
-                position: new google.maps.LatLng(stations[i].y, stations[i].x),
-                map: this.map,
-                icon: icons[type].icon
             });
-            this.markers.push(markerBike);
-            var func = ((markerBike, i) => {
-                google.maps.event.addListener(markerBike, 'click', () => {
+google.maps.event.addDomListener(map,'zoom_changed',()=>{
+    var zoomLevel =  map.getZoom();
+    if(zoomLevel<14){
+        type = 'small';
+    }else{
+        type = 'large';
+    }
+    markerBike.setIcon(icons[type].icon);
+});
 
-                    var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="functionIcon"><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
-                    for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
-                        content+='<div class="freeBike">&nbsp;</div>';
-                    }
-                    for (var counter = 0; counter < (stations[i].spacesAvailable); counter++) {
-                        content+='<div class="freeSpot">&nbsp;</div>';
-                    }
-                    content+='<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
-                    infowindow.setContent(content);
-                    infowindow.open(this.map, markerBike);
-                    var el = document.getElementById('markerBike');
-                    google.maps.event.addDomListener(el,'click',()=>{
-                        this.showDirection(markerBike);
-                    });
+})(markerBike, i);
+}
+}
 
-                });
-                google.maps.event.addDomListener(map,'zoom_changed',()=>{
-                    var zoomLevel =  map.getZoom();
-                    if(zoomLevel<14){
-                        type = 'small';
-                    }else{
-                        type = 'large';
-                    }
-                    markerBike.setIcon(icons[type].icon);
-                });
+placeCircle(lat: number, lon: number, radius: number): void{
+    this.clearCircles();
+    if(radius != 0){
+        this.circles.push(this.googleService.createCircle(new Coords(lat,lon),radius,this.map))
+    }
+}
 
-            })(markerBike, i);
-        }
+placePolygon(coordArray: any[], colorCode : string){
+    var path : any[] = []
+    for (var i=0; i< coordArray.length;i++){
+        path.push(new google.maps.LatLng(coordArray[i][1],coordArray[i][0]))
     }
 
-    placeCircle(lat: number, lon: number, radius: number): void{
-        this.clearCircles();
-        if(radius != 0){
-            this.circles.push(new google.maps.Circle({
-                strokeColor: '#4a6aa5',
-                strokeOpacity: 0.8,
-                strokeWeight: 1,
-                map: this.map,
-                center: new google.maps.LatLng(lat,lon),
-                radius: radius
-            }));
-        }
-    }
 
-    placePolygon(coordArray: any[], colorCode : string){
-        var path : any[] = []
-        for (var i=0; i< coordArray.length;i++){
-            path.push(new google.maps.LatLng(coordArray[i][1],coordArray[i][0]))
-        }
-
-
-        var polygon = new google.maps.Polygon({
-            paths: path,
-            strokeColor: colorCode,
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillOpacity: 0
-        });
-        polygon.setMap(this.map);
-        this.polygons.push(polygon);
-    }
+    var polygon =this.googleService.createPolygon(path,colorCode);
+    polygon.setMap(this.map);
+    this.polygons.push(polygon);
+}
 
     //Remove all markers on map
     clearMarkers(){
@@ -412,6 +384,7 @@ export class MapComponent{
         directionsRenderer.setMap(this.map);
         directionsRenderer.setDirections(result);
     }
+
     private showDirection(marker: any = null){
 
         /*This is hot fix only.*/
@@ -452,6 +425,7 @@ export class MapComponent{
             destination: end,
             travelMode: google.maps.DirectionsTravelMode.TRANSIT
         }, (result:any) =>{
+            console.log(result)
             this.renderDirections(result);
         });
 
