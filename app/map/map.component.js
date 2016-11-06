@@ -240,7 +240,7 @@ var MapComponent = (function () {
                     infowindow.open(_this.map, markerBike);
                     var el = document.getElementById('markerBike');
                     google.maps.event.addDomListener(el, 'click', function () {
-                        _this.showDirection(markerBike);
+                        _this.showDirection(markerBike, false);
                     });
                 });
                 google.maps.event.addDomListener(map, 'zoom_changed', function () {

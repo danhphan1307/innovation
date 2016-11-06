@@ -111,11 +111,12 @@ import { Component, OnInit,  Input,
 
     public bottomtNav():void{
       if(this.bMapDone == true){
+        document.getElementById('direction').style.display="none";
         this.MapComponent.clearCircles();
         this.MapComponent.clearMarkers();
         this.MapComponent.clearPolygons();
+        this.MapComponent.clearDirection();
         this.MapComponent.clearKML();
-        document.getElementById('direction').style.display="none";
 
         if(this.router.url == "/parking"){
           this.displayParking();

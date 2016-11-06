@@ -280,7 +280,7 @@ export class MapComponent{
                     infowindow.open(this.map, markerBike);
                     var el = document.getElementById('markerBike');
                     google.maps.event.addDomListener(el,'click',()=>{
-                        this.showDirection(markerBike);
+                        this.showDirection(markerBike,false);
                     });
 
                 });
