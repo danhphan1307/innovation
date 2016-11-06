@@ -57,6 +57,7 @@ var GoogleService = (function () {
         });
     };
     GoogleService.prototype.showWaypoints = function (start, end) {
+        console.log("to be implemented");
     };
     GoogleService = __decorate([
         core_1.Injectable(), 

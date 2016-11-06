@@ -58,7 +58,7 @@ export class GoogleService{
   }
 
   public showWaypoints(start: Coords, end: Coords){
-
+    console.log("to be implemented")
   }
 
 
