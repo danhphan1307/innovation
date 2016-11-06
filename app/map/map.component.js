@@ -12,6 +12,7 @@ var core_1 = require('@angular/core');
 var location_1 = require('../models/location');
 var router_1 = require('@angular/router');
 var map_service_1 = require('./map.service');
+var google_service_1 = require('../google/google.service');
 var localStorage_isSupported = (function () {
     try {
         var itemBackup = localStorage.getItem("");
@@ -28,9 +29,10 @@ var localStorage_isSupported = (function () {
     }
 })();
 var MapComponent = (function () {
-    function MapComponent(_router, _mapService) {
+    function MapComponent(_router, _mapService, _googleService) {
         this._router = _router;
         this._mapService = _mapService;
+        this._googleService = _googleService;
         this.centerLat = 0;
         this.centerLon = 0;
         this.centerCoords = new location_1.Coords(0.0, 0.0);
@@ -52,6 +54,7 @@ var MapComponent = (function () {
         });
         this.router = _router;
         this.service = _mapService;
+        this.googleService = _googleService;
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -421,7 +424,7 @@ var MapComponent = (function () {
                 }, (result:any, status:any) =>{
                     if(status == google.maps.DirectionsStatus.OK){
                         temp_start = result.routes[ 0 ].legs[ 0 ].end_location;
-                        
+
                     }
                 });
 
@@ -432,7 +435,7 @@ var MapComponent = (function () {
                 }, (result:any, status:any) =>{
                     if(status == google.maps.DirectionsStatus.OK){
                         temp_end = result.routes[ 0 ].legs[ 0 ].start_location;
-                        
+
                         temp_distance = google.maps.geometry.spherical.computeDistanceBetween(temp_start, temp_end);
                         if(index==0 || min>temp_distance){
                             console.log(temp_distance);
@@ -514,9 +517,9 @@ var MapComponent = (function () {
             moduleId: module.id,
             selector: 'map-gg',
             template: "\n    <div id=\"mapCanvas\" ></div>\n\n    ",
-            providers: [map_service_1.MapService]
+            providers: [map_service_1.MapService, google_service_1.GoogleService]
         }), 
-        __metadata('design:paramtypes', [router_1.Router, map_service_1.MapService])
+        __metadata('design:paramtypes', [router_1.Router, map_service_1.MapService, google_service_1.GoogleService])
     ], MapComponent);
     return MapComponent;
 }());

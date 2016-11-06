@@ -5,6 +5,7 @@ import {LeftNavigation} from '../component/left.navigation.component';
 import {Router} from '@angular/router';
 import {MapService} from './map.service'
 import {ActiveComponent} from '../models/model-enum';
+import {GoogleService} from '../google/google.service'
 declare var google: any;
 
 var localStorage_isSupported = (function () {
@@ -30,12 +31,13 @@ var localStorage_isSupported = (function () {
     <div id="mapCanvas" ></div>
 
     `,
-    providers: [MapService]
+    providers: [MapService,GoogleService]
 })
 
 export class MapComponent{
     //Service
     service: MapService;
+     googleService: GoogleService;
     router:Router;
     addItemStream:Observable<any>;
     centerLat: number = 0
@@ -84,9 +86,10 @@ export class MapComponent{
 
     });
 
-    constructor(private _router: Router, private _mapService: MapService ) {
+    constructor(private _router: Router, private _mapService: MapService,  private _googleService: GoogleService ) {
         this.router = _router;
         this.service = _mapService;
+        this.googleService = _googleService;
     }
 
     ngOnInit(){
@@ -371,7 +374,7 @@ export class MapComponent{
                     this.facilitymarkers.forEach((item, index) => {
                         item.setMap(null);
                     });
-                    
+
                     var mev={latLng: new google.maps.LatLng(this.centerLat, this.centerLon)};
                     google.maps.event.trigger(this.map, 'click', mev);
                 }
@@ -468,7 +471,7 @@ export class MapComponent{
                 }, (result:any, status:any) =>{
                     if(status == google.maps.DirectionsStatus.OK){
                         temp_start = result.routes[ 0 ].legs[ 0 ].end_location;
-                        
+
                     }
                 });
 
@@ -479,7 +482,7 @@ export class MapComponent{
                 }, (result:any, status:any) =>{
                     if(status == google.maps.DirectionsStatus.OK){
                         temp_end = result.routes[ 0 ].legs[ 0 ].start_location;
-                        
+
                         temp_distance = google.maps.geometry.spherical.computeDistanceBetween(temp_start, temp_end);
                         if(index==0 || min>temp_distance){
                             console.log(temp_distance);
@@ -501,7 +504,7 @@ export class MapComponent{
                 if(chosenMarker!=item){
                     item.setMap(null);
                 }
-            }); 
+            });
 
 
 
@@ -522,7 +525,7 @@ export class MapComponent{
                 travelMode: google.maps.DirectionsTravelMode.TRANSIT
             }, (result:any, status:any) =>{
                 this.renderDirections(result,status);
-            }); 
+            });
 
         }else {
             directionsService.route({
@@ -531,7 +534,7 @@ export class MapComponent{
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
             }, (result:any, status:any) =>{
                 this.renderDirections(result,status,true);
-            }); 
+            });
         }
 
     }

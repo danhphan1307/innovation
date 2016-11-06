@@ -6,7 +6,7 @@ import { BottomNavigation } from './component/bottom.navigation.component';
 import { BlackOverlay } from './component/blackoverlay.component';
 import { UserComponent }  from './component/user.panel.component';
 
-import {HubComponent} from './hubs/hub.component';
+
 import { AppComponent }  from './app.component';
 import { BikeComponent }  from './bikes/bike.component';
 
@@ -32,7 +32,6 @@ import { routing, appRoutingProviders }  from './app.routing';
     appRoutingProviders],
     declarations: [ AppComponent,
     ParkZoneComponent,
-    HubComponent,
     MapComponent,
     BikeComponent,
     UserComponent,
