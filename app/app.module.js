@@ -15,6 +15,7 @@ var left_navigation_component_1 = require('./component/left.navigation.component
 var bottom_navigation_component_1 = require('./component/bottom.navigation.component');
 var blackoverlay_component_1 = require('./component/blackoverlay.component');
 var user_panel_component_1 = require('./component/user.panel.component');
+var hub_component_1 = require('./hubs/hub.component');
 var app_component_1 = require('./app.component');
 var bike_component_1 = require('./bikes/bike.component');
 var http_1 = require('@angular/http');
@@ -41,6 +42,7 @@ var AppModule = (function () {
                 app_routing_1.appRoutingProviders],
             declarations: [app_component_1.AppComponent,
                 parkzone_component_1.ParkZoneComponent,
+                hub_component_1.HubComponent,
                 map_component_1.MapComponent,
                 bike_component_1.BikeComponent,
                 user_panel_component_1.UserComponent,

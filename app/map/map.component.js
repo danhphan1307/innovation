@@ -12,7 +12,6 @@ var core_1 = require('@angular/core');
 var location_1 = require('../models/location');
 var router_1 = require('@angular/router');
 var map_service_1 = require('./map.service');
-var google_service_1 = require('../google/google.service');
 var localStorage_isSupported = (function () {
     try {
         var itemBackup = localStorage.getItem("");
@@ -29,10 +28,9 @@ var localStorage_isSupported = (function () {
     }
 })();
 var MapComponent = (function () {
-    function MapComponent(_router, _mapService, _googleService) {
+    function MapComponent(_router, _mapService) {
         this._router = _router;
         this._mapService = _mapService;
-        this._googleService = _googleService;
         this.centerLat = 0;
         this.centerLon = 0;
         this.centerCoords = new location_1.Coords(0.0, 0.0);
@@ -54,7 +52,6 @@ var MapComponent = (function () {
         });
         this.router = _router;
         this.service = _mapService;
-        this.googleService = _googleService;
     }
     MapComponent.prototype.ngOnInit = function () {
         if (navigator.geolocation) {
@@ -75,7 +72,6 @@ var MapComponent = (function () {
         this.centerLon = position.coords.longitude;
         this.centerCoords = new location_1.Coords(this.centerLat, this.centerLon);
         this.centerUpdated.emit(this.centerCoords);
-<<<<<<< HEAD
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
             zoom: 12,
@@ -86,11 +82,6 @@ var MapComponent = (function () {
             position: new google.maps.LatLng(this.centerLat, this.centerLon),
             map: this.map,
         });
-=======
-        this.map = this.googleService.createMap(this.centerCoords, 13);
-        this.directionsDisplay.setMap(this.map);
-        this.centerMarker = this.googleService.createMarker(this.centerCoords, "img/red-dot.png", this.map);
->>>>>>> f428acac426dd29c9fddb70e256326ced2ff72f0
         this.createEventListeners();
         //Geocoding
         this.service.geocodeTesting("Kilo");
@@ -106,7 +97,10 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.placeMarker = function (lat, lon) {
         var _this = this;
-        var marker = this.googleService.createMarker(new location_1.Coords(lat, lon), "", this.map);
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(lat, lon),
+            map: this.map,
+        });
         this.markers.push(marker);
         google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
         return marker;
@@ -140,12 +134,19 @@ var MapComponent = (function () {
             type = 'large';
         }
         for (var i = 0; i < f.length; i++) {
-            var coordinate = new location_1.Coords(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]);
             if (f[i].name.en.indexOf('bike') !== -1) {
-                var markerFacility = this.googleService.createMarker(coordinate, iconsBike[type].icon, this.map);
+                var markerFacility = new google.maps.Marker({
+                    position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
+                    map: this.map,
+                    icon: iconsBike[type].icon
+                });
             }
             else {
-                var markerFacility = this.googleService.createMarker(coordinate, icons[type].icon, this.map);
+                var markerFacility = new google.maps.Marker({
+                    position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
+                    map: this.map,
+                    icon: icons[type].icon
+                });
             }
             this.facilitymarkers.push(markerFacility);
             var func = (function (markerFacility, i) {
@@ -216,8 +217,11 @@ var MapComponent = (function () {
             type = 'large';
         }
         for (var i = 0; i < stations.length; i++) {
-            var coordinate = new location_1.Coords(stations[i].y, stations[i].x);
-            var markerBike = this.googleService.createMarker(coordinate, icons[type].icon, this.map);
+            var markerBike = new google.maps.Marker({
+                position: new google.maps.LatLng(stations[i].y, stations[i].x),
+                map: this.map,
+                icon: icons[type].icon
+            });
             this.markers.push(markerBike);
             var func = (function (markerBike, i) {
                 google.maps.event.addListener(markerBike, 'click', function () {
@@ -252,7 +256,14 @@ var MapComponent = (function () {
     MapComponent.prototype.placeCircle = function (lat, lon, radius) {
         this.clearCircles();
         if (radius != 0) {
-            this.circles.push(this.googleService.createCircle(new location_1.Coords(lat, lon), radius, this.map));
+            this.circles.push(new google.maps.Circle({
+                strokeColor: '#4a6aa5',
+                strokeOpacity: 0.8,
+                strokeWeight: 1,
+                map: this.map,
+                center: new google.maps.LatLng(lat, lon),
+                radius: radius
+            }));
         }
     };
     MapComponent.prototype.placePolygon = function (coordArray, colorCode) {
@@ -260,7 +271,13 @@ var MapComponent = (function () {
         for (var i = 0; i < coordArray.length; i++) {
             path.push(new google.maps.LatLng(coordArray[i][1], coordArray[i][0]));
         }
-        var polygon = this.googleService.createPolygon(path, colorCode);
+        var polygon = new google.maps.Polygon({
+            paths: path,
+            strokeColor: colorCode,
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillOpacity: 0
+        });
         polygon.setMap(this.map);
         this.polygons.push(polygon);
     };
@@ -463,28 +480,6 @@ var MapComponent = (function () {
                 _this.renderDirections(result, status, true);
             });
         }
-<<<<<<< HEAD
-=======
-        var start0 = new google.maps.LatLng(this.centerLat, this.centerLon);
-        start = chosenMarker.getPosition();
-        var end = marker.getPosition();
-        var directionsService = new google.maps.DirectionsService;
-        directionsService.route({
-            origin: start0,
-            destination: start,
-            travelMode: google.maps.DirectionsTravelMode.DRIVING,
-        }, function (result) {
-            _this.renderDirections(result);
-        });
-        directionsService.route({
-            origin: start,
-            destination: end,
-            travelMode: google.maps.DirectionsTravelMode.TRANSIT
-        }, function (result) {
-            console.log(result);
-            _this.renderDirections(result);
-        });
->>>>>>> f428acac426dd29c9fddb70e256326ced2ff72f0
     };
     __decorate([
         core_1.Input(), 
@@ -519,9 +514,9 @@ var MapComponent = (function () {
             moduleId: module.id,
             selector: 'map-gg',
             template: "\n    <div id=\"mapCanvas\" ></div>\n\n    ",
-            providers: [map_service_1.MapService, google_service_1.GoogleService]
+            providers: [map_service_1.MapService]
         }), 
-        __metadata('design:paramtypes', [router_1.Router, map_service_1.MapService, google_service_1.GoogleService])
+        __metadata('design:paramtypes', [router_1.Router, map_service_1.MapService])
     ], MapComponent);
     return MapComponent;
 }());
