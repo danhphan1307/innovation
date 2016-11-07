@@ -360,21 +360,35 @@ var MapComponent = (function () {
             this.counter = 0;
         }
     };
-    MapComponent.prototype.renderDirections = function (result, status, clearOldDirection) {
+    MapComponent.prototype.renderDirections = function (result, status, clearOldDirection, vehicle) {
         if (clearOldDirection === void 0) { clearOldDirection = false; }
+        if (vehicle === void 0) { vehicle = 'public'; }
         if (status == google.maps.DirectionsStatus.OK) {
             if (clearOldDirection) {
                 this.clearDirection();
                 document.getElementById('direction').innerHTML = '';
             }
+            var colors = {
+                car: {
+                    color: 'red'
+                },
+                public: {
+                    color: 'blue'
+                }
+            };
             var directionsRenderer = new google.maps.DirectionsRenderer({
                 map: this.map,
                 //suppressMarkers: true,
                 draggable: true,
                 preserveViewport: true,
+                polylineOptions: {
+                    strokeColor: colors[vehicle].color
+                }
             });
-            directionsRenderer.setPanel(document.getElementById('direction'));
-            document.getElementById('direction').style.display = "block";
+            if (vehicle = 'public') {
+                directionsRenderer.setPanel(document.getElementById('direction'));
+                document.getElementById('direction').style.display = "block";
+            }
             this.directionArray.push(directionsRenderer);
             directionsRenderer.setDirections(result);
         }
@@ -418,6 +432,14 @@ var MapComponent = (function () {
                 travelMode: google.maps.DirectionsTravelMode.TRANSIT
             }, function (result, status) {
                 _this.renderDirections(result, status);
+            });
+            directionsService.route({
+                origin: current,
+                destination: destination,
+                optimizeWaypoints: true,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+            }, function (result, status) {
+                _this.renderDirections(result, status, false, 'car');
             });
         }
         else {

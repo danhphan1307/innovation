@@ -410,20 +410,33 @@ export class MapComponent{
         }
     }
 
-    private renderDirections(result:any,status:any, clearOldDirection:boolean = false) {
+    private renderDirections(result:any,status:any, clearOldDirection:boolean = false, vehicle:string = 'public') {
         if ( status == google.maps.DirectionsStatus.OK ) {
             if(clearOldDirection){
                 this.clearDirection();
                 document.getElementById('direction').innerHTML='';
+            }
+            var colors = {
+                car: {
+                    color:  'red'
+                },
+                public: {
+                    color: 'blue'
+                }
             }
             var directionsRenderer = new google.maps.DirectionsRenderer({
                 map:this.map,
                 //suppressMarkers: true,
                 draggable:true,
                 preserveViewport: true,
+                polylineOptions: {
+                    strokeColor: colors[vehicle].color
+                }
             });
-            directionsRenderer.setPanel(document.getElementById('direction'));
-            document.getElementById('direction').style.display="block";
+            if(vehicle='public'){
+                directionsRenderer.setPanel(document.getElementById('direction'));
+                document.getElementById('direction').style.display="block";
+            }
             this.directionArray.push(directionsRenderer);
             directionsRenderer.setDirections(result);
         }
@@ -471,6 +484,19 @@ export class MapComponent{
                 this.renderDirections(result,status);
             });
 
+            directionsService.route({
+                origin: current,
+                destination: destination,
+                optimizeWaypoints: true,
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+            }, (result:any, status:any) =>{
+                this.renderDirections(result,status,false,'car');
+            });
+            /*
+            var a = <HTMLScriptElement>document.getElementsByClassName('adp-legal')[0];
+            if(a === undefined){}else{
+                setTimeout(function(){ a.style.display = 'none!important'; },500);
+            }*/
         }else {
             directionsService.route({
                 origin: current,
