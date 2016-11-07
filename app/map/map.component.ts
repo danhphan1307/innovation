@@ -37,7 +37,7 @@ var localStorage_isSupported = (function () {
 export class MapComponent{
     //Service
     service: MapService;
-     googleService: GoogleService;
+    googleService: GoogleService;
     router:Router;
     addItemStream:Observable<any>;
     centerLat: number = 0
@@ -332,6 +332,7 @@ export class MapComponent{
     clearMarkers(){
         this.markers.forEach((item, index) => {
             item.setMap(null);
+            this.markers.splice(index, 1);
         });
     }
     clearCircles(){
@@ -391,17 +392,17 @@ export class MapComponent{
 
         if(this.router.url == "/parking"){
             this.counter++;
+            this.clearMarkers();
+            this.clearDirection();
             let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
             this.oldLat = event.latLng.lat();
             this.oldLong = event.latLng.lng();
-            this.clearMarkers();
-            this.clearDirection();
             var tempMarker = this.placeMarker(event.latLng.lat(),event.latLng.lng());
             if(this.counter<2){
                 this.clickUpdated.emit(clickCoord);
                 this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);
             }else{
-                this.showDirection(tempMarker,true);
+                //this.showDirection(tempMarker,true);
             }
             this.oldRadius = this.circleRadius;
         }else {
@@ -419,7 +420,6 @@ export class MapComponent{
                 map:this.map,
                 //suppressMarkers: true,
                 draggable:true,
-                //infoWindow:true,
                 preserveViewport: true,
             });
             directionsRenderer.setPanel(document.getElementById('direction'));
@@ -428,27 +428,6 @@ export class MapComponent{
             directionsRenderer.setDirections(result);
         }
     }
-/*
-    private test(a:any,b:any,c:any){
-        var directionsService = new google.maps.DirectionsService;
-        directionsService.route({
-            origin: a,
-            destination: b.getPosition(),
-            travelMode: google.maps.DirectionsTravelMode.DRIVING,
-
-        }, (result:any, status:any) =>{
-            this.renderDirections(result,status, true);
-        });
-
-        directionsService.route({
-            origin: b.getPosition(),
-            destination: c,
-            travelMode: google.maps.DirectionsTravelMode.TRANSIT
-        }, (result:any, status:any) =>{
-            this.renderDirections(result,status);
-        });
-    }
-    */
     private showDirection(marker: any = null, multiDirection:boolean = true){
         var current = new google.maps.LatLng(this.centerLat,this.centerLon);
         var parkCar:any ;
@@ -456,63 +435,27 @@ export class MapComponent{
         var min:number;
         var destination = marker.getPosition();
         var directionsService = new google.maps.DirectionsService;
-        var temp_end:any;
-        var temp_start:any;
-        var temp_distance:any;
 
         if(multiDirection){
-            /*
-            Promise.all([this.facilitymarkers.forEach((item, index) => {
-                directionsService.route({
-                    origin: current,
-                    destination: item.getPosition(),
-                    travelMode: google.maps.DirectionsTravelMode.DRIVING,
-
-                }, (result:any, status:any) =>{
-                    if(status == google.maps.DirectionsStatus.OK){
-                        temp_start = result.routes[ 0 ].legs[ 0 ].end_location;
-
-                    }
-                });
-
-                directionsService.route({
-                    origin: item.getPosition(),
-                    destination: destination,
-                    travelMode: google.maps.DirectionsTravelMode.TRANSIT
-                }, (result:any, status:any) =>{
-                    if(status == google.maps.DirectionsStatus.OK){
-                        temp_end = result.routes[ 0 ].legs[ 0 ].start_location;
-
-                        temp_distance = google.maps.geometry.spherical.computeDistanceBetween(temp_start, temp_end);
-                        if(index==0 || min>temp_distance){
-                            console.log(temp_distance);
-                            min = temp_distance;
-                            chosenMarker = item;
-                        }
-                    }
-                });
-            })]).then(()=>this.test(current,chosenMarker,destination));
-            */
             this.facilitymarkers.forEach((item, index) => {
-                var temp = google.maps.geometry.spherical.computeDistanceBetween (item.getPosition(), current);
+                var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
                 if(index==0 || min>temp){
                     min = temp;
                     chosenMarker = item;
                 }
             });
             this.facilitymarkers.forEach((item, index) => {
-                if(chosenMarker!=item){
+                if(item!=chosenMarker){
                     item.setMap(null);
                 }
             });
-
-
 
             parkCar = chosenMarker.getPosition();
 
             directionsService.route({
                 origin: current,
                 destination: parkCar,
+                optimizeWaypoints: true,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING,
 
             }, (result:any, status:any) =>{
@@ -522,6 +465,7 @@ export class MapComponent{
             directionsService.route({
                 origin: parkCar,
                 destination: destination,
+                optimizeWaypoints: true,
                 travelMode: google.maps.DirectionsTravelMode.TRANSIT
             }, (result:any, status:any) =>{
                 this.renderDirections(result,status);

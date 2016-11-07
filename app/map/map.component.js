@@ -285,8 +285,10 @@ var MapComponent = (function () {
         this.polygons.push(polygon);
     };
     MapComponent.prototype.clearMarkers = function () {
+        var _this = this;
         this.markers.forEach(function (item, index) {
             item.setMap(null);
+            _this.markers.splice(index, 1);
         });
     };
     MapComponent.prototype.clearCircles = function () {
@@ -340,18 +342,17 @@ var MapComponent = (function () {
     MapComponent.prototype.callbackForMapClickEvent = function (event) {
         if (this.router.url == "/parking") {
             this.counter++;
+            this.clearMarkers();
+            this.clearDirection();
             var clickCoord = new location_1.Coords(event.latLng.lat(), event.latLng.lng());
             this.oldLat = event.latLng.lat();
             this.oldLong = event.latLng.lng();
-            this.clearMarkers();
-            this.clearDirection();
             var tempMarker = this.placeMarker(event.latLng.lat(), event.latLng.lng());
             if (this.counter < 2) {
                 this.clickUpdated.emit(clickCoord);
                 this.placeCircle(this.centerLat, this.centerLon, this.circleRadius);
             }
             else {
-                this.showDirection(tempMarker, true);
             }
             this.oldRadius = this.circleRadius;
         }
@@ -370,7 +371,6 @@ var MapComponent = (function () {
                 map: this.map,
                 //suppressMarkers: true,
                 draggable: true,
-                //infoWindow:true,
                 preserveViewport: true,
             });
             directionsRenderer.setPanel(document.getElementById('direction'));
@@ -379,27 +379,6 @@ var MapComponent = (function () {
             directionsRenderer.setDirections(result);
         }
     };
-    /*
-        private test(a:any,b:any,c:any){
-            var directionsService = new google.maps.DirectionsService;
-            directionsService.route({
-                origin: a,
-                destination: b.getPosition(),
-                travelMode: google.maps.DirectionsTravelMode.DRIVING,
-    
-            }, (result:any, status:any) =>{
-                this.renderDirections(result,status, true);
-            });
-    
-            directionsService.route({
-                origin: b.getPosition(),
-                destination: c,
-                travelMode: google.maps.DirectionsTravelMode.TRANSIT
-            }, (result:any, status:any) =>{
-                this.renderDirections(result,status);
-            });
-        }
-        */
     MapComponent.prototype.showDirection = function (marker, multiDirection) {
         var _this = this;
         if (marker === void 0) { marker = null; }
@@ -410,42 +389,7 @@ var MapComponent = (function () {
         var min;
         var destination = marker.getPosition();
         var directionsService = new google.maps.DirectionsService;
-        var temp_end;
-        var temp_start;
-        var temp_distance;
         if (multiDirection) {
-            /*
-            Promise.all([this.facilitymarkers.forEach((item, index) => {
-                directionsService.route({
-                    origin: current,
-                    destination: item.getPosition(),
-                    travelMode: google.maps.DirectionsTravelMode.DRIVING,
-
-                }, (result:any, status:any) =>{
-                    if(status == google.maps.DirectionsStatus.OK){
-                        temp_start = result.routes[ 0 ].legs[ 0 ].end_location;
-
-                    }
-                });
-
-                directionsService.route({
-                    origin: item.getPosition(),
-                    destination: destination,
-                    travelMode: google.maps.DirectionsTravelMode.TRANSIT
-                }, (result:any, status:any) =>{
-                    if(status == google.maps.DirectionsStatus.OK){
-                        temp_end = result.routes[ 0 ].legs[ 0 ].start_location;
-
-                        temp_distance = google.maps.geometry.spherical.computeDistanceBetween(temp_start, temp_end);
-                        if(index==0 || min>temp_distance){
-                            console.log(temp_distance);
-                            min = temp_distance;
-                            chosenMarker = item;
-                        }
-                    }
-                });
-            })]).then(()=>this.test(current,chosenMarker,destination));
-            */
             this.facilitymarkers.forEach(function (item, index) {
                 var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
                 if (index == 0 || min > temp) {
@@ -454,7 +398,7 @@ var MapComponent = (function () {
                 }
             });
             this.facilitymarkers.forEach(function (item, index) {
-                if (chosenMarker != item) {
+                if (item != chosenMarker) {
                     item.setMap(null);
                 }
             });
@@ -462,6 +406,7 @@ var MapComponent = (function () {
             directionsService.route({
                 origin: current,
                 destination: parkCar,
+                optimizeWaypoints: true,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING,
             }, function (result, status) {
                 _this.renderDirections(result, status, true);
@@ -469,6 +414,7 @@ var MapComponent = (function () {
             directionsService.route({
                 origin: parkCar,
                 destination: destination,
+                optimizeWaypoints: true,
                 travelMode: google.maps.DirectionsTravelMode.TRANSIT
             }, function (result, status) {
                 _this.renderDirections(result, status);
