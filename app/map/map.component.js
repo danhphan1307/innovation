@@ -36,9 +36,36 @@ var MapComponent = (function () {
         this.centerLat = 0;
         this.centerLon = 0;
         this.centerCoords = new location_1.Coords(0.0, 0.0);
+        this.infowindowPolygon = new google.maps.InfoWindow({
+            maxWidth: 200
+        });
         this.counter = 0;
         this.facilitymarkers = [];
         this.directionArray = [];
+        this.icons = {
+            small: {
+                icon: 'img/parkingIconSmall.png'
+            },
+            large: {
+                icon: 'img/parkingIconLarge.png'
+            }
+        };
+        this.iconsBikeStation = {
+            small: {
+                icon: 'img/bikeStationIconSmall.png'
+            },
+            large: {
+                icon: 'img/bikeStationIcon.png'
+            }
+        };
+        this.iconsBike = {
+            small: {
+                icon: 'img/smallBike.png'
+            },
+            large: {
+                icon: 'img/largeBike.png'
+            }
+        };
         this.markers = [];
         this.circles = [];
         this.centerUpdated = new core_1.EventEmitter();
@@ -108,47 +135,33 @@ var MapComponent = (function () {
         google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
         return marker;
     };
+    MapComponent.prototype.getZoomLevel = function () {
+        var zoomLevel = this.map.getZoom();
+        if (zoomLevel < 13) {
+            return 'small';
+        }
+        else {
+            return 'large';
+        }
+    };
     MapComponent.prototype.placeMarkerFacility = function (f) {
         var _this = this;
         var infowindow = new google.maps.InfoWindow();
         var map = this.map;
-        var type;
-        var icons = {
-            small: {
-                icon: 'img/parkingIconSmall.png'
-            },
-            large: {
-                icon: 'img/parkingIconLarge.png'
-            }
-        };
-        var iconsBike = {
-            small: {
-                icon: 'img/bikeStationIconSmall.png'
-            },
-            large: {
-                icon: 'img/bikeStationIcon.png'
-            }
-        };
-        var zoomLevel = map.getZoom();
-        if (zoomLevel < 13) {
-            type = 'small';
-        }
-        else {
-            type = 'large';
-        }
+        var type = this.getZoomLevel();
         for (var i = 0; i < f.length; i++) {
             if (f[i].name.en.indexOf('bike') !== -1) {
                 var markerFacility = new google.maps.Marker({
                     position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
                     map: this.map,
-                    icon: iconsBike[type].icon
+                    icon: this.iconsBikeStation[type].icon
                 });
             }
             else {
                 var markerFacility = new google.maps.Marker({
                     position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
                     map: this.map,
-                    icon: icons[type].icon
+                    icon: this.icons[type].icon
                 });
             }
             this.facilitymarkers.push(markerFacility);
@@ -182,18 +195,12 @@ var MapComponent = (function () {
                     });
                 });
                 google.maps.event.addDomListener(map, 'zoom_changed', function () {
-                    var zoomLevel = map.getZoom();
-                    if (zoomLevel < 13) {
-                        type = 'small';
-                    }
-                    else {
-                        type = 'large';
-                    }
+                    type = _this.getZoomLevel();
                     if (f[i].name.en.indexOf('bike') !== -1) {
-                        markerFacility.setIcon(iconsBike[type].icon);
+                        markerFacility.setIcon(_this.iconsBikeStation[type].icon);
                     }
                     else {
-                        markerFacility.setIcon(icons[type].icon);
+                        markerFacility.setIcon(_this.icons[type].icon);
                     }
                 });
             })(markerFacility, i);
@@ -203,27 +210,12 @@ var MapComponent = (function () {
         var _this = this;
         var infowindow = new google.maps.InfoWindow();
         var map = this.map;
-        var type;
-        var icons = {
-            small: {
-                icon: 'img/smallBike.png'
-            },
-            large: {
-                icon: 'img/largeBike.png'
-            }
-        };
-        var zoomLevel = map.getZoom();
-        if (zoomLevel < 13) {
-            type = 'small';
-        }
-        else {
-            type = 'large';
-        }
+        var type = this.getZoomLevel();
         for (var i = 0; i < stations.length; i++) {
             var markerBike = new google.maps.Marker({
                 position: new google.maps.LatLng(stations[i].y, stations[i].x),
                 map: this.map,
-                icon: icons[type].icon
+                icon: this.iconsBike[type].icon
             });
             this.markers.push(markerBike);
             var func = (function (markerBike, i) {
@@ -244,14 +236,8 @@ var MapComponent = (function () {
                     });
                 });
                 google.maps.event.addDomListener(map, 'zoom_changed', function () {
-                    var zoomLevel = map.getZoom();
-                    if (zoomLevel < 13) {
-                        type = 'small';
-                    }
-                    else {
-                        type = 'large';
-                    }
-                    markerBike.setIcon(icons[type].icon);
+                    type = _this.getZoomLevel();
+                    markerBike.setIcon(_this.iconsBike[type].icon);
                 });
             })(markerBike, i);
         }
@@ -269,12 +255,26 @@ var MapComponent = (function () {
             }));
         }
     };
+    MapComponent.prototype.stringHandler = function (input_string) {
+        return (input_string.charAt(0).toUpperCase() + input_string.slice(1)).replace(/_/g, " ");
+    };
     MapComponent.prototype.placePolygon = function (coordArray, colorCode, type) {
+        var _this = this;
         if (type === void 0) { type = " "; }
         var path = [];
+        var bounds = new google.maps.LatLngBounds();
+        var geocoder = new google.maps.Geocoder();
         for (var i = 0; i < coordArray.length; i++) {
-            path.push(new google.maps.LatLng(coordArray[i][1], coordArray[i][0]));
+            var temp = new google.maps.LatLng(coordArray[i][1], coordArray[i][0]);
+            path.push(temp);
+            bounds.extend(temp);
         }
+        var markerPolygon = new google.maps.Marker({
+            position: new google.maps.LatLng(bounds.getCenter().lat(), bounds.getCenter().lng()),
+            map: this.map,
+            visible: false
+        });
+        this.markers.push(markerPolygon);
         var polygon = new google.maps.Polygon({
             paths: path,
             strokeColor: colorCode,
@@ -284,16 +284,32 @@ var MapComponent = (function () {
         });
         polygon.setMap(this.map);
         this.polygons.push(polygon);
-        google.maps.event.addDomListener(polygon, 'click', function () {
-            console.log(type);
+        google.maps.event.addDomListener(polygon, 'click', function (event) {
+            var content = '<div class="cityBike"><div class="title"><h3>Parking Spot</h3><img id="polygon" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>' + _this.stringHandler(type) + '</span><br>';
+            geocoder.geocode({
+                'latLng': markerPolygon.getPosition()
+            }, function (result, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    content += result[0].formatted_address;
+                }
+                else {
+                    console.log('Geocoder failed due to: ' + status);
+                }
+                _this.infowindowPolygon.setPosition(event.latLng);
+                _this.infowindowPolygon.setContent(content);
+                _this.infowindowPolygon.open(_this.map, polygon);
+                var el = document.getElementById('polygon');
+                google.maps.event.addDomListener(el, 'click', function () {
+                    _this.showDirection(markerPolygon, false);
+                });
+            });
         });
     };
     MapComponent.prototype.clearMarkers = function () {
-        var _this = this;
         this.markers.forEach(function (item, index) {
             item.setMap(null);
-            _this.markers.splice(index, 1);
         });
+        this.markers = [];
     };
     MapComponent.prototype.clearCircles = function () {
         this.circles.forEach(function (item, index) {
@@ -374,10 +390,10 @@ var MapComponent = (function () {
             }
             var colors = {
                 car: {
-                    color: 'red'
+                    color: '#FF6861'
                 },
                 public: {
-                    color: 'blue'
+                    color: '#779ECB'
                 }
             };
             var directionsRenderer = new google.maps.DirectionsRenderer({
@@ -452,7 +468,7 @@ var MapComponent = (function () {
                 destination: destination,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
             }, function (result, status) {
-                _this.renderDirections(result, status, true);
+                _this.renderDirections(result, status, true, 'car');
             });
         }
     };

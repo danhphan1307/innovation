@@ -45,7 +45,9 @@ export class MapComponent{
     map : any;
     centerMarker: any;
     centerCoords : Coords = new Coords(0.0,0.0);
-
+    infowindowPolygon = new google.maps.InfoWindow({
+        maxWidth: 200
+    });
 
     oldLat:number
     oldLong:number
@@ -55,6 +57,34 @@ export class MapComponent{
 
     facilitymarkers:any[] = [];
     directionArray:any[] = [];
+
+
+    icons = {
+        small: {
+            icon:  'img/parkingIconSmall.png'
+        },
+        large: {
+            icon: 'img/parkingIconLarge.png'
+        }
+    }
+
+    iconsBikeStation = {
+        small: {
+            icon:  'img/bikeStationIconSmall.png'
+        },
+        large: {
+            icon: 'img/bikeStationIcon.png'
+        }
+    }
+
+    iconsBike = {
+        small: {
+            icon:  'img/smallBike.png'
+        },
+        large: {
+            icon: 'img/largeBike.png'
+        }
+    }
 
     @Input()
     circleRadius: number;
@@ -149,46 +179,32 @@ export class MapComponent{
         return marker;
     }
 
+    getZoomLevel():string{
+        var zoomLevel =  this.map.getZoom();
+        if(zoomLevel<13){
+            return 'small';
+        }else{
+            return 'large';
+        }
+    }
+
     placeMarkerFacility(f:any):void{
         var infowindow = new google.maps.InfoWindow();
         var map = this.map;
-        var type:string;
+        var type:string=this.getZoomLevel();
 
-        var icons = {
-            small: {
-                icon:  'img/parkingIconSmall.png'
-            },
-            large: {
-                icon: 'img/parkingIconLarge.png'
-            }
-        }
-
-        var iconsBike = {
-            small: {
-                icon:  'img/bikeStationIconSmall.png'
-            },
-            large: {
-                icon: 'img/bikeStationIcon.png'
-            }
-        }
-        var zoomLevel =  map.getZoom();
-        if(zoomLevel<13){
-            type = 'small';
-        }else{
-            type = 'large';
-        }
         for (var i = 0; i < f.length; i++) {
             if(f[i].name.en.indexOf('bike') !== -1){
                 var markerFacility = new google.maps.Marker({
                     position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
                     map: this.map,
-                    icon: iconsBike[type].icon
+                    icon: this.iconsBikeStation[type].icon
                 });
             }else {
                 var markerFacility = new google.maps.Marker({
                     position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
                     map: this.map,
-                    icon: icons[type].icon
+                    icon: this.icons[type].icon
                 });
             }
             this.facilitymarkers.push(markerFacility);
@@ -222,16 +238,11 @@ export class MapComponent{
 
                 });
                 google.maps.event.addDomListener(map,'zoom_changed',()=>{
-                    var zoomLevel =  map.getZoom();
-                    if(zoomLevel<13){
-                        type = 'small';
-                    }else{
-                        type = 'large';
-                    }
+                    type=this.getZoomLevel();
                     if(f[i].name.en.indexOf('bike') !== -1){
-                        markerFacility.setIcon(iconsBike[type].icon);
+                        markerFacility.setIcon(this.iconsBikeStation[type].icon);
                     }else{
-                        markerFacility.setIcon(icons[type].icon);
+                        markerFacility.setIcon(this.icons[type].icon);
                     }
                 });
 
@@ -242,32 +253,17 @@ export class MapComponent{
     placeMarkerBicycle(stations:any):void{
         var infowindow = new google.maps.InfoWindow();
         var map = this.map;
-        var type:string;
+        var type:string = this.getZoomLevel();
 
-        var icons = {
-            small: {
-                icon:  'img/smallBike.png'
-            },
-            large: {
-                icon: 'img/largeBike.png'
-            }
-        }
-        var zoomLevel =  map.getZoom();
-        if(zoomLevel<13){
-            type = 'small';
-        }else{
-            type = 'large';
-        }
         for (var i = 0; i < stations.length; i++) {
             var markerBike = new google.maps.Marker({
                 position: new google.maps.LatLng(stations[i].y, stations[i].x),
                 map: this.map,
-                icon: icons[type].icon
+                icon: this.iconsBike[type].icon
             });
             this.markers.push(markerBike);
             var func = ((markerBike, i) => {
                 google.maps.event.addListener(markerBike, 'click', () => {
-
                     var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="functionIcon"><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
                     for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
                         content+='<div class="freeBike">&nbsp;</div>';
@@ -285,13 +281,8 @@ export class MapComponent{
 
                 });
                 google.maps.event.addDomListener(map,'zoom_changed',()=>{
-                    var zoomLevel =  map.getZoom();
-                    if(zoomLevel<13){
-                        type = 'small';
-                    }else{
-                        type = 'large';
-                    }
-                    markerBike.setIcon(icons[type].icon);
+                    type=this.getZoomLevel();
+                    markerBike.setIcon(this.iconsBike[type].icon);
                 });
 
             })(markerBike, i);
@@ -311,13 +302,25 @@ export class MapComponent{
             }));
         }
     }
+    stringHandler(input_string:string) {
+        return (input_string.charAt(0).toUpperCase() + input_string.slice(1)).replace(/_/g," ");
+    }
 
     placePolygon(coordArray: any[], colorCode : string, type: string = " "){
-        var path : any[] = []
+        var path : any[] = [];
+        var bounds = new google.maps.LatLngBounds();
+        var geocoder  = new google.maps.Geocoder();
         for (var i=0; i< coordArray.length;i++){
-            path.push(new google.maps.LatLng(coordArray[i][1],coordArray[i][0]))
+            var temp = new google.maps.LatLng(coordArray[i][1],coordArray[i][0])
+            path.push(temp);
+            bounds.extend(temp);
         }
-
+        var markerPolygon = new google.maps.Marker({
+            position: new google.maps.LatLng(bounds.getCenter().lat(), bounds.getCenter().lng()),
+            map: this.map,
+            visible:false
+        });
+        this.markers.push(markerPolygon);
 
         var polygon = new google.maps.Polygon({
             paths: path,
@@ -328,16 +331,32 @@ export class MapComponent{
         });
         polygon.setMap(this.map);
         this.polygons.push(polygon);
-
-        google.maps.event.addDomListener(polygon,'click',()=>{
-            console.log(type);
+        
+        google.maps.event.addDomListener(polygon,'click',(event:any)=>{
+            var content = '<div class="cityBike"><div class="title"><h3>Parking Spot</h3><img id="polygon" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+this.stringHandler(type)+'</span><br>';
+            geocoder.geocode({
+                'latLng': markerPolygon.getPosition()
+            }, (result:any, status:any) =>{
+                if (status == google.maps.GeocoderStatus.OK) {
+                    content+=result[0].formatted_address;
+                } else {
+                    console.log('Geocoder failed due to: ' + status);
+                }
+                this.infowindowPolygon.setPosition(event.latLng);
+                this.infowindowPolygon.setContent(content);
+                this.infowindowPolygon.open(this.map, polygon);
+                var el = document.getElementById('polygon');
+                google.maps.event.addDomListener(el,'click',()=>{
+                    this.showDirection(markerPolygon,false);
+                });
+            });
         });
     }
     clearMarkers(){
         this.markers.forEach((item, index) => {
             item.setMap(null);
-            this.markers.splice(index, 1);
         });
+        this.markers=[];
     }
     clearCircles(){
         this.circles.forEach((item, index) => {
@@ -393,7 +412,6 @@ export class MapComponent{
     }
 
     private callbackForMapClickEvent(event: any): void{
-
         if(this.router.url == "/parking"){
             this.counter++;
             this.clearMarkers();
@@ -422,10 +440,10 @@ export class MapComponent{
             }
             var colors = {
                 car: {
-                    color:  'red'
+                    color:  '#FF6861'
                 },
                 public: {
-                    color: 'blue'
+                    color: '#779ECB'
                 }
             }
             var directionsRenderer = new google.maps.DirectionsRenderer({
@@ -500,7 +518,7 @@ export class MapComponent{
                 destination: destination,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
             }, (result:any, status:any) =>{
-                this.renderDirections(result,status,true);
+                this.renderDirections(result,status,true,'car');
             });
         }
 
