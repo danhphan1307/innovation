@@ -312,7 +312,7 @@ export class MapComponent{
         }
     }
 
-    placePolygon(coordArray: any[], colorCode : string){
+    placePolygon(coordArray: any[], colorCode : string, type: string = " "){
         var path : any[] = []
         for (var i=0; i< coordArray.length;i++){
             path.push(new google.maps.LatLng(coordArray[i][1],coordArray[i][0]))
@@ -328,6 +328,10 @@ export class MapComponent{
         });
         polygon.setMap(this.map);
         this.polygons.push(polygon);
+
+        google.maps.event.addDomListener(polygon,'click',()=>{
+            console.log(type);
+        });
     }
     clearMarkers(){
         this.markers.forEach((item, index) => {

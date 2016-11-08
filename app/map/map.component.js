@@ -269,7 +269,8 @@ var MapComponent = (function () {
             }));
         }
     };
-    MapComponent.prototype.placePolygon = function (coordArray, colorCode) {
+    MapComponent.prototype.placePolygon = function (coordArray, colorCode, type) {
+        if (type === void 0) { type = " "; }
         var path = [];
         for (var i = 0; i < coordArray.length; i++) {
             path.push(new google.maps.LatLng(coordArray[i][1], coordArray[i][0]));
@@ -283,6 +284,9 @@ var MapComponent = (function () {
         });
         polygon.setMap(this.map);
         this.polygons.push(polygon);
+        google.maps.event.addDomListener(polygon, 'click', function () {
+            console.log(type);
+        });
     };
     MapComponent.prototype.clearMarkers = function () {
         var _this = this;

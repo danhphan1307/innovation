@@ -57,7 +57,7 @@ var ParkZoneComponent = (function () {
                 var z = _a[_i];
                 if (z.geometry.type == "Polygon") {
                     //Draw the outbounds
-                    map.placePolygon(z.geometry.coordinates[0], colorCode);
+                    map.placePolygon(z.geometry.coordinates[0], colorCode, z.properties.sallittu_pysakointitapa);
                 }
                 else if (z.geometry.type == "GeometryCollection") {
                     //Draw the Parking sign
