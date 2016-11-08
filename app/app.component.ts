@@ -102,7 +102,7 @@ import { Component, OnInit,  Input,
     }
 
     public loadData(event:boolean){
-      //call only if map is completely loaded
+      //call only if map is completely loaded. receive boolean true
       if (event==true){
         this.bMapDone = true;
         this.bottomtNav();
@@ -135,11 +135,8 @@ import { Component, OnInit,  Input,
             this.displayLayer()
           }
           this.MapComponent.center(this.lat,this.long);
-        }
-        
-      }
-
-      
+        } 
+      }     
     }
     /* Methods for displaying markers*/
     //Display markers for bikes

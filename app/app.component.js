@@ -53,7 +53,7 @@ var AppComponent = (function () {
         }
     };
     AppComponent.prototype.loadData = function (event) {
-        //call only if map is completely loaded
+        //call only if map is completely loaded. receive boolean true
         if (event == true) {
             this.bMapDone = true;
             this.bottomtNav();

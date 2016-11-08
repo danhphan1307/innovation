@@ -433,7 +433,7 @@ export class MapComponent{
                     strokeColor: colors[vehicle].color
                 }
             });
-            if(vehicle='public'){
+            if(vehicle=='public'){
                 directionsRenderer.setPanel(document.getElementById('direction'));
                 document.getElementById('direction').style.display="block";
             }
@@ -474,7 +474,6 @@ export class MapComponent{
             }, (result:any, status:any) =>{
                 this.renderDirections(result,status, true);
             });
-
             directionsService.route({
                 origin: parkCar,
                 destination: destination,
@@ -483,7 +482,6 @@ export class MapComponent{
             }, (result:any, status:any) =>{
                 this.renderDirections(result,status);
             });
-
             directionsService.route({
                 origin: current,
                 destination: destination,
@@ -492,11 +490,6 @@ export class MapComponent{
             }, (result:any, status:any) =>{
                 this.renderDirections(result,status,false,'car');
             });
-            /*
-            var a = <HTMLScriptElement>document.getElementsByClassName('adp-legal')[0];
-            if(a === undefined){}else{
-                setTimeout(function(){ a.style.display = 'none!important'; },500);
-            }*/
         }else {
             directionsService.route({
                 origin: current,

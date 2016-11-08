@@ -385,7 +385,7 @@ var MapComponent = (function () {
                     strokeColor: colors[vehicle].color
                 }
             });
-            if (vehicle = 'public') {
+            if (vehicle == 'public') {
                 directionsRenderer.setPanel(document.getElementById('direction'));
                 document.getElementById('direction').style.display = "block";
             }
