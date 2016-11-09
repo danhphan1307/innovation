@@ -21,7 +21,9 @@ var router_1 = require('@angular/router');
 var model_enum_1 = require('./models/model-enum');
 var AppComponent = (function () {
     function AppComponent(_router) {
+        var _this = this;
         this._router = _router;
+        this.onlineOffline = navigator.onLine;
         this.bMapDone = false;
         // google maps zoom level
         this.zoom = 14;
@@ -29,6 +31,8 @@ var AppComponent = (function () {
         this.lat = 60.1712179;
         this.long = 24.9418765;
         this.router = _router;
+        window.addEventListener('online', function () { _this.onlineOffline = true; });
+        window.addEventListener('offline', function () { _this.onlineOffline = false; });
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;

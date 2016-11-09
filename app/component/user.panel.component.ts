@@ -50,7 +50,7 @@ export class UserComponent extends AbstractComponent implements OnInit {
       "sv": "Sorry, you did not save your car/bike location",
       "en": "Sorry, you did not save your car/bike location"
     },
-    "date":Date()
+    "date": "No date date"
   };
 
   ngOnInit(){

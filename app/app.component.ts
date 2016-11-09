@@ -34,6 +34,7 @@ import { Component, OnInit,  Input,
   })
 
   export class AppComponent implements OnInit {
+    public onlineOffline: boolean = navigator.onLine;
     router:Router;
     bMapDone:boolean = false;
 
@@ -81,6 +82,8 @@ import { Component, OnInit,  Input,
 
     constructor(private _router: Router) {
       this.router = _router;
+      window.addEventListener('online', () => {this.onlineOffline = true});
+      window.addEventListener('offline', () => {this.onlineOffline = false});
     }
 
     public beginLeftNav():void{

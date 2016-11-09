@@ -241,10 +241,13 @@ export class MapComponent{
                         content+='Disabled Capacity:'+ (f[i].builtCapacity.DISABLED|| 0)+'<br>';
                         content+='Motorbike Capacity:'+ (f[i].builtCapacity.MOTORCYCLE|| 0);
                     }
-
-                    if(JSON.parse(localStorage.getItem('carLocation')).name.en==f[i].name.en){
-                        content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button></div></div>' ;
-                    }else {
+                    if (localStorage.getItem("carLocation") !== null) {
+                        if( JSON.parse(localStorage.getItem('carLocation')).name.en==f[i].name.en){
+                            content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button></div></div>' ;
+                        }else{
+                            content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
+                        }
+                    } else {
                         content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
                     }
                     this.infowindow.setContent(content);
@@ -256,11 +259,7 @@ export class MapComponent{
                     var el2 = document.getElementById('saveButton');
                     google.maps.event.addDomListener(el2,'click',()=>{
                         if(localStorage_isSupported){
-                            var temp = f[i];
-                            temp.date=Date();
-                            localStorage.setItem('carLocation',JSON.stringify(temp));
-                            this.saveLocation = f[i];
-                            this.saveUpdated.emit(this.saveLocation);
+                            this.editLocalStorage(f[i]);
                             document.getElementById("saveButton").className="active";
                             document.getElementById("saveButton").innerHTML="You parked here";
                         }
@@ -278,6 +277,14 @@ export class MapComponent{
 
             })(markerFacility, i);
         }
+    }
+
+    editLocalStorage(data:any){
+        var temp = data;
+        temp.date=Date();
+        localStorage.setItem('carLocation',JSON.stringify(temp));
+        this.saveLocation = data;
+        this.saveUpdated.emit(this.saveLocation);
     }
 
     placeMarkerBicycle(stations:any):void{
@@ -501,7 +508,7 @@ export class MapComponent{
         var directionsService = new google.maps.DirectionsService;
 
         if(multiDirection){
-            if(JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][1]===null){
+            if (localStorage.getItem("carLocation") === null) {
                 this.facilitymarkers.forEach((item, index) => {
                     var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
                     if(index==0 || min>temp){
@@ -509,6 +516,8 @@ export class MapComponent{
                         chosenMarker = item;
                     }
                 });
+                new google.maps.event.trigger( chosenMarker, 'click' );
+                document.getElementById('saveButton').click();
             }else{
                 chosenMarker = new google.maps.Marker({
                     position: new google.maps.LatLng(JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][1], JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][0]),
@@ -516,9 +525,8 @@ export class MapComponent{
                     visible:false
                 });
             }
-            
             this.facilitymarkers.forEach((item, index) => {
-                if(item!=chosenMarker){
+                if(item.getPosition().lat()!=chosenMarker.getPosition().lat() || item.getPosition().lng()!=chosenMarker.getPosition().lng() ){
                     item.setMap(null);
                 }
             });
@@ -548,7 +556,7 @@ export class MapComponent{
                 optimizeWaypoints: true,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
             }, (result:any, status:any) =>{
-                this.renderDirections(result,status,false,'car');
+                this.renderDirections(result,status,false,'car', true);
             });
         }else {
             directionsService.route({

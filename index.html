@@ -40,8 +40,14 @@
 </head>
 
 <body>
-	<my-app>
-		<img src="img/loading.gif" alt="loading" style ="position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);">
-	</my-app>
+	<script type="text/javascript">
+		if(navigator.onLine) {
+
+			document.body.innerHTML='<my-app><img src="img/loading.gif" alt="loading" style ="position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);">	</my-app>';
+			
+		}else {
+			document.body.innerHTML='Offline';
+		}
+	</script>
 </body>
 </html>

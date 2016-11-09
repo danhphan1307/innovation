@@ -197,8 +197,13 @@ var MapComponent = (function () {
                         content += 'Disabled Capacity:' + (f[i].builtCapacity.DISABLED || 0) + '<br>';
                         content += 'Motorbike Capacity:' + (f[i].builtCapacity.MOTORCYCLE || 0);
                     }
-                    if (JSON.parse(localStorage.getItem('carLocation')).name.en == f[i].name.en) {
-                        content += '<hr class="separate"><button id="saveButton" class="active">You parked here</button></div></div>';
+                    if (localStorage.getItem("carLocation") !== null) {
+                        if (JSON.parse(localStorage.getItem('carLocation')).name.en == f[i].name.en) {
+                            content += '<hr class="separate"><button id="saveButton" class="active">You parked here</button></div></div>';
+                        }
+                        else {
+                            content += '<hr class="separate"><button id="saveButton">Park here</button></div></div>';
+                        }
                     }
                     else {
                         content += '<hr class="separate"><button id="saveButton">Park here</button></div></div>';
@@ -212,11 +217,7 @@ var MapComponent = (function () {
                     var el2 = document.getElementById('saveButton');
                     google.maps.event.addDomListener(el2, 'click', function () {
                         if (localStorage_isSupported) {
-                            var temp = f[i];
-                            temp.date = Date();
-                            localStorage.setItem('carLocation', JSON.stringify(temp));
-                            _this.saveLocation = f[i];
-                            _this.saveUpdated.emit(_this.saveLocation);
+                            _this.editLocalStorage(f[i]);
                             document.getElementById("saveButton").className = "active";
                             document.getElementById("saveButton").innerHTML = "You parked here";
                         }
@@ -233,6 +234,13 @@ var MapComponent = (function () {
                 });
             })(markerFacility, i);
         }
+    };
+    MapComponent.prototype.editLocalStorage = function (data) {
+        var temp = data;
+        temp.date = Date();
+        localStorage.setItem('carLocation', JSON.stringify(temp));
+        this.saveLocation = data;
+        this.saveUpdated.emit(this.saveLocation);
     };
     MapComponent.prototype.placeMarkerBicycle = function (stations) {
         var _this = this;
@@ -452,7 +460,7 @@ var MapComponent = (function () {
         var destination = marker.getPosition();
         var directionsService = new google.maps.DirectionsService;
         if (multiDirection) {
-            if (JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][1] === null) {
+            if (localStorage.getItem("carLocation") === null) {
                 this.facilitymarkers.forEach(function (item, index) {
                     var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
                     if (index == 0 || min > temp) {
@@ -460,6 +468,8 @@ var MapComponent = (function () {
                         chosenMarker = item;
                     }
                 });
+                new google.maps.event.trigger(chosenMarker, 'click');
+                document.getElementById('saveButton').click();
             }
             else {
                 chosenMarker = new google.maps.Marker({
@@ -469,7 +479,7 @@ var MapComponent = (function () {
                 });
             }
             this.facilitymarkers.forEach(function (item, index) {
-                if (item != chosenMarker) {
+                if (item.getPosition().lat() != chosenMarker.getPosition().lat() || item.getPosition().lng() != chosenMarker.getPosition().lng()) {
                     item.setMap(null);
                 }
             });
@@ -496,7 +506,7 @@ var MapComponent = (function () {
                 optimizeWaypoints: true,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
             }, function (result, status) {
-                _this.renderDirections(result, status, false, 'car');
+                _this.renderDirections(result, status, false, 'car', true);
             });
         }
         else {

@@ -40,7 +40,7 @@ var UserComponent = (function (_super) {
                 "sv": "Sorry, you did not save your car/bike location",
                 "en": "Sorry, you did not save your car/bike location"
             },
-            "date": Date()
+            "date": "No date date"
         };
     }
     UserComponent.prototype.ngOnInit = function () {
