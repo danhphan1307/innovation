@@ -193,6 +193,7 @@ export class MapComponent{
                 
                 var el = document.getElementById('destination_marker');
                 google.maps.event.addDomListener(el,'click',()=>{
+                    infowindow.close();
                     this.showDirection(destination_marker);
                 });
                 
@@ -481,6 +482,7 @@ export class MapComponent{
             var directionsRenderer = new google.maps.DirectionsRenderer({
                 map:this.map,
                 suppressMarkers: suppressMarker,
+                markerOptions:{visible:false},
                 draggable:true,
                 preserveViewport: true,
                 polylineOptions: {

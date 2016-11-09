@@ -150,6 +150,7 @@ var MapComponent = (function () {
                 }
                 var el = document.getElementById('destination_marker');
                 google.maps.event.addDomListener(el, 'click', function () {
+                    infowindow.close();
                     _this.showDirection(destination_marker);
                 });
             });
@@ -432,6 +433,7 @@ var MapComponent = (function () {
             var directionsRenderer = new google.maps.DirectionsRenderer({
                 map: this.map,
                 suppressMarkers: suppressMarker,
+                markerOptions: { visible: false },
                 draggable: true,
                 preserveViewport: true,
                 polylineOptions: {
