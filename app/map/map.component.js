@@ -36,12 +36,14 @@ var MapComponent = (function () {
         this.centerLat = 0;
         this.centerLon = 0;
         this.centerCoords = new location_1.Coords(0.0, 0.0);
-        this.infowindowPolygon = new google.maps.InfoWindow({
-            maxWidth: 200
-        });
         this.counter = 0;
         this.facilitymarkers = [];
         this.directionArray = [];
+        this.infowindowPolygon = new google.maps.InfoWindow({
+            maxWidth: 200
+        });
+        this.infowindow = new google.maps.InfoWindow();
+        this.infowindowBike = new google.maps.InfoWindow();
         this.icons = {
             small: {
                 icon: 'img/parkingIconSmall.png'
@@ -127,13 +129,33 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.placeMarker = function (lat, lon) {
         var _this = this;
-        var marker = new google.maps.Marker({
+        var infowindow = new google.maps.InfoWindow();
+        var geocoder = new google.maps.Geocoder();
+        var destination_marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat, lon),
             map: this.map,
         });
-        this.markers.push(marker);
-        google.maps.event.addListener(marker, 'click', function () { return _this.showDirection(marker); });
-        return marker;
+        this.markers.push(destination_marker);
+        if (this.counter > 1) {
+            geocoder.geocode({
+                'latLng': destination_marker.getPosition()
+            }, function (result, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var content = '<div class="cityBike"><div class="title"><h3>Destination</h3><img id="destination_marker" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>' + result[0].formatted_address + '</span><br>';
+                    infowindow.setContent(content);
+                    infowindow.open(_this.map, destination_marker);
+                }
+                else {
+                    console.log('Geocoder failed due to: ' + status);
+                }
+                var el = document.getElementById('destination_marker');
+                google.maps.event.addDomListener(el, 'click', function () {
+                    _this.showDirection(destination_marker);
+                });
+            });
+        }
+        //google.maps.event.addListener(destination_marker,'click',() => this.showDirection(destination_marker));
+        return destination_marker;
     };
     MapComponent.prototype.getZoomLevel = function () {
         var zoomLevel = this.map.getZoom();
@@ -146,7 +168,6 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.placeMarkerFacility = function (f) {
         var _this = this;
-        var infowindow = new google.maps.InfoWindow();
         var map = this.map;
         var type = this.getZoomLevel();
         for (var i = 0; i < f.length; i++) {
@@ -176,9 +197,14 @@ var MapComponent = (function () {
                         content += 'Disabled Capacity:' + (f[i].builtCapacity.DISABLED || 0) + '<br>';
                         content += 'Motorbike Capacity:' + (f[i].builtCapacity.MOTORCYCLE || 0);
                     }
-                    content += '<hr class="separate"><button id="saveButton">Park here</button></div></div>';
-                    infowindow.setContent(content);
-                    infowindow.open(_this.map, markerFacility);
+                    if (JSON.parse(localStorage.getItem('carLocation')).name.en == f[i].name.en) {
+                        content += '<hr class="separate"><button id="saveButton" class="active">You parked here</button></div></div>';
+                    }
+                    else {
+                        content += '<hr class="separate"><button id="saveButton">Park here</button></div></div>';
+                    }
+                    _this.infowindow.setContent(content);
+                    _this.infowindow.open(_this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
                     google.maps.event.addDomListener(el, 'click', function () {
                         _this.showDirection(markerFacility, false);
@@ -191,6 +217,8 @@ var MapComponent = (function () {
                             localStorage.setItem('carLocation', JSON.stringify(temp));
                             _this.saveLocation = f[i];
                             _this.saveUpdated.emit(_this.saveLocation);
+                            document.getElementById("saveButton").className = "active";
+                            document.getElementById("saveButton").innerHTML = "You parked here";
                         }
                     });
                 });
@@ -208,7 +236,6 @@ var MapComponent = (function () {
     };
     MapComponent.prototype.placeMarkerBicycle = function (stations) {
         var _this = this;
-        var infowindow = new google.maps.InfoWindow();
         var map = this.map;
         var type = this.getZoomLevel();
         for (var i = 0; i < stations.length; i++) {
@@ -228,8 +255,8 @@ var MapComponent = (function () {
                         content += '<div class="freeSpot">&nbsp;</div>';
                     }
                     content += '<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
-                    infowindow.setContent(content);
-                    infowindow.open(_this.map, markerBike);
+                    _this.infowindowBike.setContent(content);
+                    _this.infowindowBike.open(_this.map, markerBike);
                     var el = document.getElementById('markerBike');
                     google.maps.event.addDomListener(el, 'click', function () {
                         _this.showDirection(markerBike, false);
@@ -380,9 +407,10 @@ var MapComponent = (function () {
             this.counter = 0;
         }
     };
-    MapComponent.prototype.renderDirections = function (result, status, clearOldDirection, vehicle) {
+    MapComponent.prototype.renderDirections = function (result, status, clearOldDirection, vehicle, suppressMarker) {
         if (clearOldDirection === void 0) { clearOldDirection = false; }
         if (vehicle === void 0) { vehicle = 'public'; }
+        if (suppressMarker === void 0) { suppressMarker = false; }
         if (status == google.maps.DirectionsStatus.OK) {
             if (clearOldDirection) {
                 this.clearDirection();
@@ -398,7 +426,7 @@ var MapComponent = (function () {
             };
             var directionsRenderer = new google.maps.DirectionsRenderer({
                 map: this.map,
-                //suppressMarkers: true,
+                suppressMarkers: suppressMarker,
                 draggable: true,
                 preserveViewport: true,
                 polylineOptions: {
@@ -424,13 +452,22 @@ var MapComponent = (function () {
         var destination = marker.getPosition();
         var directionsService = new google.maps.DirectionsService;
         if (multiDirection) {
-            this.facilitymarkers.forEach(function (item, index) {
-                var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
-                if (index == 0 || min > temp) {
-                    min = temp;
-                    chosenMarker = item;
-                }
-            });
+            if (JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][1] === null) {
+                this.facilitymarkers.forEach(function (item, index) {
+                    var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
+                    if (index == 0 || min > temp) {
+                        min = temp;
+                        chosenMarker = item;
+                    }
+                });
+            }
+            else {
+                chosenMarker = new google.maps.Marker({
+                    position: new google.maps.LatLng(JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][1], JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][0]),
+                    map: this.map,
+                    visible: false
+                });
+            }
             this.facilitymarkers.forEach(function (item, index) {
                 if (item != chosenMarker) {
                     item.setMap(null);
@@ -468,7 +505,7 @@ var MapComponent = (function () {
                 destination: destination,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
             }, function (result, status) {
-                _this.renderDirections(result, status, true, 'car');
+                _this.renderDirections(result, status, true, 'car', true);
             });
         }
     };

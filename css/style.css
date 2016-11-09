@@ -354,10 +354,10 @@ h2{
   max-height: 50px;
 }
 
-#markerFacility, #markerBike, #polygon{
+#markerFacility, #markerBike, #polygon,#destination_marker{
     background-color: #acacac;
 }
-#markerFacility:active, #markerBike:active, #polygon:active{
+#markerFacility:active, #markerBike:active, #polygon:active, #destination_marker{
     background-color: #4A6AA5;
 }
 #saveButton{
@@ -369,6 +369,13 @@ h2{
     background-color:white;
     border:1px solid #1CBB9B;
     color:#1CBB9B;
+}
+#saveButton.active{
+    margin-left:15%;
+    width:70%;
+    background-color:#1CBB9B;
+    color:white;
+
 }
 #saveButton:active{
     background-color:#1CBB9B;

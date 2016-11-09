@@ -82,10 +82,10 @@ export class ParkZoneComponent implements OnInit {
           var path1 = z.geometry.geometries[0].coordinates;
           var path2 = z.geometry.geometries[1].coordinates;
 
-          map.placePolygon(path1[0],colorCode)
-          map.placePolygon(path1[1],colorCode)
-          map.placePolygon(path2[0],colorCode)
-          map.placePolygon(path2[1],colorCode)
+          map.placePolygon(path1[0],colorCode, z.properties.sallittu_pysakointitapa);
+          map.placePolygon(path1[1],colorCode, z.properties.sallittu_pysakointitapa);
+          map.placePolygon(path2[0],colorCode, z.properties.sallittu_pysakointitapa);
+          map.placePolygon(path2[1],colorCode, z.properties.sallittu_pysakointitapa);
         }
       }
     });

@@ -45,9 +45,6 @@ export class MapComponent{
     map : any;
     centerMarker: any;
     centerCoords : Coords = new Coords(0.0,0.0);
-    infowindowPolygon = new google.maps.InfoWindow({
-        maxWidth: 200
-    });
 
     oldLat:number
     oldLong:number
@@ -58,6 +55,11 @@ export class MapComponent{
     facilitymarkers:any[] = [];
     directionArray:any[] = [];
 
+    infowindowPolygon = new google.maps.InfoWindow({
+        maxWidth: 200
+    });
+    infowindow = new google.maps.InfoWindow();
+    infowindowBike = new google.maps.InfoWindow();
 
     icons = {
         small: {
@@ -170,13 +172,35 @@ export class MapComponent{
     }
 
     placeMarker(lat: number, lon: number): any{
-        let marker = new google.maps.Marker({
+        var infowindow = new google.maps.InfoWindow();
+        var geocoder  = new google.maps.Geocoder();
+        let destination_marker = new google.maps.Marker({
             position: new google.maps.LatLng(lat,lon),
             map: this.map,
         });
-        this.markers.push(marker);
-        google.maps.event.addListener(marker,'click',() => this.showDirection(marker));
-        return marker;
+        this.markers.push(destination_marker);
+        if(this.counter>1){
+            geocoder.geocode({
+                'latLng': destination_marker.getPosition()
+            }, (result:any, status:any) =>{
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var content = '<div class="cityBike"><div class="title"><h3>Destination</h3><img id="destination_marker" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+result[0].formatted_address+'</span><br>';
+                    infowindow.setContent(content);
+                    infowindow.open(this.map, destination_marker);
+                } else {
+                    console.log('Geocoder failed due to: ' + status);
+                }
+                
+                var el = document.getElementById('destination_marker');
+                google.maps.event.addDomListener(el,'click',()=>{
+                    this.showDirection(destination_marker);
+                });
+                
+            });
+        }
+
+        //google.maps.event.addListener(destination_marker,'click',() => this.showDirection(destination_marker));
+        return destination_marker;
     }
 
     getZoomLevel():string{
@@ -189,7 +213,6 @@ export class MapComponent{
     }
 
     placeMarkerFacility(f:any):void{
-        var infowindow = new google.maps.InfoWindow();
         var map = this.map;
         var type:string=this.getZoomLevel();
 
@@ -218,9 +241,14 @@ export class MapComponent{
                         content+='Disabled Capacity:'+ (f[i].builtCapacity.DISABLED|| 0)+'<br>';
                         content+='Motorbike Capacity:'+ (f[i].builtCapacity.MOTORCYCLE|| 0);
                     }
-                    content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
-                    infowindow.setContent(content);
-                    infowindow.open(this.map, markerFacility);
+
+                    if(JSON.parse(localStorage.getItem('carLocation')).name.en==f[i].name.en){
+                        content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button></div></div>' ;
+                    }else {
+                        content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
+                    }
+                    this.infowindow.setContent(content);
+                    this.infowindow.open(this.map, markerFacility);
                     var el = document.getElementById('markerFacility');
                     google.maps.event.addDomListener(el,'click',()=>{
                         this.showDirection(markerFacility,false);
@@ -233,6 +261,8 @@ export class MapComponent{
                             localStorage.setItem('carLocation',JSON.stringify(temp));
                             this.saveLocation = f[i];
                             this.saveUpdated.emit(this.saveLocation);
+                            document.getElementById("saveButton").className="active";
+                            document.getElementById("saveButton").innerHTML="You parked here";
                         }
                     });
 
@@ -251,7 +281,6 @@ export class MapComponent{
     }
 
     placeMarkerBicycle(stations:any):void{
-        var infowindow = new google.maps.InfoWindow();
         var map = this.map;
         var type:string = this.getZoomLevel();
 
@@ -272,8 +301,8 @@ export class MapComponent{
                         content+='<div class="freeSpot">&nbsp;</div>';
                     }
                     content+='<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
-                    infowindow.setContent(content);
-                    infowindow.open(this.map, markerBike);
+                    this.infowindowBike.setContent(content);
+                    this.infowindowBike.open(this.map, markerBike);
                     var el = document.getElementById('markerBike');
                     google.maps.event.addDomListener(el,'click',()=>{
                         this.showDirection(markerBike,false);
@@ -432,7 +461,7 @@ export class MapComponent{
         }
     }
 
-    private renderDirections(result:any,status:any, clearOldDirection:boolean = false, vehicle:string = 'public') {
+    private renderDirections(result:any,status:any, clearOldDirection:boolean = false, vehicle:string = 'public', suppressMarker:boolean = false) {
         if ( status == google.maps.DirectionsStatus.OK ) {
             if(clearOldDirection){
                 this.clearDirection();
@@ -448,7 +477,7 @@ export class MapComponent{
             }
             var directionsRenderer = new google.maps.DirectionsRenderer({
                 map:this.map,
-                //suppressMarkers: true,
+                suppressMarkers: suppressMarker,
                 draggable:true,
                 preserveViewport: true,
                 polylineOptions: {
@@ -472,13 +501,22 @@ export class MapComponent{
         var directionsService = new google.maps.DirectionsService;
 
         if(multiDirection){
-            this.facilitymarkers.forEach((item, index) => {
-                var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
-                if(index==0 || min>temp){
-                    min = temp;
-                    chosenMarker = item;
-                }
-            });
+            if(JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][1]===null){
+                this.facilitymarkers.forEach((item, index) => {
+                    var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
+                    if(index==0 || min>temp){
+                        min = temp;
+                        chosenMarker = item;
+                    }
+                });
+            }else{
+                chosenMarker = new google.maps.Marker({
+                    position: new google.maps.LatLng(JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][1], JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][0]),
+                    map: this.map,
+                    visible:false
+                });
+            }
+            
             this.facilitymarkers.forEach((item, index) => {
                 if(item!=chosenMarker){
                     item.setMap(null);
@@ -518,7 +556,7 @@ export class MapComponent{
                 destination: destination,
                 travelMode: google.maps.DirectionsTravelMode.DRIVING
             }, (result:any, status:any) =>{
-                this.renderDirections(result,status,true,'car');
+                this.renderDirections(result,status,true,'car',true);
             });
         }
 
