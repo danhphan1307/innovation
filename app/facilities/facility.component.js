@@ -41,14 +41,11 @@ var FacilityComponent = (function () {
         if (this.coords == null) {
         }
         else {
-            if (this.oldRadius == null) { }
-            else {
-                if (this.oldRadius != event) {
-                    this.map.clearMarkers();
-                    this.radius = event;
-                    this.oldRadius = this.radius;
-                    this.loadFacilitiesNearby(this.map, this.coords, this.radius);
-                }
+            if (this.oldRadius != event) {
+                this.map.clearMarkers();
+                this.radius = event;
+                this.oldRadius = this.radius;
+                this.loadFacilitiesNearby(this.map, this.coords, this.radius);
             }
         }
     };

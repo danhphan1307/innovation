@@ -18,9 +18,6 @@ const appRoutes: Routes = [
   { path: 'layer',component: FacilityComponent}
 ];
 
-//export const appRoutingProviders: any[] = [];
-//export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
-
 @NgModule({
   imports: [RouterModule.forRoot(appRoutes)],
   exports: [RouterModule]

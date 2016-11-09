@@ -49,7 +49,7 @@ declare var Slider: any;
 
   <tr (click) = "ReturnSliderValue()">
   <td class="special" colspan="3">
-  <input id="ex1" #sliderIOS data-slider-id='ex1Slider' type="text" value="1" data-slider-min="0" data-slider-max="5" data-slider-step="0.1" data-slider-value="1"/>
+  <input id="ex1" #ex1Slider data-slider-id='ex1Slider' type="text" value="1" data-slider-min="0" data-slider-max="5" data-slider-step="0.1" data-slider-value="1"/>
   </td>
   </tr>
   </table>
@@ -71,15 +71,14 @@ declare var Slider: any;
 
 export class LeftNavigation  extends AbstractComponent{
 
-  @ViewChild('sliderIOS')sliderIOS: any;
+  @ViewChild('ex1Slider')ex1Slider: any;
 
   @Output()
   radiusUpdated:EventEmitter<any> = new EventEmitter<any>();
 
   radius:number;
-  oldRadius:number;
-
   mySlider:any;
+  bState:boolean = true;
   ngAfterViewInit() {
     this.mySlider = new Slider('#ex1', {
       formatter: function(value:number) {
@@ -88,26 +87,29 @@ export class LeftNavigation  extends AbstractComponent{
       }
     }
     );
-    this.radius = Number(this.sliderIOS.nativeElement.value)*1000;
-    this.oldRadius = this.radius;
+    this.radius = Number(this.ex1Slider.nativeElement.value)*1000;
   };
 
   ReturnSliderValue():number{
-    this.radius = Number(this.sliderIOS.nativeElement.value)*1000;
-    this.radiusUpdated.emit(this.radius);
-    if(this.radius!=0){
-      this.oldRadius=this.radius;
+    if(this.bState){
+      this.radius = Number(this.ex1Slider.nativeElement.value)*1000;
+      this.radiusUpdated.emit(this.radius);
+      return this.radius;
+    }else{
+      this.radiusUpdated.emit(0);
+      return 0;
     }
-    return this.radius;
+
   }
 
-  SetliderValue(value:number):void{
-    if(this.radius!=0){
-      this.oldRadius=this.radius;
+  SetliderState(state:boolean):void{
+    this.bState= state;
+    if(state){
+      this.mySlider.enable();
+      this.radiusUpdated.emit(this.radius);
+    }else{
+      this.mySlider.disable();
+      this.radiusUpdated.emit(0);
     }
-    this.mySlider.setValue(value);
-    this.radius = value*1000;
-    this.radiusUpdated.emit(this.radius);
   }
-
 }

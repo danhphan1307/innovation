@@ -114,6 +114,7 @@ import { Component, OnInit,  Input,
 
     public bottomtNav():void{
       if(this.bMapDone == true){
+        this.MapComponent.clearFacilityMarkers();
         document.getElementById('direction').style.display="none";
         this.MapComponent.clearCircles();
         this.MapComponent.clearMarkers();
@@ -122,9 +123,11 @@ import { Component, OnInit,  Input,
         this.MapComponent.clearKML();
 
         if(this.router.url == "/parking"){
+          this.leftNav.SetliderState(true);
           this.displayParking();
           this.MapComponent.center();
         }else {
+          this.leftNav.SetliderState(false);
           if(this.router.url == "/bike"){
             this.displayBikes()
           }
@@ -144,7 +147,7 @@ import { Component, OnInit,  Input,
     /* Methods for displaying markers*/
     //Display markers for bikes
     displayBikes(){
-      this.leftNav.SetliderValue(0);
+      this.leftNav.SetliderState(false);
       this.BikeComponent.loadBikeStations(this.MapComponent);
       this.MapComponent.markers = this.BikeComponent.markers;
 
@@ -152,12 +155,11 @@ import { Component, OnInit,  Input,
 
     //Parking
     displayParking(){
-
       this.MapComponent.counter=0;
       this.MapComponent.clearDirection();
       var mev={latLng: new google.maps.LatLng(this.MapComponent.centerLat, this.MapComponent.centerLon)};
       google.maps.event.trigger(this.MapComponent.map, 'click', mev);
-      this.leftNav.SetliderValue(this.leftNav.oldRadius/1000);
+      this.leftNav.SetliderState(true);
       this.MapComponent.markers = this.FacilityComponent.markers;
 
     }

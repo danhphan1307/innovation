@@ -20,6 +20,7 @@ var LeftNavigation = (function (_super) {
     function LeftNavigation() {
         _super.apply(this, arguments);
         this.radiusUpdated = new core_1.EventEmitter();
+        this.bState = true;
     }
     LeftNavigation.prototype.ngAfterViewInit = function () {
         this.mySlider = new Slider('#ex1', {
@@ -28,30 +29,35 @@ var LeftNavigation = (function (_super) {
                 return value + ' km';
             }
         });
-        this.radius = Number(this.sliderIOS.nativeElement.value) * 1000;
-        this.oldRadius = this.radius;
+        this.radius = Number(this.ex1Slider.nativeElement.value) * 1000;
     };
     ;
     LeftNavigation.prototype.ReturnSliderValue = function () {
-        this.radius = Number(this.sliderIOS.nativeElement.value) * 1000;
-        this.radiusUpdated.emit(this.radius);
-        if (this.radius != 0) {
-            this.oldRadius = this.radius;
+        if (this.bState) {
+            this.radius = Number(this.ex1Slider.nativeElement.value) * 1000;
+            this.radiusUpdated.emit(this.radius);
+            return this.radius;
         }
-        return this.radius;
+        else {
+            this.radiusUpdated.emit(0);
+            return 0;
+        }
     };
-    LeftNavigation.prototype.SetliderValue = function (value) {
-        if (this.radius != 0) {
-            this.oldRadius = this.radius;
+    LeftNavigation.prototype.SetliderState = function (state) {
+        this.bState = state;
+        if (state) {
+            this.mySlider.enable();
+            this.radiusUpdated.emit(this.radius);
         }
-        this.mySlider.setValue(value);
-        this.radius = value * 1000;
-        this.radiusUpdated.emit(this.radius);
+        else {
+            this.mySlider.disable();
+            this.radiusUpdated.emit(0);
+        }
     };
     __decorate([
-        core_1.ViewChild('sliderIOS'), 
+        core_1.ViewChild('ex1Slider'), 
         __metadata('design:type', Object)
-    ], LeftNavigation.prototype, "sliderIOS", void 0);
+    ], LeftNavigation.prototype, "ex1Slider", void 0);
     __decorate([
         core_1.Output(), 
         __metadata('design:type', core_1.EventEmitter)
@@ -68,7 +74,7 @@ var LeftNavigation = (function (_super) {
                     core_1.transition("open <=> close", core_1.animate("200ms")),
                 ])
             ],
-            template: "\n  <div id=\"mySidenav\" class=\"sidenav\" [@animationLeftNav]=\"state\">\n  <img src=\"img/cog.png\" alt=\"config\" style=\"width:40%;display:block;margin:auto;margin-top:10%;\">\n  <table>\n  <tr>\n  <td>\n  <span class=\"glyphicon glyphicon-map-marker\" ></span>\n  </td>\n  <td>\n  Location Detect\n  </td>\n  <td>\n  <label class=\"switch\">\n  <input type=\"checkbox\">\n  <div class=\"sliderIOS round\"></div>\n  </label>\n  </td>\n  </tr>\n\n  <tr>\n  <td>\n  <img src=\"img/diameter.png\" alt=\"diameter of the search\"/>\n  </td>\n  <td colspan=\"2\">\n  Search Diameter - P&R\n  </td>\n  </tr>\n\n  <tr (click) = \"ReturnSliderValue()\">\n  <td class=\"special\" colspan=\"3\">\n  <input id=\"ex1\" #sliderIOS data-slider-id='ex1Slider' type=\"text\" value=\"1\" data-slider-min=\"0\" data-slider-max=\"5\" data-slider-step=\"0.1\" data-slider-value=\"1\"/>\n  </td>\n  </tr>\n  </table>\n\n\n  <div class=\"copyright\">\n  <hr style=\"margin-top:0;margin-bottom:0;\">\n  <img src=\"img/demo-logo-2.png\" alt=\"config\" style=\"width:40%;display:block;margin:2% auto;\">\n  <p>Version: 0.9.1<br>\n  \u00A9 Parking Group<br></p>\n  </div>\n  </div>\n  <script>\n\n});\n</script>\n"
+            template: "\n  <div id=\"mySidenav\" class=\"sidenav\" [@animationLeftNav]=\"state\">\n  <img src=\"img/cog.png\" alt=\"config\" style=\"width:40%;display:block;margin:auto;margin-top:10%;\">\n  <table>\n  <tr>\n  <td>\n  <span class=\"glyphicon glyphicon-map-marker\" ></span>\n  </td>\n  <td>\n  Location Detect\n  </td>\n  <td>\n  <label class=\"switch\">\n  <input type=\"checkbox\">\n  <div class=\"sliderIOS round\"></div>\n  </label>\n  </td>\n  </tr>\n\n  <tr>\n  <td>\n  <img src=\"img/diameter.png\" alt=\"diameter of the search\"/>\n  </td>\n  <td colspan=\"2\">\n  Search Diameter - P&R\n  </td>\n  </tr>\n\n  <tr (click) = \"ReturnSliderValue()\">\n  <td class=\"special\" colspan=\"3\">\n  <input id=\"ex1\" #ex1Slider data-slider-id='ex1Slider' type=\"text\" value=\"1\" data-slider-min=\"0\" data-slider-max=\"5\" data-slider-step=\"0.1\" data-slider-value=\"1\"/>\n  </td>\n  </tr>\n  </table>\n\n\n  <div class=\"copyright\">\n  <hr style=\"margin-top:0;margin-bottom:0;\">\n  <img src=\"img/demo-logo-2.png\" alt=\"config\" style=\"width:40%;display:block;margin:2% auto;\">\n  <p>Version: 0.9.1<br>\n  \u00A9 Parking Group<br></p>\n  </div>\n  </div>\n  <script>\n\n});\n</script>\n"
         }), 
         __metadata('design:paramtypes', [])
     ], LeftNavigation);

@@ -40,7 +40,7 @@ var UserComponent = (function (_super) {
                 "sv": "Sorry, you did not save your car/bike location",
                 "en": "Sorry, you did not save your car/bike location"
             },
-            "date": "No date date"
+            "date": "No date data"
         };
     }
     UserComponent.prototype.ngOnInit = function () {
@@ -65,12 +65,12 @@ var UserComponent = (function (_super) {
             selector: 'router-outlet',
             animations: [
                 core_1.trigger("animationBottomNav", [
-                    core_1.state("open", core_1.style({ height: "70%" })),
+                    core_1.state("open", core_1.style({ height: "30%" })),
                     core_1.state("close", core_1.style({ height: "0" })),
                     core_1.transition("open <=> close", core_1.animate("250ms")),
                 ])
             ],
-            template: "<div class=\"bottomDiv\" [@animationBottomNav]=\"state\">\n  <div class=\"locationPanel\"><span class=\"glyphicon glyphicon-map-marker\" style=\"margin-right:5px;\"></span> Your car location</div>\n  <div class=\"content\">You left your car/bike at<br>\n  Location: {{this.object.name.en}}<br>\n  Time: {{this.object.date}}</div>\n  <div class=\"lovePanel\"><span class=\"glyphicon glyphicon-heart\" style=\"margin-right:5px;\"></span>Favorite bike station</div>\n  <div class=\"content\">\n  Sorry, there is no bike station in your favorite list\n  </div>\n  </div>",
+            template: "<div class=\"bottomDiv\" [@animationBottomNav]=\"state\">\n  <div class=\"locationPanel\"><span class=\"glyphicon glyphicon-map-marker\" style=\"margin-right:5px;\"></span> Your car location</div>\n  <div class=\"content\">You left your car/bike at<br>\n  Location: {{this.object.name.en}}<br>\n  Time: {{this.object.date}}</div>",
             providers: []
         }), 
         __metadata('design:paramtypes', [])

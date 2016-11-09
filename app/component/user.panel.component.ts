@@ -25,7 +25,7 @@ var localStorage_isSupported = (function () {
   animations: [
 
   trigger("animationBottomNav", [
-    state("open", style({height:"70%"})),
+    state("open", style({height:"30%"})),
     state("close", style({height: "0" })),
     transition("open <=> close", animate( "250ms" )),
     ])
@@ -34,12 +34,7 @@ var localStorage_isSupported = (function () {
   <div class="locationPanel"><span class="glyphicon glyphicon-map-marker" style="margin-right:5px;"></span> Your car location</div>
   <div class="content">You left your car/bike at<br>
   Location: {{this.object.name.en}}<br>
-  Time: {{this.object.date}}</div>
-  <div class="lovePanel"><span class="glyphicon glyphicon-heart" style="margin-right:5px;"></span>Favorite bike station</div>
-  <div class="content">
-  Sorry, there is no bike station in your favorite list
-  </div>
-  </div>`,
+  Time: {{this.object.date}}</div>`,
   providers: []
 })
 
@@ -50,7 +45,7 @@ export class UserComponent extends AbstractComponent implements OnInit {
       "sv": "Sorry, you did not save your car/bike location",
       "en": "Sorry, you did not save your car/bike location"
     },
-    "date": "No date date"
+    "date": "No date data"
   };
 
   ngOnInit(){
@@ -62,7 +57,6 @@ export class UserComponent extends AbstractComponent implements OnInit {
     } else {
       this.object.name.en = "Sorry, your browser does not support this function.";
     }
-    
   }
 
   updateSave(event:any){

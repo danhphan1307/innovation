@@ -26,8 +26,6 @@ var appRoutes = [
     { path: 'freezone', component: parkzone_component_1.ParkZoneComponent },
     { path: 'layer', component: facility_component_1.FacilityComponent }
 ];
-//export const appRoutingProviders: any[] = [];
-//export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);
 var appRoutingProviders = (function () {
     function appRoutingProviders() {
     }

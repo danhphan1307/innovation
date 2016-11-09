@@ -388,6 +388,12 @@ export class MapComponent{
             });
         });
     }
+    clearFacilityMarkers(){
+        this.facilitymarkers.forEach((item, index) => {
+            item.setMap(null);
+        });
+        this.facilitymarkers=[];
+    }
     clearMarkers(){
         this.markers.forEach((item, index) => {
             item.setMap(null);
@@ -423,21 +429,13 @@ export class MapComponent{
         if (this.oldLat == null ) {
         }
         else {
-            if(this.oldRadius ==null){
-
-            }else{
-                if(this.oldRadius!=event){
-                    this.oldRadius = event;
-                    this.clearCircles();
-                    /*this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);*/
-                    this.counter=0;
-                    this.facilitymarkers.forEach((item, index) => {
-                        item.setMap(null);
-                    });
-
-                    var mev={latLng: new google.maps.LatLng(this.centerLat, this.centerLon)};
-                    google.maps.event.trigger(this.map, 'click', mev);
-                }
+            if(this.oldRadius!=event){
+                this.counter=0;
+                this.oldRadius = event;
+                this.clearCircles();
+                this.clearFacilityMarkers();
+                var mev={latLng: new google.maps.LatLng(this.centerLat, this.centerLon)};
+                google.maps.event.trigger(this.map, 'click', mev);
             }
         }
     }
@@ -459,8 +457,6 @@ export class MapComponent{
             if(this.counter<2){
                 this.clickUpdated.emit(clickCoord);
                 this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);
-            }else{
-                //this.showDirection(tempMarker,true);
             }
             this.oldRadius = this.circleRadius;
         }else {

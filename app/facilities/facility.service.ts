@@ -22,42 +22,42 @@ export class FacilityService{
   //Get all facilities , for testing purpose only
   getAllFacilities() : Observable<Facility[]>{
     return this.http.get(this.facilityUrl,{headers: this.getHeaders()})
-      //.map(this.mapStations)
-      .map(this.extractData)
-      .catch(this.handleError);
-    }
+    //.map(this.mapStations)
+    .map(this.extractData)
+    .catch(this.handleError);
+  }
 
-    //Get facilites nearby, radius in meters
+  //Get facilites nearby, radius in meters
 
-    getFaclitiesNearby(coords: Coords, radius: number): Observable<Facility[]>{
-      let params: URLSearchParams = new URLSearchParams();
-      let strParams = "POINT(" + String(coords.lon) + "+" + String(coords.lat) + ")";
-      params.set('geometry', strParams);
-      params.set('maxDistance', String(radius));
-      let options = new RequestOptions({
-          // Have to make a URLSearchParams with a query string
-          search: params
-      });
-      return this.http.get(this.facilityUrl,options)
-      .map(this.extractData)
-      .catch(this.handleError);
-    }
+  getFaclitiesNearby(coords: Coords, radius: number): Observable<Facility[]>{
+    let params: URLSearchParams = new URLSearchParams();
+    let strParams = "POINT(" + String(coords.lon) + "+" + String(coords.lat) + ")";
+    params.set('geometry', strParams);
+    params.set('maxDistance', String(radius));
+    let options = new RequestOptions({
+      // Have to make a URLSearchParams with a query string
+      search: params
+    });
+    return this.http.get(this.facilityUrl,options)
+    .map(this.extractData)
+    .catch(this.handleError);
+  }
 
-    private extractData(res: Response) {
-      let body = res.json();
-      return body.results || { };
-    }
+  private extractData(res: Response) {
+    let body = res.json();
+    return body.results || { };
+  }
 
 
-    private getHeaders(){
-      let headers = new Headers();
-      headers.append('Accept', 'application/json');
-      return headers;
-    }
+  private getHeaders(){
+    let headers = new Headers();
+    headers.append('Accept', 'application/json');
+    return headers;
+  }
 
-    private handleError (error: any) {
-      let errMsg = (error.message) ? error.message :
-      error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+  private handleError (error: any) {
+    let errMsg = (error.message) ? error.message :
+    error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg); // log to console instead
     return Observable.throw(errMsg);
   }

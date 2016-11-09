@@ -340,6 +340,12 @@ var MapComponent = (function () {
             });
         });
     };
+    MapComponent.prototype.clearFacilityMarkers = function () {
+        this.facilitymarkers.forEach(function (item, index) {
+            item.setMap(null);
+        });
+        this.facilitymarkers = [];
+    };
     MapComponent.prototype.clearMarkers = function () {
         this.markers.forEach(function (item, index) {
             item.setMap(null);
@@ -372,20 +378,13 @@ var MapComponent = (function () {
         if (this.oldLat == null) {
         }
         else {
-            if (this.oldRadius == null) {
-            }
-            else {
-                if (this.oldRadius != event) {
-                    this.oldRadius = event;
-                    this.clearCircles();
-                    /*this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);*/
-                    this.counter = 0;
-                    this.facilitymarkers.forEach(function (item, index) {
-                        item.setMap(null);
-                    });
-                    var mev = { latLng: new google.maps.LatLng(this.centerLat, this.centerLon) };
-                    google.maps.event.trigger(this.map, 'click', mev);
-                }
+            if (this.oldRadius != event) {
+                this.counter = 0;
+                this.oldRadius = event;
+                this.clearCircles();
+                this.clearFacilityMarkers();
+                var mev = { latLng: new google.maps.LatLng(this.centerLat, this.centerLon) };
+                google.maps.event.trigger(this.map, 'click', mev);
             }
         }
     };
@@ -406,8 +405,6 @@ var MapComponent = (function () {
             if (this.counter < 2) {
                 this.clickUpdated.emit(clickCoord);
                 this.placeCircle(this.centerLat, this.centerLon, this.circleRadius);
-            }
-            else {
             }
             this.oldRadius = this.circleRadius;
         }
