@@ -54,6 +54,7 @@
   "karma-jasmine": "^0.3.8",
   "karma-webpack": "^1.8.0",
   "karma-sourcemap-loader": "^0.3.7",
+  "karma-phantomjs-launcher": "^1.0.2",
   "protractor": "^3.3.0",
   "rimraf": "^2.5.2","null-loader": "^0.1.1",
   "phantomjs-prebuilt": "^2.1.7",
