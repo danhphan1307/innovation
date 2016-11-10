@@ -406,11 +406,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
- width: 100%;
- background: #FF9AD7;
- display:flex;justify-content:center;align-items:center;
- color:white;
- height:7vh;   
+   width: 100%;
+   background: #FF9AD7;
+   display:flex;justify-content:center;align-items:center;
+   color:white;
+   height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -425,12 +425,40 @@ h2{
     background: rgba(255,255,255,0.9);
     display:none;
     padding-left:5%;
-     padding-right:5%;
+    padding-right:5%;
 }
 #noInternet{
     width:50;
 }
+#help{
+    z-index: 10;
+    position: absolute;
+    width: 25%;
+    max-width: 200px;
+    height: auto;
+    top:8%;
+    right:0;
+    background-color: rgba(255,255,255,0.7);
+}
+#help td{
+    width:45%;
+    padding-left: 5%;
+}
 
+#Help hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    margin: 1em 0;
+    padding: 0; 
+}
+#help hr.car{
+    border-top: 1px solid #FF6861;
+}
+
+#help hr.public{
+    border-top: 1px solid #779ECB;
+}
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}

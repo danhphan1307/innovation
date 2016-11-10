@@ -13,6 +13,7 @@ import { Component, OnInit,  Input,
   import {BottomNavigation} from './component/bottom.navigation.component';
   import {BlackOverlay} from './component/blackoverlay.component';
   import {FacilityComponent} from './facilities/facility.component';
+  import {Help} from './component/help.component';
   import {UserComponent} from './component/user.panel.component';
   import {BikeComponent} from './bikes/bike.component';
   import {ParkZoneComponent} from './park-zone/parkzone.component'

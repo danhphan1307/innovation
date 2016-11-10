@@ -15,6 +15,7 @@ var left_navigation_component_1 = require('./component/left.navigation.component
 var bottom_navigation_component_1 = require('./component/bottom.navigation.component');
 var blackoverlay_component_1 = require('./component/blackoverlay.component');
 var user_panel_component_1 = require('./component/user.panel.component');
+var help_component_1 = require('./component/help.component');
 var app_component_1 = require('./app.component');
 var bike_component_1 = require('./bikes/bike.component');
 var http_1 = require('@angular/http');
@@ -47,7 +48,7 @@ var AppModule = (function () {
                 facility_component_1.FacilityComponent,
                 left_navigation_component_1.LeftNavigation,
                 bottom_navigation_component_1.BottomNavigation,
-                blackoverlay_component_1.BlackOverlay, app_routing_1.routing],
+                blackoverlay_component_1.BlackOverlay, app_routing_1.routing, help_component_1.Help],
             providers: [facility_service_1.FacilityService,
                 map_service_1.MapService, bike_service_1.BikeService],
             bootstrap: [app_component_1.AppComponent]
