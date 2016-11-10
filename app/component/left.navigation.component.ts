@@ -5,7 +5,6 @@ import {AbstractComponent} from './abstract.class.component';
 declare var Slider: any;
 
 @Component({
-  moduleId: module.id,
   selector: 'left-nav',
   providers: [],
   animations: [

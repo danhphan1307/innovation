@@ -3,7 +3,6 @@ import {AbstractComponent} from './abstract.class.component';
 
 
 @Component({
-	moduleId: module.id,
 	selector: 'help',
 	animations: [
 

@@ -3,7 +3,6 @@ import {Component, Input, animate, style, state, transition, trigger} from '@ang
 import {AbstractComponent} from './abstract.class.component';
 
 @Component({
-  moduleId: module.id,
   selector: 'blackoverlay',
   providers: [],
   animations: [

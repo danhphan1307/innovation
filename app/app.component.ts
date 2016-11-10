@@ -28,9 +28,8 @@ import { Component, OnInit,  Input,
 
   declare var google: any;
   @Component({
-    moduleId: module.id,
     selector: 'my-app',
-    templateUrl: 'app.component.html',
+    templateUrl: './app.component.html',
     providers: []
   })
 

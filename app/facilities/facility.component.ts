@@ -12,7 +12,6 @@ import {Usage, PricingMethod, FacilityStatus, ActiveComponent} from '../models/m
 import {MapComponent} from '../map/map.component';
 
 @Component({
-  moduleId: module.id,
   selector: 'facility-component',
   template: ``,
   providers: [FacilityService]

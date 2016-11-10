@@ -4,7 +4,6 @@ import {AbstractComponent} from './abstract.class.component';
 import {BlackOverlay} from '../component/blackoverlay.component';
 
 @Component({
-  moduleId: module.id,
   selector: 'bottom-nav',
   providers: [],
 

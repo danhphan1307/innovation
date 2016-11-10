@@ -20,7 +20,6 @@ var localStorage_isSupported = (function () {
 })();
 
 @Component({
-  moduleId: module.id,
   selector: 'router-outlet',
   animations: [
 
