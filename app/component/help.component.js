@@ -27,7 +27,6 @@ var Help = (function (_super) {
     };
     Help = __decorate([
         core_1.Component({
-            moduleId: module.id,
             selector: 'help',
             animations: [
                 core_1.trigger("animationBottomNav", [

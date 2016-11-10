@@ -22,7 +22,6 @@ var BlackOverlay = (function (_super) {
     }
     BlackOverlay = __decorate([
         core_1.Component({
-            moduleId: module.id,
             selector: 'blackoverlay',
             providers: [],
             animations: [

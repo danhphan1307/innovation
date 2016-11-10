@@ -64,7 +64,6 @@ var LeftNavigation = (function (_super) {
     ], LeftNavigation.prototype, "radiusUpdated", void 0);
     LeftNavigation = __decorate([
         core_1.Component({
-            moduleId: module.id,
             selector: 'left-nav',
             providers: [],
             animations: [

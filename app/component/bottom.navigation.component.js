@@ -22,7 +22,6 @@ var BottomNavigation = (function (_super) {
     }
     BottomNavigation = __decorate([
         core_1.Component({
-            moduleId: module.id,
             selector: 'bottom-nav',
             providers: [],
             template: "\n  <div class=\"bottomNav\">\n  <nav>\n  <ul>\n\n  <li routerLink=\"/freezone\" routerLinkActive=\"active\">\n  <img src=\"img/Free Parking-50.png\" alt=\"free parking\" class=\"custom-img-responsive\">\n  </li>\n  <li routerLink=\"/paidzone\" routerLinkActive=\"active\">\n  <img src=\"img/Paid Parking-50.png\" alt=\"paid parking\"  class=\"custom-img-responsive\">\n  </li>\n  <li routerLink=\"/layer\" routerLinkActive=\"active\">\n  <img src=\"img/Parking Zone-50.png\" alt=\"parking zone\"  class=\"custom-img-responsive\">\n  </li>\n  <li routerLink=\"/parking\" routerLinkActive=\"active\">\n  <img src=\"img/Park Ride-50.png\" alt=\"park ride\"  class=\"custom-img-responsive\">\n  </li>\n  <li routerLink=\"/bike\" routerLinkActive=\"active\">\n  <img src=\"img/Bicycle-50.png\" alt=\"bike icon\"  class=\"custom-img-responsive\">\n  </li>\n  <li routeLink=\"/user\" routerLinkActive=\"active\" >\n  <img id=\"testImg\" #testImg src=\"img/User-Info.png\" alt=\"user info\"  class=\"custom-img-responsive\">\n  </li>\n  </ul>\n  </nav>\n  </div>\n\n  "

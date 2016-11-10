@@ -166,9 +166,9 @@ var AppComponent = (function () {
     ], AppComponent.prototype, "ZoneComponent", void 0);
     AppComponent = __decorate([
         core_1.Component({
-            moduleId: module.id,
             selector: 'my-app',
-            templateUrl: 'app.component.html',
+            templateUrl: './app.component.html',
+            styleUrls: ['../css/bootstrap.min.css', '../bootstrap-slider/bootstrap-slider.min.css', '../css/style.css'],
             providers: []
         }), 
         __metadata('design:paramtypes', [router_1.Router])

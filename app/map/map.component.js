@@ -548,7 +548,6 @@ var MapComponent = (function () {
     ], MapComponent.prototype, "saveUpdated", void 0);
     MapComponent = __decorate([
         core_1.Component({
-            moduleId: module.id,
             selector: 'map-gg',
             template: "\n    <div id=\"mapCanvas\" ></div>\n\n    ",
             providers: [map_service_1.MapService, google_service_1.GoogleService]

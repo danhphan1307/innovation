@@ -69,7 +69,6 @@ var FacilityComponent = (function () {
     ], FacilityComponent.prototype, "triggered", void 0);
     FacilityComponent = __decorate([
         core_1.Component({
-            moduleId: module.id,
             selector: 'facility-component',
             template: "",
             providers: [facility_service_1.FacilityService]

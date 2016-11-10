@@ -7,5 +7,9 @@ import '@angular/http';
 import '@angular/router';
 // RxJS
 import 'rxjs';
+import '../css/bootstrap.min.css';
+import '../bootstrap-slider/bootstrap-slider.min.css';
+import '../css/style.css';
+
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
