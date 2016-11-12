@@ -10,12 +10,11 @@ const appRoutes: Routes = [
   {     path: '',
     redirectTo: '/parking',
     pathMatch: 'full'},
-  { path: 'parking', component: FacilityComponent },
+  { path: 'parkandride', component: FacilityComponent },
   { path: 'bike', component: BikeComponent },
   { path: 'user', component: UserComponent },
-  { path: 'paidzone',component: ParkZoneComponent},
-  { path: 'freezone',component: ParkZoneComponent},
-  { path: 'layer',component: FacilityComponent}
+  { path: 'hri',component: ParkZoneComponent},
+  { path: 'parking',component: FacilityComponent}
 ];
 
 @NgModule({

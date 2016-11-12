@@ -10,10 +10,9 @@ html{
 body {
     height: 100%;
     width: 100%;
-    overflow-x:hidden;
+    overflow:hidden;
     margin: 0px;
     z-index: 0;
-    overflow-y: hidden;
 }
 
 a{
@@ -323,7 +322,7 @@ h2{
     font-weight: bold;
     height: 100%;
     color:#acacac;
-    width: 16.66%;
+    width: 20%;
     float: left;
     text-align: center;
     text-transform: uppercase;
@@ -342,16 +341,21 @@ h2{
     background-color:#acacac;
 }
 
-.bottomNav li.active, .bottomNav li.active img{
+.bottomNav li.active img{
     background-color:#2A6785;
 }
-.custom-img-responsive{
+.bottomNav li.active span{
+    color:#2A6785;
+}
+.bottomNav li div{
   position: relative;
   top: 50%;
   transform: translateY(-50%);
+}
+.custom-img-responsive{
   height: 100%;
-  max-width: 50px;
-  max-height: 50px;
+  max-width: 30px;
+  max-height: 30px;
 }
 
 #markerFacility, #markerBike, #polygon,#destination_marker{
@@ -429,7 +433,7 @@ h2{
     width:50;
 }
 #help{
-    z-index: 10;
+    z-index: 1;
     position: absolute;
     width: 25%;
     max-width: 200px;
@@ -456,6 +460,19 @@ h2{
 
 #help hr.public{
     border-top: 1px solid #779ECB;
+}
+
+#filter{
+    z-index: 1;
+    display:block;
+    position:absolute;
+    bottom:9%;
+    background-color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+#filter label{
+    margin-left:5px;
 }
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {

@@ -4,7 +4,7 @@ import {Coords} from '../models/location';
 import {LeftNavigation} from '../component/left.navigation.component';
 import {Router} from '@angular/router';
 import {MapService} from './map.service'
-import {ActiveComponent} from '../models/model-enum';
+import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
 import {GoogleService} from '../google/google.service'
 declare var google: any;
 
@@ -106,7 +106,10 @@ export class MapComponent{
     doneLoading: any = new EventEmitter<boolean>();
 
     //Polygons array
-    polygons : any[] = []
+    polygons: any[] =  [[],[],[],[],[]];
+
+
+
     @Output()
     saveUpdated: any= new EventEmitter();
 
@@ -215,21 +218,41 @@ export class MapComponent{
     placeMarkerFacility(f:any):void{
         var map = this.map;
         var type:string=this.getZoomLevel();
-
+        var object:any;
+        var flag:boolean = true;
+        var markerFacility:any;
+        if (localStorage.getItem("carLocation") !== null) {
+            //if localstorage has item carLocation => the marker of this localstorage is not loaded yet = > flag false
+            flag = false;
+        }
+        if(this.router.url != "/parkandride"){
+            flag = true;
+            //only load in park and ride
+        }
         for (var i = 0; i < f.length; i++) {
+            if (localStorage.getItem("carLocation") !== null) {
+                object = JSON.parse(localStorage.getItem('carLocation'));
+                if(object.location.coordinates[0][0][1] == f[i].location.coordinates[0][0][1] && object.location.coordinates[0][0][0] == f[i].location.coordinates[0][0][0]){
+                    flag = true;
+                    //localStorage loaded, flag = true
+                }
+
+            }
             if(f[i].name.en.indexOf('bike') !== -1){
-                var markerFacility = new google.maps.Marker({
+                markerFacility = new google.maps.Marker({
                     position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
                     map: this.map,
                     icon: this.iconsBikeStation[type].icon
                 });
             }else {
-                var markerFacility = new google.maps.Marker({
+                markerFacility = new google.maps.Marker({
                     position: new google.maps.LatLng(f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0]),
                     map: this.map,
                     icon: this.icons[type].icon
                 });
             }
+
+
             this.facilitymarkers.push(markerFacility);
             var func = ((markerFacility, i) => {
                 google.maps.event.addListener(markerFacility, 'click', () => {
@@ -276,6 +299,58 @@ export class MapComponent{
                 });
 
             })(markerFacility, i);
+        }
+        if(!flag){
+            //if the localStorage is exist but not being loaded (not in diameter range, forexample, this will handle)
+            if(object.name.en.indexOf('bike') !== -1){
+                markerFacility = new google.maps.Marker({
+                    position: new google.maps.LatLng(object.location.coordinates[0][0][1], object.location.coordinates[0][0][0]),
+                    map: this.map,
+                    icon: this.iconsBikeStation[type].icon
+                });
+            }else {
+                markerFacility = new google.maps.Marker({
+                    position: new google.maps.LatLng(object.location.coordinates[0][0][1], object.location.coordinates[0][0][0]),
+                    map: this.map,
+                    icon: this.icons[type].icon
+                });
+            } 
+
+            google.maps.event.addListener(markerFacility, 'click', () => {
+                var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+object.name.en+ '</span><br>';
+                if(object.name.en.indexOf('bike') !== -1){
+                    content+='Bicycle Capacity :'+ (object.builtCapacity.BICYCLE||0);
+                } else {
+                    content+='Car Capacity :'+ (object.builtCapacity.CAR|| 0)+'<br>';
+                    content+='Disabled Capacity:'+ (object.builtCapacity.DISABLED|| 0)+'<br>';
+                    content+='Motorbike Capacity:'+ (object.builtCapacity.MOTORCYCLE|| 0);
+                }
+                content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button></div></div>' ;
+
+                this.infowindow.setContent(content);
+                this.infowindow.open(this.map, markerFacility);
+                var el = document.getElementById('markerFacility');
+                google.maps.event.addDomListener(el,'click',()=>{
+                    this.showDirection(markerFacility,false);
+                });
+                var el2 = document.getElementById('saveButton');
+                google.maps.event.addDomListener(el2,'click',()=>{
+                    if(localStorage_isSupported){
+                        this.editLocalStorage(object);
+                        document.getElementById("saveButton").className="active";
+                        document.getElementById("saveButton").innerHTML="You parked here";
+                    }
+                });
+
+            });
+            google.maps.event.addDomListener(map,'zoom_changed',()=>{
+                type=this.getZoomLevel();
+                if(object.name.en.indexOf('bike') !== -1){
+                    markerFacility.setIcon(this.iconsBikeStation[type].icon);
+                }else{
+                    markerFacility.setIcon(this.icons[type].icon);
+                }
+            });
         }
     }
 
@@ -342,7 +417,8 @@ export class MapComponent{
         return (input_string.charAt(0).toUpperCase() + input_string.slice(1)).replace(/_/g," ");
     }
 
-    placePolygon(coordArray: any[], colorCode : string, type: string = " "){
+    placePolygon(coordArray: any[], colorCode : string, type: string = " ", enumabcd : any){
+
         var path : any[] = [];
         var bounds = new google.maps.LatLngBounds();
         var geocoder  = new google.maps.Geocoder();
@@ -366,8 +442,8 @@ export class MapComponent{
             fillOpacity: 0
         });
         polygon.setMap(this.map);
-        this.polygons.push(polygon);
-        
+        this.polygons[enumabcd].push(polygon);
+
         google.maps.event.addDomListener(polygon,'click',(event:any)=>{
             var content = '<div class="cityBike"><div class="title"><h3>Parking Spot</h3><img id="polygon" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+this.stringHandler(type)+'</span><br>';
             geocoder.geocode({
@@ -407,6 +483,13 @@ export class MapComponent{
     }
     clearPolygons(){
         this.polygons.forEach((item, index) => {
+            item.forEach((item2:any, index2:any)=>{
+                item2.setMap(null);
+            })   
+        });
+    }
+    clearPolygonIndex(_index:number){
+        this.polygons[_index].forEach((item:any, index:any) => {
             item.setMap(null);
         });
     }
@@ -446,7 +529,7 @@ export class MapComponent{
     }
 
     private callbackForMapClickEvent(event: any): void{
-        if(this.router.url == "/parking"){
+        if(this.router.url == "/parkandride"){
             this.counter++;
             this.clearMarkers();
             this.clearDirection();

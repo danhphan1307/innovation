@@ -34,6 +34,7 @@ import { Component, OnInit,  Input,
   })
 
   export class AppComponent implements OnInit {
+    options = ['free', 'low', 'medium' ,'high', 'garage'];
     public onlineOffline: boolean = navigator.onLine;
     router:Router;
     bMapDone:boolean = false;
@@ -98,7 +99,7 @@ import { Component, OnInit,  Input,
     }
 
     public FacilityRoute(event:any):void{
-      if(this.router.url == "/parking"){
+      if(this.router.url == "/parkandride"){
         this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
         this.MapComponent.markers = this.FacilityComponent.markers;
       }
@@ -121,8 +122,7 @@ import { Component, OnInit,  Input,
         this.MapComponent.clearPolygons();
         this.MapComponent.clearDirection();
         this.MapComponent.clearKML();
-
-        if(this.router.url == "/parking"){
+        if(this.router.url == "/parkandride"){
           this.leftNav.SetliderState(true);
           this.displayParking();
           this.MapComponent.center();
@@ -131,13 +131,7 @@ import { Component, OnInit,  Input,
           if(this.router.url == "/bike"){
             this.displayBikes()
           }
-          if (this.router.url == "/paidzone"){
-            this.displayPaidZone()
-          }
-          if (this.router.url == "/freezone"){
-            this.displayFreeZone()
-          }
-          if (this.router.url == "/layer"){
+          if (this.router.url == "/parking"){
             this.displayLayer()
           }
           this.MapComponent.center(this.lat,this.long);
@@ -152,8 +146,7 @@ import { Component, OnInit,  Input,
       this.MapComponent.markers = this.BikeComponent.markers;
 
     }
-
-    //Parking
+    //Park and Ride
     displayParking(){
       this.MapComponent.counter=0;
       this.MapComponent.clearDirection();
@@ -161,22 +154,58 @@ import { Component, OnInit,  Input,
       google.maps.event.trigger(this.MapComponent.map, 'click', mev);
       this.leftNav.SetliderState(true);
       this.MapComponent.markers = this.FacilityComponent.markers;
-
     }
 
-    //Layer for freezone
-    displayFreeZone(){
-      this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.MapComponent);
-      this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.MapComponent);
-    }
+    displayZone(e:any){
+      if(e.target.checked){
+        switch (e.target.name) {
+          case "free":
+          this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.MapComponent);
+          this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.MapComponent);
+          break;
+          
+          case "low":
+          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
+          break;
 
-    //Layer for paid zones
-    displayPaidZone(){
-      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
-      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
-      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.MapComponent);
-      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.MapComponent);
-      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
+          case "medium":
+          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.MapComponent);
+          break;
+
+          case "high":
+          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
+          break;
+
+          case "garage":
+          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
+          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.MapComponent);
+          break;
+        }
+
+      }else{
+
+        switch (e.target.name) {
+          case "free":
+          this.MapComponent.clearPolygonIndex(0);
+          break;
+          
+          case "low":
+          this.MapComponent.clearPolygonIndex(3);
+          break;
+
+          case "medium":
+          this.MapComponent.clearPolygonIndex(2);
+          break;
+
+          case "high":
+          this.MapComponent.clearPolygonIndex(1);
+          break;
+
+          case "garage":
+          this.MapComponent.clearPolygonIndex(4);
+          break;
+        }
+      }
     }
 
     //Layer for parking area

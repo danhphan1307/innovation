@@ -12,24 +12,35 @@ import {BlackOverlay} from '../component/blackoverlay.component';
   <div class="bottomNav">
   <nav>
   <ul>
-
-  <li routerLink="/freezone" routerLinkActive="active">
-  <img src="img/Free Parking-50.png" alt="free parking" class="custom-img-responsive">
-  </li>
-  <li routerLink="/paidzone" routerLinkActive="active">
-  <img src="img/Paid Parking-50.png" alt="paid parking"  class="custom-img-responsive">
-  </li>
-  <li routerLink="/layer" routerLinkActive="active">
-  <img src="img/Parking Zone-50.png" alt="parking zone"  class="custom-img-responsive">
-  </li>
   <li routerLink="/parking" routerLinkActive="active">
-  <img src="img/Park Ride-50.png" alt="park ride"  class="custom-img-responsive">
+  <div>
+  <img src="img/Parking Zone-50.png" alt="parking zone"  class="custom-img-responsive"><br>
+  <span>Parking</span>
+  </div>
+  </li>
+  <li routerLink="/hri" routerLinkActive="active">
+  <div>
+  <img src="img/Free Parking-50.png" alt="free parking" class="custom-img-responsive"><br>
+  <span>HRI Data</span>
+  </div>
+  </li>
+  <li routerLink="/parkandride" routerLinkActive="active">
+  <div>
+  <img src="img/Park Ride-50.png" alt="park ride"  class="custom-img-responsive"><br>
+  <span>Park & Ride</span>
+  </div>
   </li>
   <li routerLink="/bike" routerLinkActive="active">
-  <img src="img/Bicycle-50.png" alt="bike icon"  class="custom-img-responsive">
+  <div>
+  <img src="img/Bicycle-50.png" alt="bike icon"  class="custom-img-responsive"><br>
+  <span>City Bike</span>
+  </div>
   </li>
   <li routeLink="/user" routerLinkActive="active" >
-  <img id="testImg" #testImg src="img/User-Info.png" alt="user info"  class="custom-img-responsive">
+  <div>
+  <img id="testImg" #testImg src="img/User-Info.png" alt="user info"  class="custom-img-responsive"><br>
+  <span>User Info</span>
+  </div>
   </li>
   </ul>
   </nav>

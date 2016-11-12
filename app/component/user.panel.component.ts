@@ -24,8 +24,8 @@ var localStorage_isSupported = (function () {
   animations: [
 
   trigger("animationBottomNav", [
-    state("open", style({height:"30%"})),
-    state("close", style({height: "0" })),
+    state("open", style({height:"30%", display: "block"})),
+    state("close", style({height: "0", display: "none" })),
     transition("open <=> close", animate( "250ms" )),
     ])
   ],
