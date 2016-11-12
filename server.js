@@ -4,7 +4,7 @@ var app = express();
 
 // set the port of our application
 // process.env.PORT lets the port be set by Heroku
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 8081;
 
 /* At the top, with other redirect methods before other routes */
 app.get('*',function(req,res,next){
@@ -26,6 +26,10 @@ app.get('/', function(req, res) {
 
             // make sure index is in the right directory. In this case /app/index.html
             res.render('index');
+});
+
+app.post('/pay', function(req,res){
+    console.log(req)
 });
 
 app.listen(port, function() {

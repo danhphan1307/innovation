@@ -1,6 +1,6 @@
 
 import {Injectable} from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import global = require('../globals');
 
 import {Observable} from 'rxjs/Rx';
@@ -14,7 +14,9 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class MapService{
 
-    constructor(){
+    //url = "https://limitless-sea-28806.herokuapp.com/api/checkout";
+    url = "https://limitless-sea-28806.herokuapp.com/api/checkout";
+    constructor(private http: Http){
 
     }
 
@@ -32,16 +34,16 @@ export class MapService{
 
     public placeMarkers(lat: number, lon: number, map?: any): Marker{
 
-         var m = new google.maps.Marker({
+        var m = new google.maps.Marker({
             position: new google.maps.LatLng(lat,lon),
 
             icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
         });
-         m.setMap(map);
-         console.log(global.map)
-         return new Marker(m.getIcon(),
-          m.getPosition().lat(),
-         m.getPosition().lng());
+        m.setMap(map);
+        console.log(global.map)
+        return new Marker(m.getIcon(),
+            m.getPosition().lat(),
+            m.getPosition().lng());
     }
 
     public geocodeTesting(address: string){
@@ -51,5 +53,32 @@ export class MapService{
                 console.log(res)
             }
         })
+    }
+
+    public openCheckout() {
+        let header = new Headers();
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({ headers: headers });
+
+        var handler = (<any>window).StripeCheckout.configure({
+            key: 'pk_test_cq1ut4ba4Ftin2AAUVEGnRbn',
+            locale: 'auto',
+            token:  (token: any) => {
+        // You can access the token ID with `token.id`.
+        // Get the token ID to your server-side code for use.
+        this.http.post(this.url,{token},options)
+        .subscribe(
+            res=>{console.log(res);},
+            error =>{console.log(error)}
+            )}
+    });
+
+        handler.open({
+            name: 'Ticket',
+            description: 'Payment for ticket',
+            amount: 400
+        });
+
     }
 }

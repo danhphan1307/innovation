@@ -11,5 +11,7 @@ import '../css/bootstrap.min.css';
 import '../bootstrap-slider/bootstrap-slider.min.css';
 import '../css/style.css';
 
+//Stripe
+import '../stripe/checkout.js';
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
