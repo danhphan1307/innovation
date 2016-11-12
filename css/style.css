@@ -434,6 +434,7 @@ h2{
 }
 #help{
     z-index: 1;
+    display:none;
     position: absolute;
     width: 25%;
     max-width: 200px;
@@ -464,7 +465,7 @@ h2{
 
 #filter{
     z-index: 1;
-    display:block;
+    display:none;
     position:absolute;
     bottom:9%;
     background-color: white;
@@ -474,6 +475,33 @@ h2{
 #filter label{
     margin-left:5px;
 }
+
+#theme{
+    width: 100%;
+}
+#person {
+    top: 50%;
+    left: 50%;
+    transform: translate(-150%, -50%);
+    display:block;
+    margin: 0 auto;
+    max-width: 80px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 2px solid white;
+    border-radius:50%;
+    margin-bottom:-80px;
+
+}
+.bottomDiv #info{
+    height:7vh;
+    margin-left:120px;
+    top:5px;
+    position: relative;
+    font-weight: bold;
+}
+
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}

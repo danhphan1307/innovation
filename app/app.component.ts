@@ -87,18 +87,18 @@ import { Component, OnInit,  Input,
       window.addEventListener('offline', () => {this.onlineOffline = false});
     }
 
-    public beginLeftNav():void{
-      this.leftNav.setState('open');
-      this.blackOverlay.setState('open');
-    }
-
     public closeAll():void{
       this.leftNav.setState('close');
       this.blackOverlay.setState('close');
       this.UserComponent.setState('close');
     }
 
-    public FacilityRoute(event:any):void{
+    public beginLeftNav():void{
+      this.leftNav.setState('open');
+      this.blackOverlay.setState('open');
+    }
+
+    public Route(event:any):void{
       if(this.router.url == "/parkandride"){
         this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
         this.MapComponent.markers = this.FacilityComponent.markers;
@@ -115,29 +115,27 @@ import { Component, OnInit,  Input,
 
     public bottomtNav():void{
       if(this.bMapDone == true){
-        this.MapComponent.clearFacilityMarkers();
-        document.getElementById('direction').style.display="none";
-        this.MapComponent.clearCircles();
-        this.MapComponent.clearMarkers();
-        this.MapComponent.clearPolygons();
-        this.MapComponent.clearDirection();
-        this.MapComponent.clearKML();
+        this.reset();
         if(this.router.url == "/parkandride"){
           this.leftNav.SetliderState(true);
           this.displayParking();
           this.MapComponent.center();
-        }else {
-          this.leftNav.SetliderState(false);
+        }else if(this.router.url == "/parking"){
+          this.MapComponent.displayKML();
+          this.MapComponent.center();
+        }
+        else {
           if(this.router.url == "/bike"){
             this.displayBikes()
           }
-          if (this.router.url == "/parking"){
-            this.displayLayer()
+          if (this.router.url == "/hri"){
+            document.getElementById('filter').style.display="block";
           }
           this.MapComponent.center(this.lat,this.long);
         } 
       }     
     }
+
     /* Methods for displaying markers*/
     //Display markers for bikes
     displayBikes(){
@@ -146,7 +144,7 @@ import { Component, OnInit,  Input,
       this.MapComponent.markers = this.BikeComponent.markers;
 
     }
-    //Park and Ride
+    //Display markers for park and ride
     displayParking(){
       this.MapComponent.counter=0;
       this.MapComponent.clearDirection();
@@ -156,6 +154,7 @@ import { Component, OnInit,  Input,
       this.MapComponent.markers = this.FacilityComponent.markers;
     }
 
+    //Display markers for parking
     displayZone(e:any){
       if(e.target.checked){
         switch (e.target.name) {
@@ -165,7 +164,7 @@ import { Component, OnInit,  Input,
           break;
           
           case "low":
-          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
+          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
           break;
 
           case "medium":
@@ -173,7 +172,7 @@ import { Component, OnInit,  Input,
           break;
 
           case "high":
-          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
+          this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
           break;
 
           case "garage":
@@ -183,14 +182,13 @@ import { Component, OnInit,  Input,
         }
 
       }else{
-
         switch (e.target.name) {
           case "free":
           this.MapComponent.clearPolygonIndex(0);
           break;
           
           case "low":
-          this.MapComponent.clearPolygonIndex(3);
+          this.MapComponent.clearPolygonIndex(1);
           break;
 
           case "medium":
@@ -198,7 +196,7 @@ import { Component, OnInit,  Input,
           break;
 
           case "high":
-          this.MapComponent.clearPolygonIndex(1);
+          this.MapComponent.clearPolygonIndex(3);
           break;
 
           case "garage":
@@ -208,9 +206,20 @@ import { Component, OnInit,  Input,
       }
     }
 
-    //Layer for parking area
-    displayLayer(){
-      this.MapComponent.displayKML();
+    reset(){
+      for (var i = 0; i< this.options.length; i++){
+         (<HTMLInputElement>document.getElementById(this.options[i])).checked = false;
+      }
+      document.getElementById('help').style.display="none";
+      document.getElementById('direction').style.display="none";
+      document.getElementById('filter').style.display="none";
+      this.MapComponent.clearFacilityMarkers();
+      this.MapComponent.clearCircles();
+      this.MapComponent.clearMarkers();
+      this.MapComponent.clearPolygons();
+      this.MapComponent.clearDirection();
+      this.MapComponent.clearKML();
+      this.leftNav.SetliderState(false);
     }
     //Set active component
     setStatus(event: ActiveComponent){

@@ -20,7 +20,7 @@ declare var Slider: any;
   template:
   `
   <div id="mySidenav" class="sidenav" [@animationLeftNav]="state">
-  <img src="img/cog.png" alt="config" style="width:40%;display:block;margin:auto;margin-top:10%;">
+  <img src="img/cog.png" alt="config" style="width:30%;display:block;margin:auto;margin-top:10%;">
   <table>
   <tr>
   <td>

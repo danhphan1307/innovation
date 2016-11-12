@@ -223,6 +223,7 @@ export class MapComponent{
         var markerFacility:any;
         if (localStorage.getItem("carLocation") !== null) {
             //if localstorage has item carLocation => the marker of this localstorage is not loaded yet = > flag false
+            object = JSON.parse(localStorage.getItem('carLocation'));
             flag = false;
         }
         if(this.router.url != "/parkandride"){
@@ -231,7 +232,6 @@ export class MapComponent{
         }
         for (var i = 0; i < f.length; i++) {
             if (localStorage.getItem("carLocation") !== null) {
-                object = JSON.parse(localStorage.getItem('carLocation'));
                 if(object.location.coordinates[0][0][1] == f[i].location.coordinates[0][0][1] && object.location.coordinates[0][0][0] == f[i].location.coordinates[0][0][0]){
                     flag = true;
                     //localStorage loaded, flag = true
@@ -356,7 +356,8 @@ export class MapComponent{
 
     editLocalStorage(data:any){
         var temp = data;
-        temp.date=Date();
+        
+        temp.date= Date();
         localStorage.setItem('carLocation',JSON.stringify(temp));
         this.saveLocation = data;
         this.saveUpdated.emit(this.saveLocation);
@@ -418,7 +419,6 @@ export class MapComponent{
     }
 
     placePolygon(coordArray: any[], colorCode : string, type: string = " ", enumabcd : any){
-
         var path : any[] = [];
         var bounds = new google.maps.LatLngBounds();
         var geocoder  = new google.maps.Geocoder();
@@ -549,6 +549,8 @@ export class MapComponent{
 
     private renderDirections(result:any,status:any, clearOldDirection:boolean = false, vehicle:string = 'public', suppressMarker:boolean = false) {
         if ( status == google.maps.DirectionsStatus.OK ) {
+
+            document.getElementById('help').style.display="block";
             if(clearOldDirection){
                 this.clearDirection();
                 document.getElementById('direction').innerHTML='';
@@ -573,7 +575,7 @@ export class MapComponent{
             });
             if(vehicle=='public'){
                 directionsRenderer.setPanel(document.getElementById('direction'));
-                document.getElementById('direction').style.display="block";
+                document.getElementById('direction').style.display="none";
             }
             this.directionArray.push(directionsRenderer);
             directionsRenderer.setDirections(result);

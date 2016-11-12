@@ -14,13 +14,13 @@ import {BlackOverlay} from '../component/blackoverlay.component';
   <ul>
   <li routerLink="/parking" routerLinkActive="active">
   <div>
-  <img src="img/Parking Zone-50.png" alt="parking zone"  class="custom-img-responsive"><br>
+  <img src="img/Free Parking-50.png" alt="parking zone"  class="custom-img-responsive"><br>
   <span>Parking</span>
   </div>
   </li>
   <li routerLink="/hri" routerLinkActive="active">
   <div>
-  <img src="img/Free Parking-50.png" alt="free parking" class="custom-img-responsive"><br>
+  <img src="img/hri.png" alt="free parking" class="custom-img-responsive"><br>
   <span>HRI Data</span>
   </div>
   </li>
@@ -36,9 +36,9 @@ import {BlackOverlay} from '../component/blackoverlay.component';
   <span>City Bike</span>
   </div>
   </li>
-  <li routeLink="/user" routerLinkActive="active" >
+  <li routeLink="/user" routerLinkActive="active" id="testImg" #testImg>
   <div>
-  <img id="testImg" #testImg src="img/User-Info.png" alt="user info"  class="custom-img-responsive"><br>
+  <img  src="img/User-Info.png" alt="user info"  class="custom-img-responsive"><br>
   <span>User Info</span>
   </div>
   </li>
