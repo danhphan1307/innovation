@@ -34,7 +34,7 @@ export class MarkerComponent{
     createMarker(): void{
         this.map = new google.maps.Map(document.getElementById("mapCanvas"));
 
-        this.mapService.placeMarkers(this.marker.lon,this.marker.lon,this.map);
+        //this.mapService.placeMarkers(this.marker.lon,this.marker.lon,this.map);
 
     }
 
