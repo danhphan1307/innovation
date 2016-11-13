@@ -51,34 +51,6 @@ var localStorage_hasData = (function () {
 })
 
 export class MapComponent{
-
-    icons = {
-        small: {
-            icon:  'img/parkingIconSmall.png'
-        },
-        large: {
-            icon: 'img/parkingIconLarge.png'
-        }
-    }
-
-    iconsBikeStation = {
-        small: {
-            icon:  'img/bikeStationIconSmall.png'
-        },
-        large: {
-            icon: 'img/bikeStationIcon.png'
-        }
-    }
-
-    iconsBike = {
-        small: {
-            icon:  'img/smallBike.png'
-        },
-        large: {
-            icon: 'img/largeBike.png'
-        }
-    }
-
     //Service
     service: MapService;
     googleService: GoogleService;
@@ -136,20 +108,17 @@ export class MapComponent{
         preserveViewport: true
 
     });
-
     constructor(private _router: Router, private _mapService: MapService,  private _googleService: GoogleService ) {
         this.router = _router;
         this.service = _mapService;
         this.googleService = _googleService;
     }
-
     ngOnInit(){
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.createMap.bind(this), this.noGeolocation);
         } else {
             this.geolocationNotSupported();
         }
-
         //Hacky way to prevent circular json in stripe checkout
         const _stringify: any = JSON.stringify;
         JSON.stringify = function (value: any, ...args: any[]) {
@@ -165,7 +134,6 @@ export class MapComponent{
             });
             }
         };
-
     }
 
     noGeolocation() {
@@ -188,18 +156,17 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
-
-        this.centerMarker = new google.maps.Marker({
-            position: new google.maps.LatLng(this.centerLat,this.centerLon),
-            map: this.map,
-        });
+        this.centerMarker = this.service.placeMarker(this.map, this.centerLat, this.centerLon,"default");
         this.createEventListeners();
         //Geocoding
         this.service.geocodeTesting("Kilo");
         //Signal that map has done loading
         this.doneLoading.emit(true);
         this.clickUpdated.emit(this.centerCoords);
-        this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);
+        this.clearCircles();
+        if(this.circleRadius != 0){
+            this.circles.push(this.service.placeCircle(this.map,this.circleRadius,this.centerLat,this.centerLon));
+        }
         if(localStorage_hasData){
             this.parkMarker = this.placeParkPlace();
         }
@@ -252,32 +219,12 @@ export class MapComponent{
         this.kmlLayer.setMap(this.map);
     }
 
-    placeMarker(lat: number, lon: number): any{
-        var infowindow = new google.maps.InfoWindow();
-        var geocoder  = new google.maps.Geocoder();
-        let destination_marker = this.service.placeMarker(this.map, lat, lon,"default");
-
-        this.markers.push(destination_marker);
-        if(this.counter>1){
-            geocoder.geocode({
-                'latLng': destination_marker.getPosition()
-            }, (result:any, status:any) =>{
-                if (status == google.maps.GeocoderStatus.OK) {
-                    var content = '<div class="cityBike"><div class="title"><h3>Destination</h3><img id="destination_marker" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+result[0].formatted_address+'</span><br>';
-                    infowindow.setContent(content);
-                    infowindow.open(this.map, destination_marker);
-                } else {
-                    console.log('Geocoder failed due to: ' + status);
-                }
-                var el = document.getElementById('destination_marker');
-                google.maps.event.addDomListener(el,'click',()=>{
-                    infowindow.close();
-                    this.showDirection(destination_marker);
-                });
-
-            });
-        }
-        return destination_marker;
+    editLocalStorage(data:any){
+        var temp = data;
+        temp.date=Date();
+        localStorage.setItem('carLocation',JSON.stringify(temp));
+        this.saveLocation = data;
+        this.saveUpdated.emit(this.saveLocation);
     }
 
     placeParkPlace(){
@@ -377,17 +324,8 @@ export class MapComponent{
         }
     }
 
-    editLocalStorage(data:any){
-        var temp = data;
-        temp.date=Date();
-        localStorage.setItem('carLocation',JSON.stringify(temp));
-        this.saveLocation = data;
-        this.saveUpdated.emit(this.saveLocation);
-    }
-
     placeMarkerBicycle(stations:any):void{
         var map = this.map;
-
         for (var i = 0; i < stations.length; i++) {
             var markerBike = this.service.placeMarker(this.map, stations[i].y, stations[i].x, "bike");
             this.markers.push(markerBike);
@@ -413,25 +351,11 @@ export class MapComponent{
         }
     }
 
-    placeCircle(lat: number, lon: number, radius: number): void{
-        this.clearCircles();
-        if(radius != 0){
-            this.circles.push(new google.maps.Circle({
-                strokeColor: '#4a6aa5',
-                strokeOpacity: 0.8,
-                strokeWeight: 1,
-                map: this.map,
-                center: new google.maps.LatLng(lat,lon),
-                radius: radius
-            }));
-        }
-    }
     stringHandler(input_string:string) {
         return (input_string.charAt(0).toUpperCase() + input_string.slice(1)).replace(/_/g," ");
     }
 
     placePolygon(coordArray: any[], colorCode : string, type: string = " ", enumabcd : any){
-
         var path : any[] = [];
         var bounds = new google.maps.LatLngBounds();
         var geocoder  = new google.maps.Geocoder();
@@ -440,21 +364,9 @@ export class MapComponent{
             path.push(temp);
             bounds.extend(temp);
         }
-        var markerPolygon = new google.maps.Marker({
-            position: new google.maps.LatLng(bounds.getCenter().lat(), bounds.getCenter().lng()),
-            map: this.map,
-            visible:false
-        });
+        var markerPolygon = this.service.placeMarker(this.map, bounds.getCenter().lat(), bounds.getCenter().lng(), "hiden");
         this.markers.push(markerPolygon);
-
-        var polygon = new google.maps.Polygon({
-            paths: path,
-            strokeColor: colorCode,
-            strokeOpacity: 0.8,
-            strokeWeight: 2,
-            fillOpacity: 0
-        });
-        polygon.setMap(this.map);
+        var polygon = this.service.placePolygon(this.map, path, colorCode);
         this.polygons[enumabcd].push(polygon);
 
         google.maps.event.addDomListener(polygon,'click',(event:any)=>{
@@ -505,6 +417,32 @@ export class MapComponent{
     private createEventListeners(): void{
         this.map.addListener('click', (event: any) => this.callbackForMapClickEvent(event));
     }
+    placeMarker(lat: number, lon: number): any{
+        var infowindow = new google.maps.InfoWindow();
+        var geocoder  = new google.maps.Geocoder();
+        let destination_marker = this.service.placeMarker(this.map, lat, lon,"default");
+
+        this.markers.push(destination_marker);
+        if(this.counter>1){
+            geocoder.geocode({
+                'latLng': destination_marker.getPosition()
+            }, (result:any, status:any) =>{
+                if (status == google.maps.GeocoderStatus.OK) {
+                    var content = '<div class="cityBike"><div class="title"><h3>Destination</h3><img id="destination_marker" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+result[0].formatted_address+'</span><br>';
+                    infowindow.setContent(content);
+                    infowindow.open(this.map, destination_marker);
+                } else {
+                    console.log('Geocoder failed due to: ' + status);
+                }
+                var el = document.getElementById('destination_marker');
+                google.maps.event.addDomListener(el,'click',()=>{
+                    infowindow.close();
+                    this.showDirection(destination_marker);
+                });
+            });
+        }
+        return destination_marker;
+    }
 
     private callbackForMapClickEvent(event: any): void{
         if(this.router.url == "/parkandride"){
@@ -517,7 +455,10 @@ export class MapComponent{
             var tempMarker = this.placeMarker(event.latLng.lat(),event.latLng.lng());
             if(this.counter<2){
                 this.clickUpdated.emit(clickCoord);
-                this.placeCircle(this.centerLat,this.centerLon,this.circleRadius);
+                this.clearCircles();
+                if(this.circleRadius != 0){
+                    this.circles.push(this.service.placeCircle(this.map,this.circleRadius,this.centerLat,this.centerLon));
+                }
                 if (localStorage_hasData) {
                     this.parkMarker = this.placeParkPlace();
                 }
@@ -528,47 +469,12 @@ export class MapComponent{
         }
     }
 
-    private renderDirections(result:any,status:any, clearOldDirection:boolean = false, vehicle:string = 'public', suppressMarker:boolean = false) {
-        if ( status == google.maps.DirectionsStatus.OK ) {
-
-            document.getElementById('help').style.display="block";
-            if(clearOldDirection){
-                this.clearDirection();
-                document.getElementById('direction').innerHTML='';
-            }
-            var colors = {
-                car: {
-                    color:  '#FF6861'
-                },
-                public: {
-                    color: '#779ECB'
-                }
-            }
-            var directionsRenderer = new google.maps.DirectionsRenderer({
-                map:this.map,
-                suppressMarkers: suppressMarker,
-                markerOptions:{visible:false},
-                draggable:true,
-                preserveViewport: true,
-                polylineOptions: {
-                    strokeColor: colors[vehicle].color
-                }
-            });
-            if(vehicle=='public'){
-                directionsRenderer.setPanel(document.getElementById('direction'));
-                document.getElementById('direction').style.display="none";
-            }
-            this.directionArray.push(directionsRenderer);
-            directionsRenderer.setDirections(result);
-        }
-    }
     private showDirection(marker: any = null, multiDirection:boolean = true){
         var current = new google.maps.LatLng(this.centerLat,this.centerLon);
         var parkCar:any ;
         var chosenMarker:any;
         var min:number;
         var destination = marker.getPosition();
-        var directionsService = new google.maps.DirectionsService;
 
         if(multiDirection){
             if (!localStorage_hasData) {
@@ -595,42 +501,15 @@ export class MapComponent{
             });
 
             parkCar = chosenMarker.getPosition();
-
-            directionsService.route({
-                origin: current,
-                destination: parkCar,
-                optimizeWaypoints: true,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING,
-
-            }, (result:any, status:any) =>{
-                this.renderDirections(result,status, true);
-            });
-            directionsService.route({
-                origin: parkCar,
-                destination: destination,
-                optimizeWaypoints: true,
-                travelMode: google.maps.DirectionsTravelMode.TRANSIT
-            }, (result:any, status:any) =>{
-                this.renderDirections(result,status);
-            });
-            directionsService.route({
-                origin: current,
-                destination: destination,
-                optimizeWaypoints: true,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
-            }, (result:any, status:any) =>{
-                this.renderDirections(result,status,false,'car', true);
-            });
+            this.clearDirection();
+            document.getElementById('direction').innerHTML='';
+            this.service.directionsService(this.map, current, parkCar, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING);
+            this.service.directionsService(this.map, parkCar, destination, this.directionArray,'public',google.maps.DirectionsTravelMode.TRANSIT);
+            this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
         }else {
-            directionsService.route({
-                origin: current,
-                destination: destination,
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
-            }, (result:any, status:any) =>{
-                this.renderDirections(result,status,true,'car',true);
-            });
+            this.clearDirection();
+            document.getElementById('direction').innerHTML='';
+            this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
         }
     }
-
-
 }
