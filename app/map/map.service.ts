@@ -56,24 +56,21 @@ export class MapService{
     }
 
     public openCheckout() {
-        let header = new Headers();
-
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
-
         var handler = (<any>window).StripeCheckout.configure({
             key: 'pk_test_cq1ut4ba4Ftin2AAUVEGnRbn',
             locale: 'auto',
             currency: 'eur',
             token:  (token: any) => {
-        // You can access the token ID with `token.id`.
-        // Get the token ID to your server-side code for use.
-        this.http.post(this.url,{token},options)
-        .subscribe(
-            res=>{console.log(res);},
-            error =>{console.log(error)}
-            )}
-    });
+                // You can access the token ID with `token.id`.
+                // Get the token ID to your server-side code for use.
+                this.http.post(this.url,{token},options)
+                .subscribe(
+                    res=>{console.log(res);},
+                    error =>{console.log(error)}
+                    )}
+            });
 
         handler.open({
             name: 'Ticket',

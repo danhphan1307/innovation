@@ -134,12 +134,12 @@ export class MapComponent{
         }
 
         //Hacky way to prevent circular json in stripe checkout
-        const _stringify = JSON.stringify;
+        const _stringify: any = JSON.stringify;
         JSON.stringify = function (value: any, ...args: any[]) {
             if (args.length) {
                 return _stringify(value, ...args);
             } else {
-                return _stringify(value, function (key, value) {
+                return _stringify(value, function (key: any, value: any) {
                     if (value && key === 'zone' && value['_zoneDelegate']
                         && value['_zoneDelegate']['zone'] === value) {
                         return undefined;
