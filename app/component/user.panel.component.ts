@@ -18,6 +18,22 @@ var localStorage_isSupported = (function () {
     return false;
   }
 })();
+var localStorage_hasData = (function () {
+  try {
+    if(localStorage_isSupported){
+      if(localStorage.getItem("carLocation") !== null){
+        return true;
+      }else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+  catch (e) {
+    return false;
+  }
+})();
 
 @Component({
   selector: 'router-outlet',
@@ -49,13 +65,13 @@ export class UserComponent extends AbstractComponent implements OnInit {
   };
   dateString:string = "No data";
   date:any;
-  diff:string ="No date";
+  diff:string ="No data";
 
   ngOnInit(){
     this.date = this.convertDateString(new Date());
     this.state='close';
     if(localStorage_isSupported){
-      if (localStorage.getItem("carLocation") !== null) {
+      if (localStorage_hasData) {
         this.object = JSON.parse(localStorage.getItem('carLocation'));
         this.dateString = this.convertDateString(this.object.date);
         this.diff = this.diffTwoDay(new Date(), new Date(this.object.date));
@@ -64,15 +80,28 @@ export class UserComponent extends AbstractComponent implements OnInit {
       this.object.name.en = "Sorry, your browser does not support this function.";
     }
     setInterval(() => {
-      this.date =  this.convertDateString(new Date());
-      this.diff = this.diffTwoDay(new Date(), new Date (this.object.date));
+      if(localStorage_hasData){
+        this.date =  this.convertDateString(new Date());
+        this.diff = this.diffTwoDay(new Date(), new Date (this.object.date));
+      }
+
     }, 1000);
   }
 
   updateSave(event:any){
     if(localStorage_isSupported){
-      this.object = event;
-      this.dateString = this.convertDateString(this.object.date);
+      if(event==null){
+        this.object.name.en = "Sorry, you did not save your car location";
+        this.dateString = "No data";
+        this.diff ="No data";
+
+        localStorage_hasData = false;
+      }else{
+
+        localStorage_hasData = true;
+        this.object = event;
+        this.dateString = this.convertDateString(this.object.date);
+      }
     }
   }
 

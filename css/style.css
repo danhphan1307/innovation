@@ -374,6 +374,21 @@ h2{
     border:1px solid #1CBB9B;
     color:#1CBB9B;
 }
+#unpark{
+    outline:none;
+    margin-left:25%;
+    width: 50%;
+    min-height: 30px;
+    border-radius: 5%;
+    background-color:white;
+    border:1px solid red;
+    color:red;
+    margin-top:5px;
+}
+#unpark:active{
+    background-color:red;
+    color:white;
+}
 #saveButton.active{
     margin-left:15%;
     width:70%;
@@ -408,11 +423,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
-   width: 100%;
-   background: #FF9AD7;
-   display:flex;justify-content:center;align-items:center;
-   color:white;
-   height:7vh;   
+ width: 100%;
+ background: #FF9AD7;
+ display:flex;justify-content:center;align-items:center;
+ color:white;
+ height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
