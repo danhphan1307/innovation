@@ -59,6 +59,7 @@ function showCurlCommand(mergedEndpoint) {
   var curlCommand = 'curl --header "Authorization: key=' + API_KEY +
     '" --header Content-Type:"application/json" ' + GCM_ENDPOINT +
     ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"]}"';
+    alert(curlCommand);
     console.log(curlCommand);
 }
 
