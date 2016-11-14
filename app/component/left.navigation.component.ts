@@ -32,7 +32,7 @@ declare var Slider: any;
   </td>
   <td>
   <label class="switch">
-  <input type="checkbox" checked>
+  <input type="checkbox" class="js-push-button" disabled>
   <div class="sliderIOS round js-push-button"></div>
   </label>
   </td>
