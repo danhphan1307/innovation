@@ -20,10 +20,10 @@ function endpointWorkaround(pushSubscription) {
   if (pushSubscription.subscriptionId &&
     pushSubscription.endpoint.indexOf(pushSubscription.subscriptionId) === -1) {
     // Handle version 42 where you have separate subId and Endpoint
-    mergedEndpoint = pushSubscription.endpoint + '/' +
-      pushSubscription.subscriptionId;
-  }
-  return mergedEndpoint;
+  mergedEndpoint = pushSubscription.endpoint + '/' +
+  pushSubscription.subscriptionId;
+}
+return mergedEndpoint;
 }
 
 function sendSubscriptionToServer(subscription) {
@@ -57,10 +57,10 @@ function showCurlCommand(mergedEndpoint) {
   var subscriptionId = endpointSections[endpointSections.length - 1];
 
   var curlCommand = 'curl --header "Authorization: key=' + API_KEY +
-    '" --header Content-Type:"application/json" ' + GCM_ENDPOINT +
-    ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"]}"';
-    alert(curlCommand);
-    console.log(curlCommand);
+  '" --header Content-Type:"application/json" ' + GCM_ENDPOINT +
+  ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"]}"';
+  alert(curlCommand);
+  console.log(curlCommand);
 }
 
 function unsubscribe() {
@@ -104,7 +104,7 @@ function unsubscribe() {
         window.Demo.debug.log('Error thrown while unsubscribing from ' +
           'push messaging.', e);
       });
-  });
+    });
 }
 
 function subscribe() {
@@ -115,7 +115,7 @@ function subscribe() {
 
   navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
     serviceWorkerRegistration.pushManager.subscribe({userVisibleOnly: true})
-      .then(function(subscription) {
+    .then(function(subscription) {
         // The subscription was successful
         isPushEnabled = true;
         pushButton.textContent = 'Disable Push Messages';
@@ -126,8 +126,8 @@ function subscribe() {
         // at a later date
         return sendSubscriptionToServer(subscription);
       })
-      .catch(function(e) {
-        if (Notification.permission === 'denied') {
+    .catch(function(e) {
+      if (Notification.permission === 'denied') {
           // The user denied the notification permission which
           // means we failed to subscribe and the user will need
           // to manually change the notification permission to
@@ -172,7 +172,7 @@ function initialiseState() {
   navigator.serviceWorker.ready.then(function(serviceWorkerRegistration) {
     // Do we already have a push message subscription?
     serviceWorkerRegistration.pushManager.getSubscription()
-      .then(function(subscription) {
+    .then(function(subscription) {
         // Enable any UI which subscribes / unsubscribes from
         // push messages.
         var pushButton = document.querySelector('.js-push-button');
@@ -192,9 +192,9 @@ function initialiseState() {
         pushButton.textContent = 'Disable Push Messages';
         isPushEnabled = true;
       })
-      .catch(function(err) {
-        window.Demo.debug.log('Error during getSubscription()', err);
-      });
+    .catch(function(err) {
+      window.Demo.debug.log('Error during getSubscription()', err);
+    });
   });
 }
 
@@ -211,8 +211,15 @@ window.addEventListener('load', function() {
   // Check that service workers are supported, if so, progressively
   // enhance and add push messaging support, otherwise continue without it.
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('../service-worker.js')
-    .then(initialiseState);
+    navigator.serviceWorker.register('../service-worker.js');
+    Notification.requestPermission(function(result) {
+      if (result === 'granted') {
+        navigator.serviceWorker.ready.then(function(registration) {
+          registration.showNotification('Notification with ServiceWorker');
+          initialiseState();
+        });
+      }
+    });
   } else {
     window.Demo.debug.log('Service workers aren\'t supported in this browser.');
   }
