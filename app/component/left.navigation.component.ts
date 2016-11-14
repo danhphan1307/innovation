@@ -27,12 +27,13 @@ declare var Slider: any;
   <span class="glyphicon glyphicon-map-marker" ></span>
   </td>
   <td>
-  Location Detect
+  Notification
+ 
   </td>
   <td>
   <label class="switch">
-  <input type="checkbox">
-  <div class="sliderIOS round"></div>
+  <input type="checkbox" checked>
+  <div class="sliderIOS round js-push-button"></div>
   </label>
   </td>
   </tr>

@@ -5,6 +5,7 @@ import '@angular/core';
 import '@angular/common';
 import '@angular/http';
 import '@angular/router';
+
 // RxJS
 import 'rxjs';
 import '../css/bootstrap.min.css';
@@ -13,5 +14,11 @@ import '../css/style.css';
 
 //Stripe
 import '../stripe/checkout.js';
+
+//notification
+import '../notification/config.js';
+import '../notification/demo.js';
+import '../notification/main.js';
+
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
