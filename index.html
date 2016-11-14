@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" manifest="manifest.appcache">
 <head>
 	<base href="/">
 	<title>Helsinki Parking</title>
@@ -31,7 +31,13 @@
 </head>
 
 <body>
-	<my-app><img src="img/loading.gif" alt="loading" style ="position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);">	</my-app>
+	<script type="text/javascript">
+		if(navigator.onLine) {
+			document.body.innerHTML='<my-app><img src="img/loading.gif" alt="loading" style ="position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);">	</my-app>';
+		}else {
+			document.body.innerHTML='Offline';
+		}
+	</script>
 
 	<script src="/config.js"></script>
 	<script src="/main.js"></script>
