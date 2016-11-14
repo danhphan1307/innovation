@@ -15,10 +15,5 @@ import '../css/style.css';
 //Stripe
 import '../stripe/checkout.js';
 
-//notification
-import '../notification/config.js';
-import '../notification/demo.js';
-import '../notification/main.js';
-
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
