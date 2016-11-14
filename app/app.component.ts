@@ -14,6 +14,7 @@ import { Component, OnInit,  Input,
   import {BlackOverlay} from './component/blackoverlay.component';
   import {FacilityComponent} from './facilities/facility.component';
   import {Help} from './component/help.component';
+  import {SearchBar} from './component/search.bar.component';
   import {UserComponent} from './component/user.panel.component';
   import {BikeComponent} from './bikes/bike.component';
   import {ParkZoneComponent} from './park-zone/parkzone.component'
@@ -59,6 +60,9 @@ import { Component, OnInit,  Input,
 
     @ViewChild(UserComponent)
     private UserComponent: UserComponent;
+
+    @ViewChild(SearchBar)
+    private SearchBar: SearchBar;
 
     @ViewChild(ParkZoneComponent)
     private ZoneComponent: ParkZoneComponent;
@@ -208,7 +212,7 @@ import { Component, OnInit,  Input,
 
     reset(){
       for (var i = 0; i< this.options.length; i++){
-         (<HTMLInputElement>document.getElementById(this.options[i])).checked = false;
+        (<HTMLInputElement>document.getElementById(this.options[i])).checked = false;
       }
       document.getElementById('help').style.display="none";
       document.getElementById('direction').style.display="none";

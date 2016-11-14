@@ -58,7 +58,7 @@ export class MapComponent{
     addItemStream:Observable<any>;
     centerLat: number = 0
     centerLon: number = 0
-    map : any;
+    map:any;
     centerMarker: any;
     centerCoords : Coords = new Coords(0.0,0.0);
 
@@ -67,6 +67,7 @@ export class MapComponent{
     oldRadius:number
     saveLocation:any;
     counter:number=0;
+    that:any;
 
     parkMarker:any;
     facilitymarkers:any[] = [];
@@ -115,7 +116,9 @@ export class MapComponent{
     }
     ngOnInit(){
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(this.createMap.bind(this), this.noGeolocation);
+            google.maps.event.addDomListener(window, "load", ()=>{
+                navigator.geolocation.getCurrentPosition(this.createMap.bind(this), this.noGeolocation)
+            });
         } else {
             this.geolocationNotSupported();
         }
@@ -156,10 +159,67 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+        var _map = this.map;
         this.centerMarker = this.service.placeMarker(this.map, this.centerLat, this.centerLon,"default");
         this.createEventListeners();
-        //Geocoding
-        this.service.geocodeTesting("Kilo");
+        //Search bar
+        var input = /** @type {!HTMLInputElement} */(
+            document.getElementById('search_input'));
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+        autocomplete.bindTo('bounds', this.map);
+        var infowindow = new google.maps.InfoWindow();
+        var marker = new google.maps.Marker({
+            map: this.map,
+            anchorPoint: new google.maps.Point(0, -29)
+        });
+
+        autocomplete.addListener('place_changed',()=> {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                _map.fitBounds(place.geometry.viewport);
+            } else {
+                _map.setCenter(place.geometry.location);
+            }
+            marker.setIcon(/** @type {google.maps.Icon} */({
+                url: place.icon,
+                size: new google.maps.Size(71, 71),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(17, 34),
+                scaledSize: new google.maps.Size(35, 35)
+            }));
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                (place.address_components[0] && place.address_components[0].short_name || ''),
+                (place.address_components[1] && place.address_components[1].short_name || ''),
+                (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            var content = '<div class="cityBike"><div class="title"><h3>'+ place.name + '</h3><img id="markerSearch" src="img/directionIcon.png" alt="direction icon" class="functionIcon"><br><span>'+address+ '</span></div>' ;
+            infowindow.setContent(content);
+            infowindow.open(_map, marker);
+            var el = document.getElementById('markerSearch');
+            google.maps.event.addDomListener(el,'click',()=>{
+                this.showDirection(marker,false);
+            });
+        });
+
+
+        //End of Search bar
         //Signal that map has done loading
         this.doneLoading.emit(true);
         this.clickUpdated.emit(this.centerCoords);
@@ -520,6 +580,7 @@ export class MapComponent{
     }
 
     private showDirection(marker: any = null, multiDirection:boolean = true){
+        this.that = this;
         var current = new google.maps.LatLng(this.centerLat,this.centerLon);
         var parkCar:any ;
         var chosenMarker:any;

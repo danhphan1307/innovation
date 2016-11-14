@@ -187,7 +187,7 @@ export class MapService{
 
     public geocodeTesting(address: string){
         var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({'address': 'Kilonrinne'}, function(res: any,status: any){
+        geocoder.geocode({'address': address}, function(res: any,status: any){
             if (status == google.maps.GeocoderStatus.OK){
                 console.log(res)
             }

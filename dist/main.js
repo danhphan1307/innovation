@@ -222,7 +222,6 @@ window.addEventListener('load', function() {
     Notification.requestPermission(function(result) {
       if (result === 'granted') {
         navigator.serviceWorker.ready.then(function(registration) {
-          registration.showNotification('Notification with ServiceWorker');
           initialiseState();
         });
       }
