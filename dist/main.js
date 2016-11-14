@@ -59,7 +59,6 @@ function showCurlCommand(mergedEndpoint) {
   var curlCommand = 'curl --header "Authorization: key=' + API_KEY +
   '" --header Content-Type:"application/json" ' + GCM_ENDPOINT +
   ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"]}"';
-  alert(curlCommand);
   console.log(curlCommand);
 }
 
@@ -78,6 +77,7 @@ function unsubscribe() {
           // to allow the user to subscribe to push
           isPushEnabled = false;
           pushButton.disabled = false;
+          pushButton.checked = false;
           pushButton.textContent = 'Enable Push Messages';
           return;
         }
@@ -89,6 +89,8 @@ function unsubscribe() {
         // We have a subcription, so call unsubscribe on it
         pushSubscription.unsubscribe().then(function() {
           pushButton.disabled = false;
+
+          pushButton.checked = false;
           pushButton.textContent = 'Enable Push Messages';
           isPushEnabled = false;
         }).catch(function(e) {
@@ -118,6 +120,8 @@ function subscribe() {
     .then(function(subscription) {
         // The subscription was successful
         isPushEnabled = true;
+
+        pushButton.checked = true;
         pushButton.textContent = 'Disable Push Messages';
         pushButton.disabled = false;
 
@@ -133,6 +137,7 @@ function subscribe() {
           // to manually change the notification permission to
           // subscribe to push messages
           window.Demo.debug.log('Permission for Notifications was denied');
+          pushButton.checked = false;
           pushButton.disabled = true;
         } else {
           // A problem occurred with the subscription, this can
@@ -140,6 +145,7 @@ function subscribe() {
           // and / or gcm_user_visible_only
           window.Demo.debug.log('Unable to subscribe to push.', e);
           pushButton.disabled = false;
+          pushButton.checked = false;
           pushButton.textContent = 'Enable Push Messages';
         }
       });
@@ -190,6 +196,7 @@ function initialiseState() {
         // Set your UI to show they have subscribed for
         // push messages
         pushButton.textContent = 'Disable Push Messages';
+        pushButton.checked = true;
         isPushEnabled = true;
       })
     .catch(function(err) {
