@@ -161,7 +161,20 @@ export class MapComponent{
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
         var _map = this.map;
         this.centerMarker = this.service.placeMarker(this.map, this.centerLat, this.centerLon,"default");
+
         this.createEventListeners();
+        google.maps.event.addListener(this.centerMarker, 'click', ()=>{  
+            if(this.router.url == "/parking"){
+                var content = '<img id="payment" src="img/heart.png" alt="show payment icon" class="functionIcon" style="margin-right:10px;">';
+
+                infowindow.setContent(content);
+                infowindow.open(this.map, this.centerMarker);
+                var pay = document.getElementById('payment');
+                google.maps.event.addDomListener(pay,'click',()=>{
+                    this.service.openCheckout();
+                });
+            }
+        });
         //Search bar
         var input = /** @type {!HTMLInputElement} */(
             document.getElementById('search_input'));
@@ -190,6 +203,7 @@ export class MapComponent{
             } else {
                 _map.setCenter(place.geometry.location);
             }
+
             marker.setIcon(/** @type {google.maps.Icon} */({
                 url: place.icon,
                 size: new google.maps.Size(71, 71),
@@ -199,7 +213,8 @@ export class MapComponent{
             }));
             marker.setPosition(place.geometry.location);
             marker.setVisible(true);
-
+            this.clearDirection();
+            infowindow.close();
             var address = '';
             if (place.address_components) {
                 address = [
@@ -208,13 +223,25 @@ export class MapComponent{
                 (place.address_components[2] && place.address_components[2].short_name || '')
                 ].join(' ');
             }
-
             var content = '<div class="cityBike"><div class="title"><h3>'+ place.name + '</h3><img id="markerSearch" src="img/directionIcon.png" alt="direction icon" class="functionIcon"><br><span>'+address+ '</span></div>' ;
             infowindow.setContent(content);
             infowindow.open(_map, marker);
-            var el = document.getElementById('markerSearch');
-            google.maps.event.addDomListener(el,'click',()=>{
-                this.showDirection(marker,false);
+            google.maps.event.addDomListener(document.getElementById('close_search'),'click',()=>{  
+                infowindow.close();                      
+                marker.setVisible(false);
+                this.clearDirection();
+                (<HTMLInputElement>document.getElementById('search_input')).value = '';
+            });
+            google.maps.event.addListener(marker, 'click', ()=>{
+                infowindow.open(_map, marker);
+            });
+
+            google.maps.event.addDomListener(document.getElementById('markerSearch'),'click',()=>{                        
+                if(this.router.url == "/parkandride"){
+                    this.showDirection(marker);
+                } else {
+                    this.showDirection(marker,false);
+                }
             });
         });
 
@@ -531,8 +558,8 @@ export class MapComponent{
         var infowindow = new google.maps.InfoWindow();
         var geocoder  = new google.maps.Geocoder();
         let destination_marker = this.service.placeMarker(this.map, lat, lon,"default");
-
         this.markers.push(destination_marker);
+        /*
         if(this.counter>1){
             geocoder.geocode({
                 'latLng': destination_marker.getPosition()
@@ -551,6 +578,7 @@ export class MapComponent{
                 });
             });
         }
+        */
         return destination_marker;
     }
 
@@ -562,8 +590,8 @@ export class MapComponent{
             let clickCoord:Coords = new Coords(event.latLng.lat(),event.latLng.lng());
             this.oldLat = event.latLng.lat();
             this.oldLong = event.latLng.lng();
-            var tempMarker = this.placeMarker(event.latLng.lat(),event.latLng.lng());
             if(this.counter<2){
+                var tempMarker = this.placeMarker(event.latLng.lat(),event.latLng.lng());
                 this.clickUpdated.emit(clickCoord);
                 this.clearCircles();
                 if(this.circleRadius != 0){

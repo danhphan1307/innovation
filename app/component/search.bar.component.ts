@@ -7,9 +7,9 @@ import {MapService} from '../map/map.service'
   template: `
   <div [hidden]="!bShow" >
   <div class="input-group"  id="search_input_wrap" >
-  <input id="search_input" #search_input  type="text" class="form-control" placeholder="Enter a location" (keyup)="onKey($event)">
+  <input id="search_input" type="text" class="form-control" placeholder="Enter a location" >
   <div class="input-group-btn">
-  <button (click)=search(search_input.value) class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+  <button class="btn btn-default" id="close_search"><span class="glyphicon glyphicon-remove"></span></button>
   </div>
   </div>
   </div>
@@ -31,19 +31,8 @@ export class SearchBar {
     this.values  = '';
     this.service = _mapService;
   }
-
-
   slide(){
     this.bShow ? this.bShow=false : this.bShow=true;
 
-  }
-  onKey(event: KeyboardEvent) {
-    this.values = (<HTMLInputElement>event.target).value;
-  }
-
-  search(_search:string) {
-    if (_search) {
-      this.service.geocodeTesting(_search);
-    }
   }
 }
