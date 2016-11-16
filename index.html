@@ -23,24 +23,86 @@
 	<meta name="msapplication-TileColor" content="#2A6785">
 
 	<link rel="icon" href="../img/favicon.ico">
-	<!-- Include manifest file in the page -->
 	<link rel="manifest" href="manifest.json">
 
 	<script src="bootstrap-slider/bootstrap-slider.min.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyC9xg4iGS-l2PLDIdLp1u3T9vCIMXIdVoE&language=en&libraries=places"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?v=3.27&key=AIzaSyC9xg4iGS-l2PLDIdLp1u3T9vCIMXIdVoE&language=en&libraries=places"></script>
 	<script src="https://checkout.stripe.com/checkout.js"></script>
-	
 </head>
-
 <body>
 	<script type="text/javascript">
-		if(navigator.onLine) {
-			document.body.innerHTML='<my-app><img src="img/loading.gif" alt="loading" style ="position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);">	</my-app>';
+		var localStorage_isSupported = (function () {
+			try {
+				var itemBackup = localStorage.getItem("");
+				localStorage.removeItem("");
+				localStorage.setItem("", itemBackup);
+				if (itemBackup === null)
+					localStorage.removeItem("");
+				else
+					localStorage.setItem("", itemBackup);
+				return true;
+			}
+			catch (e) {
+				return false;
+			}
+		})();
+		var localStorage_hasData = (function () {
+			try {
+				if(localStorage_isSupported){
+					if(localStorage.getItem("carLocation") !== null){
+						return true;
+					}else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+			catch (e) {
+				return false;
+			}
+		})();
+		function initLocalStorage(){
+			var init_local_storage= {
+				"name": {
+					"fi": "Sorry, you did not save your car location",
+					"sv": "Sorry, you did not save your car location",
+					"en": "Sorry, you did not save your car location"
+				},"builtCapacity":{
+					"CAR": "No data",
+					"MOTORCYCLE": "No data",
+					"DISABLED": "No data",
+					"BICYCLE": "No data",
+				},
+				"location":{
+					"coordinates":[[[[0],[0]]]]
+				},
+				"free":true
+			};
+			localStorage.setItem('carLocation',JSON.stringify(init_local_storage));
+		}
+		if(navigator.onLine && localStorage_isSupported) {
+			document.body.innerHTML='<my-app><img src="img/loading.gif" alt="loading" style ="position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);"></my-app>';
+			if(localStorage_hasData){
+				initLocalStorage();
+			}
 		}else {
-			document.body.innerHTML='Offline';
+			var content='';
+			if(!navigator.onLine) {
+				content = '<div class="alert alert-danger" role="alert"  style="z-index: 10"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>You are offline<br>';
+				if(localStorage_hasData){
+					var object = JSON.parse(localStorage.getItem('carLocation'))
+					content+= 'Car location: '+ object.name.en + ' <br>Park time: ' + object.date ;
+				}else {
+					content+='Please check your internet connection';
+				}
+				content+='</div>';
+			}else if(!localStorage_isSupported){
+				content = '<div class="alert alert-danger" role="alert"  style="z-index: 10"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>Your current browser is not supported<br>Please update/change your browser</div>';
+			}
+			document.body.innerHTML=content;
 		}
 	</script>
-
 	<script src="/config.js"></script>
 	<script src="/main.js"></script>
 </body>

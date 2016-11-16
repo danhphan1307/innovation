@@ -1,5 +1,5 @@
 <blackoverlay (click)="closeAll()"></blackoverlay>
-<left-nav  (radiusUpdated)="MapComponent.updateRadius($event)" (radiusUpdated)="FacilityComponent.updateRadius($event)"></left-nav>
+<left-nav  (radiusUpdated)="MapComponent.updateRadius($event)" (radiusUpdated)="FacilityComponent.updateRadius($event, MapComponent)"></left-nav>
 <div id="controlNav">
 	<span id="cog" (click)="beginLeftNav()"  class="glyphicon glyphicon-cog" ></span><img src="../img/demo-logo-2.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="MapComponent.center()"  class="glyphicon glyphicon-map-marker"></span>
 	<div *ngIf="!onlineOffline" class="alert alert-danger" role="alert"  style="z-index: 10">
@@ -19,7 +19,7 @@
 		<br>
 	</div>
 </div>
-<map-gg (clickUpdated) = "Route($event)" [circleRadius] = "leftNav.ReturnSliderValue()" (saveUpdated) = "UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
+<map-gg (saveUpdated) = "UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
 <my-bike ></my-bike>
 <park-zone ></park-zone>
 <facility-component ></facility-component>

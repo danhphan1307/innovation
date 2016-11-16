@@ -104,13 +104,6 @@ import { Component, OnInit,  Input,
       this.blackOverlay.setState('open');
     }
 
-    public Route(event:any):void{
-      if(this.router.url == "/parkandride"){
-        this.FacilityComponent.receivedClick(this.MapComponent, event, this.leftNav.ReturnSliderValue());
-        this.MapComponent.markers = this.FacilityComponent.markers;
-      }
-    }
-
     public loadData(event:boolean){
       //call only if map is completely loaded. receive boolean true
       if (event==true){
@@ -152,7 +145,6 @@ import { Component, OnInit,  Input,
     }
     //Display markers for park and ride
     displayParking(){
-      this.MapComponent.counter=0;
       this.MapComponent.clearDirection();
       var mev={latLng: new google.maps.LatLng(this.MapComponent.centerLat, this.MapComponent.centerLon)};
       google.maps.event.trigger(this.MapComponent.map, 'click', mev);

@@ -70,14 +70,10 @@ export class UserComponent extends AbstractComponent implements OnInit {
   ngOnInit(){
     this.date = this.convertDateString(new Date());
     this.state='close';
-    if(localStorage_isSupported){
-      if (localStorage_hasData) {
-        this.temp_object = JSON.parse(localStorage.getItem('carLocation'));
-        this.dateString = this.convertDateString(this.temp_object.date);
-        this.diff = this.diffTwoDay(new Date(), new Date(this.temp_object.date));
-      }
-    } else {
-      this.temp_object.name.en = "Sorry, your browser does not support this function.";
+    if (localStorage_hasData) {
+      this.temp_object = JSON.parse(localStorage.getItem('carLocation'));
+      this.dateString = this.convertDateString(this.temp_object.date);
+      this.diff = this.diffTwoDay(new Date(), new Date(this.temp_object.date));
     }
     setInterval(() => {
       if(localStorage_hasData){
@@ -85,7 +81,6 @@ export class UserComponent extends AbstractComponent implements OnInit {
         this.diff = this.diffTwoDay(new Date(), new Date (this.temp_object.date));
         localStorage.setItem('duration',(this.diff));
       }
-
     }, 1000);
   }
 

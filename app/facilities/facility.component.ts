@@ -26,15 +26,10 @@ export class FacilityComponent implements OnInit {
   triggered = new EventEmitter<ActiveComponent>();
 
   facilities : Facility[];
-  center: Coords = new Coords(0.0,0.0);
-  mapClicked: Coords = new Coords(0.0,0.0);
   markers : Coords[] = [];
   title = 'Park and Ride';
 
-  map:any;
-  coords:any;
-  radius:any;
-  oldRadius:any;
+  radius:number;
 
   constructor(private facilityService: FacilityService){
 
@@ -45,30 +40,10 @@ export class FacilityComponent implements OnInit {
 
   }
 
-  receiveCenterUpdated(event: any){
-    this.center.lat = event.lat;
-    this.center.lon = event.lon;
-  }
-
-  receivedClick(mapComponent:MapComponent, event: Coords, radius:number):void{
-    this.map = mapComponent;
-    this.coords = event;
-    this.radius =radius;
-    this.oldRadius = this.radius;
-    this.loadFacilitiesNearby(mapComponent, event, radius)
-  }
-
-  updateRadius(event:any){
+  updateRadius(event:number, _map:any){
     this.radius = event;
-    if (this.coords == null ) {
-    }else {
-      if(this.oldRadius!=event){
-        this.map.clearMarkers();
-        this.radius = event;
-        this.oldRadius = this.radius;
-        this.loadFacilitiesNearby(this.map, this.coords, this.radius);
-      }
-    }
+    _map.clearMarkers();
+    this.loadFacilitiesNearby(_map, new Coords(_map.centerLat, _map.centerLon), this.radius);
   }
 
   private loadFacilitiesNearby(mapComponent: MapComponent, coord: Coords, radius:number): void{

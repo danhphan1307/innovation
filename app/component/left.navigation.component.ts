@@ -47,8 +47,8 @@ declare var Slider: any;
   </td>
   </tr>
 
-  <tr (click) = "ReturnSliderValue()">
-  <td class="special" colspan="3">
+  <tr >
+  <td class="special" colspan="3"  (touchend) = "ReturnSliderValue()" >
   <input id="ex1" #ex1Slider data-slider-id='ex1Slider' type="text" value="1" data-slider-min="0" data-slider-max="5" data-slider-step="0.1" data-slider-value="1"/>
   </td>
   </tr>
