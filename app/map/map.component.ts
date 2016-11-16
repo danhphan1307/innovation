@@ -105,11 +105,11 @@ export class MapComponent{
     @Output()
     doneLoading: any = new EventEmitter<boolean>();
 
-    //Polygons array
-    polygons: any[] =  [[],[],[],[],[]];
-
     @Output()
     saveUpdated: any= new EventEmitter();
+
+    //Polygons array
+    polygons: any[] =  [[],[],[],[],[]];
 
     klmSrc : String = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/vyohykerajat_ETRS.kml';
     kmlLayer : any = new google.maps.KmlLayer(this.klmSrc, {
@@ -221,7 +221,7 @@ export class MapComponent{
                 (place.address_components[2] && place.address_components[2].short_name || '')
                 ].join(' ');
             }
-            var content = '<div class="cityBike"><div class="title"><h3>'+ place.name + '</h3><img id="markerSearch" src="img/directionIcon.png" alt="direction icon" class="functionIcon"><br><span>'+address+ '</span></div>' ;
+            var content = '<div class="searchInfo"><div class="title"><h3>'+ place.name + '</h3><img id="markerSearch" src="img/directionIcon.png" alt="direction icon" class="functionIcon"><br><span>'+address+ '</span></div>' ;
             infowindow.setContent(content);
             infowindow.open(_map, marker);
             google.maps.event.addDomListener(document.getElementById('close_search'),'click',()=>{  
@@ -397,7 +397,9 @@ export class MapComponent{
         if(this.parkMarker!== undefined){
             this.parkMarker.setMap(null);
         }
+
         if(localStorage_hasData){
+
             var object = JSON.parse(localStorage.getItem('carLocation'));
             var markerPark = this.service.placeMarker(this.map,object.location.coordinates[0][0][1], object.location.coordinates[0][0][0], "park");
             this.parkMarker = markerPark;
@@ -411,10 +413,8 @@ export class MapComponent{
                     content+='Motorbike Capacity:'+ (object.builtCapacity.MOTORCYCLE|| 0);
                 }
                 content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button><br><button id="unpark">Unpark</button></div></div>' ;
-                if(object.name.en !="Sorry, you did not save your car location"){
-                    this.infowindow.setContent(content);
-                }
                 this.infowindow.open(this.map, markerPark);
+
                 google.maps.event.addDomListener(document.getElementById('markerFacility'),'click',()=>{
                     this.showDirection(markerPark,false);
                 });
@@ -440,6 +440,7 @@ export class MapComponent{
     }
 
     placeMarkerFacility(f:any, _free:boolean = true):void{
+        var infowindow = new google.maps.InfoWindow();
         var object:any;
         var cont:boolean = true;
         var markerFacility:any;
@@ -483,12 +484,10 @@ export class MapComponent{
                         if( JSON.parse(localStorage.getItem('carLocation')).name.en==f[i].name.en){
                             content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button><<br><button id="unpark">Unpark</button></div></div>' ;
                             google.maps.event.addDomListener(document.getElementById('unpark'),'click',()=>{
-                                if(localStorage_isSupported){
-                                    document.getElementById("saveButton").className = "";
-                                    document.getElementById("saveButton").innerHTML ="Park here";
-                                    this.removeLocalStorage();
-                                    this.placeParkPlace();
-                                }
+                                document.getElementById("saveButton").className = "";
+                                document.getElementById("saveButton").innerHTML ="Park here";
+                                this.removeLocalStorage();
+                                this.placeParkPlace();
                             });
                         }else{
                             content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
@@ -496,26 +495,26 @@ export class MapComponent{
                     } else {
                         content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
                     }
-                    this.infowindow.setContent(content);
-                    this.infowindow.open(this.map, markerFacility);
+                    infowindow.setContent(content);
+                    infowindow.open(this.map, markerFacility);
                     google.maps.event.addDomListener(document.getElementById('markerFacility'),'click',()=>{
                         this.showDirection(markerFacility,false);
                     });
                     google.maps.event.addDomListener(document.getElementById('saveButton'),'click',()=>{
-                        if(localStorage_hasData){
-                            var object_temp = JSON.parse(localStorage.getItem('carLocation'));
-                            if( object_temp.free!== undefined && !object_temp.free){
-                                alert("Sorry you have to pay for your previous parking time first");
-                            }else {
-                                if(localStorage_isSupported){
-                                    this.park("cityBike", f[i],"saveButton","unpark",this.infowindow);
+                        if(localStorage_isSupported){
+                            if(localStorage_hasData){
+                                var object_temp = JSON.parse(localStorage.getItem('carLocation'));
+                                if( object_temp.free!== undefined && !object_temp.free){
+                                    alert("Sorry you have to pay for your previous parking time first");
+                                }else {
+                                    this.park("cityBike", f[i],"saveButton","unpark",infowindow);
                                 }
-                            }
-                        }else {
-                            if(localStorage_isSupported){
-                                this.park("cityBike", f[i],"saveButton","unpark",this.infowindow);
+                            }else {
+                                this.park("cityBike", f[i],"saveButton","unpark",infowindow);
+
                             }
                         }
+                        
                     });
 
                 });
@@ -535,12 +534,14 @@ export class MapComponent{
             node.appendChild(textnode);
             document.getElementsByClassName(_container)[0].appendChild(node);
         }
-        this.placeParkPlace(_free);
         google.maps.event.addDomListener(document.getElementById(_elementIDForUnpark),'click',()=>{
+
             if(localStorage_isSupported){
                 document.getElementById(_elementIDForPark).className = "";
                 document.getElementById(_elementIDForPark).innerHTML ="Park here";
+
                 this.removeLocalStorage();
+
                 this.placeParkPlace(_free);
                 _infoWindow.close();
             }

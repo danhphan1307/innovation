@@ -36,7 +36,7 @@ var localStorage_hasData = (function () {
 })();
 
 @Component({
-  selector: 'router-outlet',
+  selector: 'user-panel',
   animations: [
 
   trigger("animationBottomNav", [
@@ -92,13 +92,12 @@ export class UserComponent extends AbstractComponent implements OnInit {
   updateSave(event:any){
     if(localStorage_isSupported){
       if(event==null){
-        this.temp_object.name.en = "Sorry, you did not save your car location";
+        //this.temp_object.name.en = "Why copy me..";
         this.dateString = "No data";
         this.diff ="No data";
 
         localStorage_hasData = false;
       }else{
-
         localStorage_hasData = true;
         this.temp_object = event;
         this.dateString = this.convertDateString(this.temp_object.date);

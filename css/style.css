@@ -235,11 +235,15 @@ h2{
     overflow:visible!important;
 }
 
-.cityBike {
+.cityBike, .searchInfo {
     width: 110%;
 }
-.cityBike h3{
+.cityBike h3, .parkHere h3, .searchInfo h3{
     display: inline-block;
+    text-transform: uppercase;
+    margin:0;
+    color:#484B64;
+    font-size: 16px;
 }
 .functionIcon{
     z-index: 10;
@@ -247,12 +251,12 @@ h2{
     margin-left:10px;
 }
 
-.cityBike .separate{
+.cityBike .separate, .searchInfo .seperate{
     margin-top: 5px;
     margin-bottom: 15px;
     border-top: 3px solid #eee;
 }
-.cityBike .info{
+.cityBike .info, .searchInfo .info{
     margin-top:5px;
     color:#484B64;
     font-size:15px;
@@ -268,7 +272,7 @@ h2{
 .cityBike .register a{
     color:white;
 }
-.cityBike .moreInfo{
+.cityBike .moreInfo, .searchInfo .moreInfo{
     display:block;
     width: 100%;
     text-align: center;
@@ -290,12 +294,7 @@ h2{
     margin-left:1px;
     margin-right: 1px;
 }
-.cityBike h3, .parkHere h3{
-    text-transform: uppercase;
-    margin:0;
-    color:#484B64;
-    font-size: 16px;
-}
+
 .cityBike span, .parkHere span{
     font-size: 14px;
     color:#484B64;
@@ -424,11 +423,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
- width: 100%;
- background: #FF9AD7;
- display:flex;justify-content:center;align-items:center;
- color:white;
- height:7vh;   
+   width: 100%;
+   background: #FF9AD7;
+   display:flex;justify-content:center;align-items:center;
+   color:white;
+   height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -541,18 +540,18 @@ h2{
     animation: all 0.5s;
 }
 #arrowUp{
-   background-color: white;
-   top:9vh;
-   z-index:1;
-   position: absolute;
-   width: auto;
-   max-width: 10vw;
-   text-align: center;
-   left: 0; 
-   right: 0; 
-   margin-left: auto; 
-   margin-right: auto;  
-   animation: all 0.5s;
+ background-color: white;
+ top:9vh;
+ z-index:1;
+ position: absolute;
+ width: auto;
+ max-width: 10vw;
+ text-align: center;
+ left: 0; 
+ right: 0; 
+ margin-left: auto; 
+ margin-right: auto;  
+ animation: all 0.5s;
 }
 .modal-dialog {
     margin-left: 10vw;

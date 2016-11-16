@@ -19,10 +19,11 @@
 		<br>
 	</div>
 </div>
-<map-gg (clickUpdated) = "Route($event)" [circleRadius] = "leftNav.ReturnSliderValue()" (saveUpdated)="UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
+<map-gg (clickUpdated) = "Route($event)" [circleRadius] = "leftNav.ReturnSliderValue()" (saveUpdated) = "UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
 <my-bike ></my-bike>
 <park-zone ></park-zone>
 <facility-component ></facility-component>
+<user-panel></user-panel>
 <router-outlet></router-outlet>
 <bottom-nav (click)="bottomtNav()" ></bottom-nav>
 
