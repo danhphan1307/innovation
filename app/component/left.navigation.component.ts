@@ -99,7 +99,6 @@ export class LeftNavigation  extends AbstractComponent{
       this.radiusUpdated.emit(0);
       return 0;
     }
-
   }
 
   SetliderState(state:boolean):void{

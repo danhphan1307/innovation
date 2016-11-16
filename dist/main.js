@@ -45,10 +45,38 @@ function sendSubscriptionToServer(subscription) {
 // NOTE: This code is only suitable for GCM endpoints,
 // When another browser has a working version, alter
 // this to send a PUSH request directly to the endpoint
+function postXHR(_url, _para){
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', _url);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      //console.log(xhr.responseText);
+    }
+  };
+  xhr.send(JSON.stringify({
+    token: _para
+  }));
+}
+
+function getXHR(_url, _object, _function){
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', _url);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      _object = JSON.parse(xhr.responseText);
+      _function(_object);
+    }
+  };
+  xhr.send();
+}
+
 function showCurlCommand(mergedEndpoint) {
+  var object;
+  var bDuplicate = false;
   // The curl command to trigger a push message straight from GCM
   if (mergedEndpoint.indexOf(GCM_ENDPOINT) !== 0) {
-    window.Demo.debug.log('This browser isn\'t currently ' +
+    console.log('This browser isn\'t currently ' +
       'supported for this demo');
     return;
   }
@@ -59,7 +87,17 @@ function showCurlCommand(mergedEndpoint) {
   var curlCommand = 'curl --header "Authorization: key=' + API_KEY +
   '" --header Content-Type:"application/json" ' + GCM_ENDPOINT +
   ' -d "{\\"registration_ids\\":[\\"' + subscriptionId + '\\"]}"';
-  console.log(curlCommand);
+
+  getXHR("https://fabulous-backend-hsl-parking.herokuapp.com/api/noti",object, function(abc){
+    abc.forEach((item, index) => {
+      if(item.code == curlCommand){
+        bDuplicate = true;
+      }
+    });
+    if(!bDuplicate){
+      postXHR("https://fabulous-backend-hsl-parking.herokuapp.com/api/noti",curlCommand);
+    }
+  });
 }
 
 function unsubscribe() {
@@ -99,11 +137,11 @@ function unsubscribe() {
           // the subscription id from your data store and
           // inform the user that you disabled push
 
-          window.Demo.debug.log('Unsubscription error: ', e);
+          console.log('Unsubscription error: ', e);
           pushButton.disabled = false;
         });
       }).catch(function(e) {
-        window.Demo.debug.log('Error thrown while unsubscribing from ' +
+        console.log('Error thrown while unsubscribing from ' +
           'push messaging.', e);
       });
     });
@@ -136,14 +174,14 @@ function subscribe() {
           // means we failed to subscribe and the user will need
           // to manually change the notification permission to
           // subscribe to push messages
-          window.Demo.debug.log('Permission for Notifications was denied');
+          console.log('Permission for Notifications was denied');
           pushButton.checked = false;
           pushButton.disabled = true;
         } else {
           // A problem occurred with the subscription, this can
           // often be down to an issue or lack of the gcm_sender_id
           // and / or gcm_user_visible_only
-          window.Demo.debug.log('Unable to subscribe to push.', e);
+          console.log('Unable to subscribe to push.', e);
           pushButton.disabled = false;
           pushButton.checked = false;
           pushButton.textContent = 'Enable Push Messages';
@@ -156,7 +194,7 @@ function subscribe() {
 function initialiseState() {
   // Are Notifications supported in the service worker?
   if (!('showNotification' in ServiceWorkerRegistration.prototype)) {
-    window.Demo.debug.log('Notifications aren\'t supported.');
+    console.log('Notifications aren\'t supported.');
     return;
   }
 
@@ -164,13 +202,13 @@ function initialiseState() {
   // If its denied, it's a permanent block until the
   // user changes the permission
   if (Notification.permission === 'denied') {
-    window.Demo.debug.log('The user has blocked notifications.');
+    console.log('The user has blocked notifications.');
     return;
   }
 
   // Check if push messaging is supported
   if (!('PushManager' in window)) {
-    window.Demo.debug.log('Push messaging isn\'t supported.');
+    console.log('Push messaging isn\'t supported.');
     return;
   }
 
@@ -200,7 +238,7 @@ function initialiseState() {
         isPushEnabled = true;
       })
     .catch(function(err) {
-      window.Demo.debug.log('Error during getSubscription()', err);
+      console.log('Error during getSubscription()', err);
     });
   });
 }
@@ -227,6 +265,6 @@ window.addEventListener('load', function() {
       }
     });
   } else {
-    window.Demo.debug.log('Service workers aren\'t supported in this browser.');
+    console.log('Service workers aren\'t supported in this browser.');
   }
 });

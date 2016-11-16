@@ -4,7 +4,7 @@ import { Component, OnInit,  Input,
   style,
   transition,
   animate,
-  ViewChild, ElementRef, Renderer} from '@angular/core';
+  ViewChild, ElementRef, Renderer, ViewContainerRef} from '@angular/core';
 
   import {BikeService } from './bikes/bike.service';
   import {BikeStation} from './bikes/bike';
@@ -36,6 +36,7 @@ import { Component, OnInit,  Input,
 
   export class AppComponent implements OnInit {
     options = ['free', 'low', 'medium' ,'high', 'garage'];
+    private viewContainerRef: ViewContainerRef;
     public onlineOffline: boolean = navigator.onLine;
     router:Router;
     bMapDone:boolean = false;
@@ -85,8 +86,9 @@ import { Component, OnInit,  Input,
       })
     }
 
-    constructor(private _router: Router) {
+    constructor(private _router: Router, viewContainerRef:ViewContainerRef ) {
       this.router = _router;
+      this.viewContainerRef = viewContainerRef;
       window.addEventListener('online', () => {this.onlineOffline = true});
       window.addEventListener('offline', () => {this.onlineOffline = false});
     }

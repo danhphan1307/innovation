@@ -7,7 +7,7 @@ import {MapService} from '../map/map.service'
   template: `
   <div [hidden]="!bShow" >
   <div class="input-group"  id="search_input_wrap" >
-  <input id="search_input" type="text" class="form-control" placeholder="Enter a location" >
+  <input id="search_input" type="text" class="form-control" placeholder="Enter destination" >
   <div class="input-group-btn">
   <button class="btn btn-default" id="close_search"><span class="glyphicon glyphicon-remove"></span></button>
   </div>
@@ -27,7 +27,7 @@ export class SearchBar {
   values:string;
   service: MapService;
   constructor(private _mapService: MapService) {
-    this.bShow = false;
+    this.bShow = true;
     this.values  = '';
     this.service = _mapService;
   }

@@ -234,6 +234,7 @@ h2{
 .gm-style-iw div{
     overflow:visible!important;
 }
+
 .cityBike {
     width: 110%;
 }
@@ -289,13 +290,13 @@ h2{
     margin-left:1px;
     margin-right: 1px;
 }
-.cityBike h3{
+.cityBike h3, .parkHere h3{
     text-transform: uppercase;
     margin:0;
     color:#484B64;
     font-size: 16px;
 }
-.cityBike span{
+.cityBike span, .parkHere span{
     font-size: 14px;
     color:#484B64;
     font-weight:normal;
@@ -423,11 +424,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
-   width: 100%;
-   background: #FF9AD7;
-   display:flex;justify-content:center;align-items:center;
-   color:white;
-   height:7vh;   
+ width: 100%;
+ background: #FF9AD7;
+ display:flex;justify-content:center;align-items:center;
+ color:white;
+ height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -540,19 +541,44 @@ h2{
     animation: all 0.5s;
 }
 #arrowUp{
- background-color: white;
- top:9vh;
- z-index:1;
- position: absolute;
- width: auto;
- max-width: 10vw;
- text-align: center;
- left: 0; 
- right: 0; 
- margin-left: auto; 
- margin-right: auto;  
- animation: all 0.5s;
+   background-color: white;
+   top:9vh;
+   z-index:1;
+   position: absolute;
+   width: auto;
+   max-width: 10vw;
+   text-align: center;
+   left: 0; 
+   right: 0; 
+   margin-left: auto; 
+   margin-right: auto;  
+   animation: all 0.5s;
 }
+.modal-dialog {
+    margin-left: 10vw;
+    width: 80vw!important;
+}
+.vertical-alignment-helper {
+    display:table;
+    height: 100%;
+    width: 100%;
+    pointer-events:none; /* This makes sure that we can still click outside of the modal to close it */
+}
+.vertical-align-center {
+    /* To center vertically */
+    display: table-cell;
+    vertical-align: middle;
+    pointer-events:none;
+}
+.modal-content {
+    /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+    width:inherit;
+    height:inherit;
+    /* To center horizontally */
+    margin: 0 auto;
+    pointer-events: all;
+}
+
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {

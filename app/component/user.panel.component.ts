@@ -49,14 +49,14 @@ var localStorage_hasData = (function () {
 
   <img src="img/person.png" alt="user icon" id="person">
   <div class="locationPanel"><span class="glyphicon glyphicon-map-marker" style="margin-right:5px;"></span> Car location</div>
-  <div class="content">{{this.object.name.en}}<br>
+  <div class="content">{{this.temp_object.name.en}}<br>
   Park time: {{dateString}}<br>
   Time pass: {{diff}}</div>`,
   providers: []
 })
 
 export class UserComponent extends AbstractComponent implements OnInit {
-  object: any ={
+  temp_object: any ={
     "name": {
       "fi": "Sorry, you did not save your car location",
       "sv": "Sorry, you did not save your car location",
@@ -72,17 +72,18 @@ export class UserComponent extends AbstractComponent implements OnInit {
     this.state='close';
     if(localStorage_isSupported){
       if (localStorage_hasData) {
-        this.object = JSON.parse(localStorage.getItem('carLocation'));
-        this.dateString = this.convertDateString(this.object.date);
-        this.diff = this.diffTwoDay(new Date(), new Date(this.object.date));
+        this.temp_object = JSON.parse(localStorage.getItem('carLocation'));
+        this.dateString = this.convertDateString(this.temp_object.date);
+        this.diff = this.diffTwoDay(new Date(), new Date(this.temp_object.date));
       }
     } else {
-      this.object.name.en = "Sorry, your browser does not support this function.";
+      this.temp_object.name.en = "Sorry, your browser does not support this function.";
     }
     setInterval(() => {
       if(localStorage_hasData){
         this.date =  this.convertDateString(new Date());
-        this.diff = this.diffTwoDay(new Date(), new Date (this.object.date));
+        this.diff = this.diffTwoDay(new Date(), new Date (this.temp_object.date));
+        localStorage.setItem('duration',(this.diff));
       }
 
     }, 1000);
@@ -91,7 +92,7 @@ export class UserComponent extends AbstractComponent implements OnInit {
   updateSave(event:any){
     if(localStorage_isSupported){
       if(event==null){
-        this.object.name.en = "Sorry, you did not save your car location";
+        this.temp_object.name.en = "Sorry, you did not save your car location";
         this.dateString = "No data";
         this.diff ="No data";
 
@@ -99,8 +100,8 @@ export class UserComponent extends AbstractComponent implements OnInit {
       }else{
 
         localStorage_hasData = true;
-        this.object = event;
-        this.dateString = this.convertDateString(this.object.date);
+        this.temp_object = event;
+        this.dateString = this.convertDateString(this.temp_object.date);
       }
     }
   }

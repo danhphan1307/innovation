@@ -5,6 +5,7 @@ import { LeftNavigation } from './component/left.navigation.component';
 import { BottomNavigation } from './component/bottom.navigation.component';
 import { BlackOverlay } from './component/blackoverlay.component';
 import { UserComponent }  from './component/user.panel.component';
+import { ModalComponent }  from './component/modal.component';
 import {Help} from './component/help.component';
 import {SearchBar} from './component/search.bar.component';
 import { AppComponent }  from './app.component';
@@ -38,7 +39,7 @@ import { routing, appRoutingProviders }  from './app.routing';
     FacilityComponent,
     LeftNavigation,
     BottomNavigation,
-    BlackOverlay,routing, Help, SearchBar],
+    BlackOverlay,routing, Help, SearchBar,ModalComponent],
     providers:[ FacilityService,
     MapService,BikeService],
     bootstrap: [AppComponent]

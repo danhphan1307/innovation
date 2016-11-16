@@ -6,6 +6,8 @@ import {Router} from '@angular/router';
 import {MapService} from './map.service'
 import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
 import {GoogleService} from '../google/google.service'
+import {ModalComponent} from '../component/modal.component'
+
 declare var google: any;
 
 var localStorage_isSupported = (function () {
@@ -44,6 +46,7 @@ var localStorage_hasData = (function () {
 @Component({
     selector: 'map-gg',
     template: `
+    <modal-bootstrap (resultUpdated)="ParkOrNot($event)"></modal-bootstrap>
     <div id="mapCanvas" ></div>
 
     `,
@@ -52,6 +55,9 @@ var localStorage_hasData = (function () {
 
 export class MapComponent{
     //Service
+    @ViewChild(ModalComponent)
+    private modalComponent:ModalComponent;
+
     service: MapService;
     googleService: GoogleService;
     router:Router;
@@ -78,6 +84,8 @@ export class MapComponent{
     });
     infowindow = new google.maps.InfoWindow();
     infowindowBike = new google.maps.InfoWindow();
+
+    parkingObject:any;
 
     @Input()
     circleRadius: number;
@@ -163,18 +171,7 @@ export class MapComponent{
         this.centerMarker = this.service.placeMarker(this.map, this.centerLat, this.centerLon,"default");
 
         this.createEventListeners();
-        google.maps.event.addListener(this.centerMarker, 'click', ()=>{  
-            if(this.router.url == "/parking"){
-                var content = '<img id="payment" src="img/heart.png" alt="show payment icon" class="functionIcon" style="margin-right:10px;">';
 
-                infowindow.setContent(content);
-                infowindow.open(this.map, this.centerMarker);
-                var pay = document.getElementById('payment');
-                google.maps.event.addDomListener(pay,'click',()=>{
-                    this.service.openCheckout();
-                });
-            }
-        });
         //Search bar
         var input = /** @type {!HTMLInputElement} */(
             document.getElementById('search_input'));
@@ -186,6 +183,7 @@ export class MapComponent{
             map: this.map,
             anchorPoint: new google.maps.Point(0, -29)
         });
+        this.addListenerForMainMarker(this.centerMarker,infowindow);
 
         autocomplete.addListener('place_changed',()=> {
             infowindow.close();
@@ -259,6 +257,50 @@ export class MapComponent{
         }
     }
 
+    addListenerForMainMarker(_marker:any, _infowindow:any){
+        google.maps.event.addListener(_marker, 'click', ()=>{  
+            if(this.router.url == "/parking"){
+                var geocoder  = new google.maps.Geocoder();
+                geocoder.geocode({
+                    'latLng': _marker.getPosition()
+                }, (result:any, status:any) =>{
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        var content = '<div class="parkHere"><h3>Current Location</h3><br><span>'+result[0].formatted_address+'</span>';
+                        content+='<hr class="separate"><button id="saveButton" type="button">Park here</button></div>' ;
+
+                        _infowindow.setContent(content);
+                        _infowindow.open(this.map, _marker);
+                        google.maps.event.addDomListener(document.getElementById('saveButton'),'click',()=>{
+                            this.modalComponent.showLgModal(4);
+                            this.parkingObject = {
+                                "name":result[0].formatted_address,
+                                "marker":_marker,
+                                "saveButton":"saveButton",
+                                "infowindow":_infowindow,
+                                "unpark":"unpark"
+                            };
+                        });
+
+                    } else {
+                        console.log('Geocoder failed due to: ' + status);
+                    }
+                });
+
+            }
+        });
+    }
+
+    ParkOrNot(event:boolean){
+        if(event){
+            if(localStorage_isSupported){
+                this.park("parkHere",this.markerToJSON(this.parkingObject.marker,this.parkingObject.name),this.parkingObject.saveButton,this.parkingObject.unpark,this.parkingObject.infowindow,false);
+                this.parkingObject.infowindow.close();
+            }
+        }else {
+            this.parkingObject='';
+        }
+    }
+
 
     center(lat:number = this.centerLat,long:number = this.centerLon):void{
         this.map.panTo(new google.maps.LatLng(lat,long));
@@ -306,7 +348,28 @@ export class MapComponent{
         this.kmlLayer.setMap(this.map);
     }
 
+    markerToJSON(_marker:any, _name:string):any{
+        var temp:any = {
+            "name": {
+                "fi": _name,
+                "sv": _name,
+                "en": _name,
+            },"builtCapacity":{
+                "CAR": "No data",
+                "MOTORCYCLE": "No data",
+                "DISABLED": "No data",
+                "BICYCLE": "No data",
+            },
+            "location":{
+                "coordinates":[[[[_marker.getPosition().lng()],[_marker.getPosition().lat()]]]]
+            },
+            "free":false
+        };
+        return temp;
+    }
+
     editLocalStorage(data:any){
+
         if(localStorage_hasData){
             var object = JSON.parse(localStorage.getItem('carLocation'));
             if(data.location.coordinates[0][0][1] != object.location.coordinates[0][0][1] || data.location.coordinates[0][0][0] != object.location.coordinates[0][0][0]){
@@ -323,7 +386,6 @@ export class MapComponent{
             this.saveLocation = data;
             this.saveUpdated.emit(this.saveLocation);
         }
-
     }
     removeLocalStorage(){
         localStorage.removeItem('carLocation');
@@ -331,7 +393,7 @@ export class MapComponent{
         localStorage_hasData = false;
     }
 
-    placeParkPlace(){
+    placeParkPlace(_free:boolean = true){
         if(this.parkMarker!== undefined){
             this.parkMarker.setMap(null);
         }
@@ -340,7 +402,7 @@ export class MapComponent{
             var markerPark = this.service.placeMarker(this.map,object.location.coordinates[0][0][1], object.location.coordinates[0][0][0], "park");
             this.parkMarker = markerPark;
             google.maps.event.addListener(markerPark, 'click', () => {
-                var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+object.name.en+ '</span><br>';
+                var content = '<div class="cityBike"><div class="title"><h3>Your Park Place</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+object.name.en+ '</span><br>';
                 if(object.name.en.indexOf('bike') !== -1){
                     content+='Bicycle Capacity :'+ (object.builtCapacity.BICYCLE||0);
                 } else {
@@ -349,7 +411,9 @@ export class MapComponent{
                     content+='Motorbike Capacity:'+ (object.builtCapacity.MOTORCYCLE|| 0);
                 }
                 content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button><br><button id="unpark">Unpark</button></div></div>' ;
-                this.infowindow.setContent(content);
+                if(object.name.en !="Sorry, you did not save your car location"){
+                    this.infowindow.setContent(content);
+                }
                 this.infowindow.open(this.map, markerPark);
                 google.maps.event.addDomListener(document.getElementById('markerFacility'),'click',()=>{
                     this.showDirection(markerPark,false);
@@ -360,7 +424,14 @@ export class MapComponent{
                         document.getElementById("saveButton").innerHTML ="Park here";
                         localStorage_hasData = false;
                         this.removeLocalStorage();
-                        this.placeParkPlace();
+                        this.placeParkPlace(_free);
+
+                        if(!_free || (object.free!== undefined &&!object.free)){
+                            var a = localStorage.getItem('duration').split(':');
+                            var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
+                            var amount = 400 *(seconds/3600);
+                            this.service.openCheckout((amount>50)? amount : 50);
+                        }
                     }
                 });
             });
@@ -368,7 +439,7 @@ export class MapComponent{
         } 
     }
 
-    placeMarkerFacility(f:any):void{
+    placeMarkerFacility(f:any, _free:boolean = true):void{
         var object:any;
         var cont:boolean = true;
         var markerFacility:any;
@@ -431,34 +502,49 @@ export class MapComponent{
                         this.showDirection(markerFacility,false);
                     });
                     google.maps.event.addDomListener(document.getElementById('saveButton'),'click',()=>{
-                        if(localStorage_isSupported){
-                            this.editLocalStorage(f[i]);
-                            localStorage_hasData = true;
-                            document.getElementById("saveButton").className="active";
-                            document.getElementById("saveButton").innerHTML="You parked here";
-                            if(document.getElementById("unpark")==null){
-                                var node = document.createElement("button");
-                                node.setAttribute("id", "unpark");
-                                var textnode = document.createTextNode("Unpark");
-                                node.appendChild(textnode);
-                                document.getElementsByClassName("cityBike")[0].appendChild(node);
-                            }
-                            this.placeParkPlace();
-                            google.maps.event.addDomListener(document.getElementById('unpark'),'click',()=>{
+                        if(localStorage_hasData){
+                            var object_temp = JSON.parse(localStorage.getItem('carLocation'));
+                            if( object_temp.free!== undefined && !object_temp.free){
+                                alert("Sorry you have to pay for your previous parking time first");
+                            }else {
                                 if(localStorage_isSupported){
-                                    document.getElementById("saveButton").className = "";
-                                    document.getElementById("saveButton").innerHTML ="Park here";
-                                    this.removeLocalStorage();
-                                    this.placeParkPlace();
-                                    this.infowindow.close();
+                                    this.park("cityBike", f[i],"saveButton","unpark",this.infowindow);
                                 }
-                            });
+                            }
+                        }else {
+                            if(localStorage_isSupported){
+                                this.park("cityBike", f[i],"saveButton","unpark",this.infowindow);
+                            }
                         }
                     });
 
                 });
             })(markerFacility, i);
         }
+    }
+
+    park(_container:any, _newLocation:any, _elementIDForPark:string,_elementIDForUnpark:string, _infoWindow:any, _free:boolean=true){
+        this.editLocalStorage(_newLocation);
+        localStorage_hasData = true;
+        document.getElementById(_elementIDForPark).className="active";
+        document.getElementById(_elementIDForPark).innerHTML="You parked here";
+        if(document.getElementById(_elementIDForUnpark)==null){
+            var node = document.createElement("button");
+            node.setAttribute("id", _elementIDForUnpark);
+            var textnode = document.createTextNode("Unpark");
+            node.appendChild(textnode);
+            document.getElementsByClassName(_container)[0].appendChild(node);
+        }
+        this.placeParkPlace(_free);
+        google.maps.event.addDomListener(document.getElementById(_elementIDForUnpark),'click',()=>{
+            if(localStorage_isSupported){
+                document.getElementById(_elementIDForPark).className = "";
+                document.getElementById(_elementIDForPark).innerHTML ="Park here";
+                this.removeLocalStorage();
+                this.placeParkPlace(_free);
+                _infoWindow.close();
+            }
+        });
     }
 
     placeMarkerBicycle(stations:any):void{
@@ -492,6 +578,22 @@ export class MapComponent{
         return (input_string.charAt(0).toUpperCase() + input_string.slice(1)).replace(/_/g," ");
     }
 
+    getNameFromGeocoder(_marker:any):string{
+        var geocoder  = new google.maps.Geocoder();
+        var sResult = "soo...";
+        geocoder.geocode({
+            'latLng': _marker.getPosition()
+        }, (result:any, status:any) =>{
+            if (status == google.maps.GeocoderStatus.OK) {
+                return sResult =  result[0].formatted_address;
+            } else {
+                console.log('Geocoder failed due to: ' + status);
+                return sResult =  "Location not found";
+            }
+        });
+        return sResult;
+    }
+
     placePolygon(coordArray: any[], colorCode : string, type: string = " ", enumabcd : any){
         var path : any[] = [];
         var bounds = new google.maps.LatLngBounds();
@@ -516,7 +618,6 @@ export class MapComponent{
                 } else {
                     console.log('Geocoder failed due to: ' + status);
                 }
-                content += '<img id="payment" src="img/heart.png" alt="show payment icon" class="functionIcon" style="margin-right:10px;">';
                 this.infowindowPolygon.setPosition(event.latLng);
                 this.infowindowPolygon.setContent(content);
                 this.infowindowPolygon.open(this.map, polygon);
@@ -524,11 +625,6 @@ export class MapComponent{
                 var el = document.getElementById('polygon');
                 google.maps.event.addDomListener(el,'click',()=>{
                     this.showDirection(markerPolygon,false);
-                });
-
-                var pay = document.getElementById('payment');
-                google.maps.event.addDomListener(pay,'click',()=>{
-                    this.service.openCheckout();
                 });
             });
         });
@@ -593,6 +689,7 @@ export class MapComponent{
             if(this.counter<2){
                 var tempMarker = this.placeMarker(event.latLng.lat(),event.latLng.lng());
                 this.clickUpdated.emit(clickCoord);
+                this.addListenerForMainMarker(tempMarker,this.infowindow);
                 this.clearCircles();
                 if(this.circleRadius != 0){
                     this.circles.push(this.service.placeCircle(this.map,this.circleRadius,this.centerLat,this.centerLon));

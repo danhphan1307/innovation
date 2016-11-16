@@ -111,7 +111,7 @@ export class MapService{
             _icon = this.iconsBike[type].icon;
         }else if(_type=="park"){
             _zIndex = 2;
-            _icon = this.iconsParkHere[type].icon;
+            _icon = this.iconsParkHere['large'].icon;
         }else if(_type=="default"){
             //
         }else if(_type="hiden"){
@@ -134,7 +134,7 @@ export class MapService{
             }else if(_type=="bike"){
                 temp_marker.setIcon(this.iconsBike[type].icon);
             }else if(_type=="park"){
-                temp_marker.setIcon(this.iconsParkHere[type].icon);
+                temp_marker.setIcon(this.iconsParkHere['large'].icon);
             }else if(_type=="fefault"){
                 temp_marker.setIcon(null);
             }
@@ -194,7 +194,7 @@ export class MapService{
         })
     }
 
-    public openCheckout() {
+    public openCheckout(_amount:number) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         var handler = (<any>window).StripeCheckout.configure({
@@ -214,7 +214,7 @@ export class MapService{
         handler.open({
             name: 'Ticket',
             description: 'Payment for ticket',
-            amount: 400
+            amount: _amount
         });
     }
 }

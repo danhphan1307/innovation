@@ -1,8 +1,9 @@
 CACHE MANIFEST
+# 2016-11-16 v1.0.0
 index.html
-app.d92e9f7096c055d4b341.js
-polyfills.d92e9f7096c055d4b341.js
-vendor.d92e9f7096c055d4b341.js
+app.1df39a283d1b9a738b78.js
+polyfills.1df39a283d1b9a738b78.js
+vendor.1df39a283d1b9a738b78.js
 
 NETWORK: 
 *
