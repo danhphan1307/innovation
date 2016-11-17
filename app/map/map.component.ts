@@ -8,9 +8,9 @@ import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
 import {GoogleService} from '../google/google.service'
 import {ModalComponent} from '../component/modal.component'
 
-var localStorage_hasData = (function () {
+function localStorage_hasData() {
     try {
-        if(JSON.parse(localStorage.getItem("carLocation")).name.en !== "Sorry, you did not save your car location"){
+        if(JSON.parse(localStorage.getItem("carLocation")).name.en != "Sorry, you did not save your car location"){
             return true;
         }else {
             return false;
@@ -19,7 +19,7 @@ var localStorage_hasData = (function () {
     catch (e) {
         return false;
     }
-})();
+};
 
 declare var google: any;
 
@@ -140,7 +140,7 @@ export class MapComponent{
         this.map.panTo(center);
         var _map = this.map; // need this line to make sure that the map is loaded.
         this.centerMarker = this.service.placeMarker(this.map, this.centerLat, this.centerLon,"default");
-        if (localStorage_hasData) {
+        if (localStorage_hasData()) {
             this.parkMarker = this.placeParkPlace();
         }
 
@@ -253,7 +253,7 @@ export class MapComponent{
     }
 
     ParkOrNot(event:boolean){
-        if(event){
+        if(event!=false){
             this.park("parkHere",this.markerToJSON(this.parkingObject.marker,this.parkingObject.name),this.parkingObject.saveButton,this.parkingObject.unpark,this.parkingObject.infowindow,false);
             this.parkingObject.infowindow.close();
         }else {
@@ -329,7 +329,7 @@ export class MapComponent{
     }
 
     editLocalStorage(data:any){
-        if(localStorage_hasData){
+        if(localStorage_hasData()){
             var object = JSON.parse(localStorage.getItem('carLocation'));
             if(data.location.coordinates[0][0][1] != object.location.coordinates[0][0][1] || data.location.coordinates[0][0][0] != object.location.coordinates[0][0][0]){
                 var temp = data;
@@ -359,22 +359,27 @@ export class MapComponent{
             "location":{
                 "coordinates":[[[[0],[0]]]]
             },
-            "free":true
+            "free": true,
+            "date" : "No data",
+            "diff" :"No data"
         };
+        localStorage.setItem('duration',("No data"));
         localStorage.setItem('carLocation',JSON.stringify(init_local_storage));
-        this.saveUpdated.emit(init_local_storage);
+        this.saveUpdated.emit(null);
     }
 
     placeParkPlace(_free:boolean = true){
         if(this.parkMarker!== undefined){
             this.parkMarker.setMap(null);
         }
-        if(localStorage_hasData){
+        if(localStorage_hasData()){
+            //this.infowindowFacility.close();
+            //this.infowindowMainMarker.close();
             var object = JSON.parse(localStorage.getItem('carLocation'));
             var markerPark = this.service.placeMarker(this.map,object.location.coordinates[0][0][1], object.location.coordinates[0][0][0], "park");
             this.parkMarker = markerPark;
             google.maps.event.addListener(markerPark, 'click', () => {
-                var content = '<div class="cityBike"><div class="title"><h3>Your Park Place</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+object.name.en+ '</span><br>';
+                var content = '<div class="parkPlace"><div class="title"><h3>Your Park Place</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+object.name.en+ '</span><br>';
                 if(object.name.en.indexOf('bike') !== -1){
                     content+='Bicycle Capacity :'+ (object.builtCapacity.BICYCLE||0);
                 } else {
@@ -383,6 +388,7 @@ export class MapComponent{
                     content+='Motorbike Capacity:'+ (object.builtCapacity.MOTORCYCLE|| 0);
                 }
                 content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button><br><button id="unpark">Unpark</button></div></div>' ;
+                this.infowindowDestination.setContent(content);
                 this.infowindowDestination.open(this.map, markerPark);
 
                 google.maps.event.addDomListener(document.getElementById('markerFacility'),'click',()=>{
@@ -391,16 +397,14 @@ export class MapComponent{
                 google.maps.event.addDomListener(document.getElementById('unpark'),'click',()=>{
                     document.getElementById("saveButton").className = "";
                     document.getElementById("saveButton").innerHTML ="Park here";
-                    localStorage_hasData = false;
-                    this.resetLocalStorage();
-                    this.placeParkPlace(_free);
-
-                    if(!_free || (object.free!== undefined &&!object.free)){
+                    if(!_free || (object.free!==undefined && !object.free)){
                         var a = localStorage.getItem('duration').split(':');
                         var seconds = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
                         var amount = 400 *(seconds/3600);
                         this.service.openCheckout((amount>50)? amount : 50);
                     }
+                    this.resetLocalStorage();
+                    this.placeParkPlace(_free);
                 });
             });
             return markerPark;
@@ -408,39 +412,22 @@ export class MapComponent{
     }
 
     placeMarkerFacility(f:any, _free:boolean = true):void{
-        var infowindow = new google.maps.InfoWindow();
         var object:any;
         var cont:boolean = true;
         var markerFacility:any;
-        if (localStorage_hasData) { //if localstorage has item carLocation => the marker of this localstorage is not loaded yet = > loaded false
+        if (localStorage_hasData()) { //if localstorage has item carLocation => the marker of this localstorage is not loaded yet = > loaded false
             object = JSON.parse(localStorage.getItem('carLocation'));
         }
         for (var i = 0; i < f.length; i++) {
-            if (localStorage_hasData) {
-                if(object.location.coordinates[0][0][1] != f[i].location.coordinates[0][0][1] || object.location.coordinates[0][0][0] != f[i].location.coordinates[0][0][0]){
-                    if(f[i].name.en.indexOf('bike') !== -1){
-                        markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "bikestation");
-                    }else {
-                        markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "carstation");
-                    }
-                }else {
-                    if(f[i].name.en.indexOf('bike') !== -1){
-                        markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "bikestation");
-                    }else {
-                        markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "carstation");
-                    }
-                }
+            if(f[i].name.en.indexOf('bike') !== -1){
+                markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "bikestation");
             }else {
-                if(f[i].name.en.indexOf('bike') !== -1){
-                    markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "bikestation");
-                }else {
-                    markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "carstation");
-                }
+                markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "carstation");
             }
             this.facilitymarkers.push(markerFacility);
             var func = ((markerFacility, i) => {
                 google.maps.event.addListener(markerFacility, 'click', () => {
-                    var content = '<div class="cityBike"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+f[i].name.en+ '</span><br>';
+                    var content = '<div class="facility"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+f[i].name.en+ '</span><br>';
                     if(f[i].name.en.indexOf('bike') !== -1){
                         content+='Bicycle Capacity :'+ (f[i].builtCapacity.BICYCLE||0);
                     } else {
@@ -448,36 +435,22 @@ export class MapComponent{
                         content+='Disabled Capacity:'+ (f[i].builtCapacity.DISABLED|| 0)+'<br>';
                         content+='Motorbike Capacity:'+ (f[i].builtCapacity.MOTORCYCLE|| 0);
                     }
-                    if (localStorage_hasData) {
-                        if( JSON.parse(localStorage.getItem('carLocation')).name.en==f[i].name.en){
-                            content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button><<br><button id="unpark">Unpark</button></div></div>' ;
-                            google.maps.event.addDomListener(document.getElementById('unpark'),'click',()=>{
-                                document.getElementById("saveButton").className = "";
-                                document.getElementById("saveButton").innerHTML ="Park here";
-                                this.resetLocalStorage();
-                                this.placeParkPlace();
-                            });
-                        }else{
-                            content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
-                        }
-                    } else {
-                        content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
-                    }
-                    infowindow.setContent(content);
-                    infowindow.open(this.map, markerFacility);
+                    content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
+                    this.infowindowFacility.setContent(content);
+                    this.infowindowFacility.open(this.map, markerFacility);
                     google.maps.event.addDomListener(document.getElementById('markerFacility'),'click',()=>{
                         this.showDirection(markerFacility,false);
                     });
                     google.maps.event.addDomListener(document.getElementById('saveButton'),'click',()=>{
-                        if(localStorage_hasData){
+                        if(localStorage_hasData()){
                             var object_temp = JSON.parse(localStorage.getItem('carLocation'));
                             if( object_temp.free!== undefined && !object_temp.free){
                                 alert("Sorry you have to pay for your previous parking time first");
                             }else {
-                                this.park("cityBike", f[i],"saveButton","unpark",infowindow);
+                                this.park("facility", f[i],"saveButton","unpark",this.infowindowFacility);
                             }
                         }else {
-                            this.park("cityBike", f[i],"saveButton","unpark",infowindow);
+                            this.park("facility", f[i],"saveButton","unpark",this.infowindowFacility);
 
                         }
                     });
@@ -491,6 +464,7 @@ export class MapComponent{
         this.editLocalStorage(_newLocation);
         document.getElementById(_elementIDForPark).className="active";
         document.getElementById(_elementIDForPark).innerHTML="You parked here";
+        this.placeParkPlace(_free);
         if(document.getElementById(_elementIDForUnpark)==null){
             var node = document.createElement("button");
             node.setAttribute("id", _elementIDForUnpark);
@@ -608,7 +582,7 @@ export class MapComponent{
         var destination = marker.getPosition();
 
         if(multiDirection){
-            if (!localStorage_hasData) {
+            if (!localStorage_hasData()) {
                 this.facilitymarkers.forEach((item, index) => {
                     var temp = google.maps.geometry.spherical.computeDistanceBetween(item.getPosition(), current);
                     if(index==0 || min>temp){

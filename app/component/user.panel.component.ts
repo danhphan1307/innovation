@@ -3,38 +3,6 @@ import {AbstractComponent} from './abstract.class.component';
 import {BlackOverlay} from '../component/blackoverlay.component';
 import {Coords} from '../models/location';
 
-var localStorage_isSupported = (function () {
-  try {
-    var itemBackup = localStorage.getItem("");
-    localStorage.removeItem("");
-    localStorage.setItem("", itemBackup);
-    if (itemBackup === null)
-      localStorage.removeItem("");
-    else
-      localStorage.setItem("", itemBackup);
-    return true;
-  }
-  catch (e) {
-    return false;
-  }
-})();
-var localStorage_hasData = (function () {
-  try {
-    if(localStorage_isSupported){
-      if(localStorage.getItem("carLocation") !== null){
-        return true;
-      }else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-  catch (e) {
-    return false;
-  }
-})();
-
 @Component({
   selector: 'user-panel',
   animations: [
@@ -49,56 +17,39 @@ var localStorage_hasData = (function () {
 
   <img src="img/person.png" alt="user icon" id="person">
   <div class="locationPanel"><span class="glyphicon glyphicon-map-marker" style="margin-right:5px;"></span> Car location</div>
-  <div class="content">{{this.temp_object.name.en}}<br>
-  Park time: {{dateString}}<br>
+  <div class="content">{{name}}<br>
+  Park time: {{time}}<br>
   Time pass: {{diff}}</div>`,
   providers: []
 })
 
 export class UserComponent extends AbstractComponent implements OnInit {
-  temp_object: any ={
-    "name": {
-      "fi": "Sorry, you did not save your car location",
-      "sv": "Sorry, you did not save your car location",
-      "en": "Sorry, you did not save your car location"
-    }
-  };
-  dateString:string = "No data";
-  date:any;
-  diff:string ="No data";
-
+  name:string = "Sorry, you did not save your car location";
+  time:any;
+  diff:any;
   ngOnInit(){
-    this.date = this.convertDateString(new Date());
-    this.state='close';
-    if (localStorage_hasData) {
-      this.temp_object = JSON.parse(localStorage.getItem('carLocation'));
-      this.dateString = this.convertDateString(this.temp_object.date);
-      this.diff = this.diffTwoDay(new Date(), new Date(this.temp_object.date));
-    }
+    var object = JSON.parse(localStorage.getItem('carLocation'));
+    this.name = object.name.en;
+    this.time = object.date;
+    this.diff = localStorage.getItem('duration');
     setInterval(() => {
-      if(localStorage_hasData){
-        this.date =  this.convertDateString(new Date());
-        this.diff = this.diffTwoDay(new Date(), new Date (this.temp_object.date));
-        localStorage.setItem('duration',(this.diff));
-      }
+      if(this.name!="Sorry, you did not save your car location")
+        this.diff = this.diffTwoDay(new Date(), new Date (this.time));
+      localStorage.setItem('duration',this.diff);
     }, 1000);
   }
 
   updateSave(event:any){
-    if(localStorage_isSupported){
-      if(event==null){
-        //this.temp_object.name.en = "Why copy me..";
-        this.dateString = "No data";
-        this.diff ="No data";
-
-        localStorage_hasData = false;
-      }else{
-        localStorage_hasData = true;
-        this.temp_object = event;
-        this.dateString = this.convertDateString(this.temp_object.date);
-      }
+    if(event!=null){
+      this.name = event.name.en;
+      this.time = event.date;
+    }else {
+      this.name = "Sorry, you did not save your car location";
+      this.time = "No data";
+      this.diff = "No data";
     }
   }
+
 
   convertDateString(_date:any):string{
     var d = new Date(_date);

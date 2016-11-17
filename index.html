@@ -77,13 +77,16 @@
 				"location":{
 					"coordinates":[[[[0],[0]]]]
 				},
-				"free":true
+				"free": true,
+				"date" : "No data",
+        		"diff" : "No data"
 			};
 			localStorage.setItem('carLocation',JSON.stringify(init_local_storage));
+			localStorage.setItem('duration',("No data"));
 		}
 		if(navigator.onLine && localStorage_isSupported) {
 			document.body.innerHTML='<my-app><img src="img/loading.gif" alt="loading" style ="position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);"></my-app>';
-			if(localStorage_hasData){
+			if(!localStorage_hasData){
 				initLocalStorage();
 			}
 		}else {

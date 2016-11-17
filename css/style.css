@@ -234,29 +234,26 @@ h2{
 .gm-style-iw div{
     overflow:visible!important;
 }
-
-.cityBike, .searchInfo {
-    width: 110%;
-}
-.cityBike h3, .parkHere h3, .searchInfo h3{
-    display: inline-block;
-    text-transform: uppercase;
-    margin:0;
-    color:#484B64;
-    font-size: 16px;
-}
 .functionIcon{
     z-index: 10;
     margin-top:-5px;
     margin-left:10px;
 }
 
-.cityBike .separate, .searchInfo .seperate{
+.cityBike h3, .parkHere h3, .searchInfo h3, .facility h3, .parkPlace h3{
+    display: inline-block;
+    text-transform: uppercase;
+    margin:0;
+    color:#484B64;
+    font-size: 16px;
+}
+
+.cityBike .separate, .searchInfo .separate, .facility .separate, .parkPlace .separate{
     margin-top: 5px;
     margin-bottom: 15px;
     border-top: 3px solid #eee;
 }
-.cityBike .info, .searchInfo .info{
+.cityBike .info, .searchInfo .info, .facility .info, .parkPlace .info {
     margin-top:5px;
     color:#484B64;
     font-size:15px;
@@ -272,7 +269,7 @@ h2{
 .cityBike .register a{
     color:white;
 }
-.cityBike .moreInfo, .searchInfo .moreInfo{
+.cityBike .moreInfo, .searchInfo .moreInfo, .facility .moreInfo, .parkPlace .moreInfo {
     display:block;
     width: 100%;
     text-align: center;
@@ -295,7 +292,7 @@ h2{
     margin-right: 1px;
 }
 
-.cityBike span, .parkHere span{
+.cityBike span, .parkHere span, .facility span, .parkPlace span{
     font-size: 14px;
     color:#484B64;
     font-weight:normal;
@@ -577,8 +574,13 @@ h2{
     margin: 0 auto;
     pointer-events: all;
 }
-
-
+.alert-danger , .alert-success{
+    width: auto!important;
+    position:relative!important;
+    top: 0%!important;
+    left: 0%!important;
+    transform: translate(0, 0)!important;
+}
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
