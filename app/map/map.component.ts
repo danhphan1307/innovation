@@ -57,6 +57,7 @@ export class MapComponent{
     infowindowFacility = new google.maps.InfoWindow();
     infowindowBike = new google.maps.InfoWindow();
     infowindowDestination = new google.maps.InfoWindow();
+    infowindowParkPlace = new google.maps.InfoWindow();
     infowindowPolygon = new google.maps.InfoWindow({
         maxWidth: 200
     });
@@ -388,8 +389,8 @@ export class MapComponent{
                     content+='Motorbike Capacity:'+ (object.builtCapacity.MOTORCYCLE|| 0);
                 }
                 content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button><br><button id="unpark">Unpark</button></div></div>' ;
-                this.infowindowDestination.setContent(content);
-                this.infowindowDestination.open(this.map, markerPark);
+                this.infowindowParkPlace.setContent(content);
+                this.infowindowParkPlace.open(this.map, markerPark);
 
                 google.maps.event.addDomListener(document.getElementById('markerFacility'),'click',()=>{
                     this.showDirection(markerPark,false);
