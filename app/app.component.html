@@ -1,7 +1,7 @@
 <blackoverlay (click)="closeAll()"></blackoverlay>
-<left-nav  (radiusUpdated)="MapComponent.updateRadius($event)" (radiusUpdated)="FacilityComponent.updateRadius($event, MapComponent)"></left-nav>
+<filter id="filter" (radiusUpdated)="MapComponent.updateRadius($event)" (radiusUpdated)="FacilityComponent.updateRadius($event, MapComponent)"></filter>
 <div id="controlNav">
-	<span id="cog" (click)="beginLeftNav()"  class="glyphicon glyphicon-cog" ></span><img src="../img/demo-logo-2.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="MapComponent.center()"  class="glyphicon glyphicon-map-marker"></span>
+	<img src="../img/demo-logo-2.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="MapComponent.center()"  class="glyphicon glyphicon-map-marker"></span>
 	<div *ngIf="!onlineOffline" class="alert alert-danger" role="alert"  style="z-index: 10">
 		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 		<span class="sr-only">Error:</span>You are offline<br>
@@ -12,24 +12,11 @@
 <search-bar></search-bar>
 <help id="help"></help>
 <div id="direction"></div>
-<div id="filter">
-	<div *ngFor="let option of options; let i = index;">
-		<input type="checkbox" name={{option}} id={{option}} (change)="displayZone($event)"/>
-		<label>{{option}}</label>
-		<br>
-	</div>
-</div>
-<div id="filterFacility">
-	<div *ngFor="let option of optionsFacility; let i = index;">
-		<input type="checkbox" name={{option}} id={{option}} (change)="displayAllFacility($event)"/>
-		<label>{{option}}</label>
-		<br>
-	</div>
-</div>
+<img alt="config" id="cog_icon" src="../img/cog.png" (click) = "openHelper()" />
 <map-gg (saveUpdated) = "UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
 <my-bike ></my-bike>
 <park-zone ></park-zone>
-<facility-component ></facility-component>
+<facility-component></facility-component>
 <user-panel></user-panel>
 <router-outlet></router-outlet>
 <bottom-nav (click)="bottomtNav()" ></bottom-nav>

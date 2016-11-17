@@ -48,7 +48,7 @@ export class UserComponent extends AbstractComponent implements OnInit {
   updateSave(event:any){
     if(event!=null){
       this.name = event.name.en;
-      this.time = this.convertDateString(event.date);
+      this.time = this.convertDateString(localStorage.getItem('date'));
       this.ticket = localStorage.getItem('ticket');
       this.diff = localStorage.getItem('duration');
     }else {

@@ -1,7 +1,7 @@
 import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BikeService } from './bikes/bike.service';
-import { LeftNavigation } from './component/left.navigation.component';
+import { FilterPanel } from './component/filter.panel';
 import { BottomNavigation } from './component/bottom.navigation.component';
 import { BlackOverlay } from './component/blackoverlay.component';
 import { UserComponent }  from './component/user.panel.component';
@@ -37,7 +37,7 @@ import { routing, appRoutingProviders }  from './app.routing';
     BikeComponent,
     UserComponent,
     FacilityComponent,
-    LeftNavigation,
+    FilterPanel,
     BottomNavigation,
     BlackOverlay,routing, Help, SearchBar,ModalComponent],
     providers:[ FacilityService,

@@ -1,15 +1,10 @@
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
-
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {FacilityService} from './facility.service';
-import { Facility } from './facility';
-
+import {Facility} from './facility';
 import {Coords} from '../models/location';
-
-
-import {LeftNavigation} from '../component/left.navigation.component';
-import {AgmCoreModule} from 'angular2-google-maps/core';
-import {Usage, PricingMethod, FacilityStatus, ActiveComponent} from '../models/model-enum';
+import {Usage, FacilityStatus, ActiveComponent} from '../models/model-enum';
 import {MapComponent} from '../map/map.component';
+import {Observable} from 'rxjs/Rx';
 
 @Component({
   selector: 'facility-component',
@@ -18,9 +13,6 @@ import {MapComponent} from '../map/map.component';
 })
 
 export class FacilityComponent implements OnInit {
-
-  @ViewChild(LeftNavigation)
-  private leftNav:LeftNavigation;
 
   @Output()
   triggered = new EventEmitter<ActiveComponent>();
@@ -46,14 +38,14 @@ export class FacilityComponent implements OnInit {
     this.loadFacilitiesNearby(_map, new Coords(_map.centerLat, _map.centerLon), this.radius);
   }
 
-  loadAllFacilities(mapComponent: MapComponent): void{
-    this.facilityService.getAllFacilities()
-    .subscribe((facilities) => {
+  loadAllFacilities(mapComponent: MapComponent, _func:()=>void){
+    this.facilityService.getAllFacilities().subscribe((facilities) => {
       //filter park and ride + active
       this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
         && f.status == FacilityStatus.IN_OPERATION
         );
       mapComponent.placeMarkerFacility(this.facilities, true, true);
+      _func();
     });
   }
 

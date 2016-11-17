@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, Renderer, ElementRef} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Coords} from '../models/location';
-import {LeftNavigation} from '../component/left.navigation.component';
 import {Router} from '@angular/router';
 import {MapService} from './map.service'
 import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
@@ -139,6 +138,10 @@ export class MapComponent{
         this.autocomplete.bindTo('bounds', this.map);
         var container_input = /** @type {!HTMLInputElement} */(document.getElementById('input-group'));
         this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(container_input);
+        var cog_icon = /** @type {!HTMLInputElement} */(document.getElementById('cog_icon'));
+        this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(cog_icon);
+        var filter = /** @type {!HTMLInputElement} */(document.getElementById('filter'));
+        this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(filter);
     }
 
 
@@ -270,19 +273,20 @@ export class MapComponent{
     center(lat:number = this.centerLat,long:number = this.centerLon):void{
         this.map.panTo(new google.maps.LatLng(lat,long));
     }
-    clearFacilityMarkers(_all:boolean = false){
-        if(_all){
+    clearFacilityMarkers(_init:boolean = false, _pageLoad:boolean = false){
+        if(_init){
             this.facilitymarkers.forEach((item, index) => {
                 item.setMap(null);
             });
             this.facilitymarkers=[];
             
         }
-        this.facilitymarkersInit.forEach((item, index) => {
-            item.setMap(null);
-        });
-        this.facilitymarkersInit=[];
-        
+        if(_pageLoad){
+            this.facilitymarkersInit.forEach((item, index) => {
+                item.setMap(null);
+            });
+            this.facilitymarkersInit=[];
+        } 
     }
     clearMarkers(){
         this.markers.forEach((item, index) => {
@@ -345,16 +349,14 @@ export class MapComponent{
         if(localStorage_hasData()){
             var object = JSON.parse(localStorage.getItem('carLocation'));
             if(data.location.coordinates[0][0][1] != object.location.coordinates[0][0][1] || data.location.coordinates[0][0][0] != object.location.coordinates[0][0][0]){
-                var temp = data;
-                temp.date=Date();
-                localStorage.setItem('carLocation',JSON.stringify(temp));
-                this.saveUpdated.emit(temp);
+                localStorage.setItem('date',Date());
+                localStorage.setItem('carLocation',JSON.stringify(data));
+                this.saveUpdated.emit(data);
             }
         }else {
-            var temp = data;
-            temp.date=Date();
-            localStorage.setItem('carLocation',JSON.stringify(temp));
-            this.saveUpdated.emit(temp);
+            localStorage.setItem('date',Date());
+            localStorage.setItem('carLocation',JSON.stringify(data));
+            this.saveUpdated.emit(data);
         }
     }
     resetLocalStorage(){
@@ -588,8 +590,8 @@ export class MapComponent{
             var markerEntrance = this.service.placeMarker(this.map, coords[i].lat, coords[i].lon, "entrance");
             this.markers.push(markerEntrance);
             google.maps.event.addListener(markerEntrance, 'click', () => {
-                    this.showDirection(markerEntrance,false);
-                });
+                this.showDirection(markerEntrance,false);
+            });
         }
     }
 
@@ -597,7 +599,7 @@ export class MapComponent{
         this.circleRadius = event;
         if (this.centerLat != null && this.centerLon != null) {
             this.clearCircles();
-            this.clearFacilityMarkers();
+            this.clearFacilityMarkers(true,false);
             this.circles.push(this.service.placeCircle(this.map,this.circleRadius,this.centerLat,this.centerLon));
         }
     }
@@ -632,6 +634,7 @@ export class MapComponent{
                     item.setMap(null);
                 }
             });
+            this.clearFacilityMarkers(false,true);
 
             parkCar = chosenMarker.getPosition();
             this.clearDirection();

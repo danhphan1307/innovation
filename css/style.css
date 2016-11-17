@@ -76,7 +76,8 @@ a{
     height:100%;
 }
 #controlNav{
-    height: 8%;
+    position: relative;
+    height: 7%;
     display:flex;
     align-items:center;
 }
@@ -95,57 +96,39 @@ a{
     cursor:pointer;
     display:inline-block;
 }
-#controlNav #navigate, #mySidenav .glyphicon.glyphicon-map-marker{
+#controlNav #navigate{
     color:rgb(251,118,107);
     font-size:2em;
     margin-right:3%;
     cursor:pointer;
     display:inline-block;
+    position: absolute;
+    right:0;
+    top: 25%;
 }
-#controlNav #cog{
-    color:#AEC0C9;
-    font-size:2em;
-    margin-left:3%;
-    cursor:pointer;
-    display:inline-block;
+
+#cog_icon{
+    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px -1px;
+    border-radius: 2px;
+    margin-left:7px;
+    margin-bottom:10px;
 }
+
 #controlNav img{
     position: relative;
     display:inline-block;
     /*margin-left:45%;*/
 }
 /*Side Nav CSS*/
-#mySidenav .glyphicon{
-    font-size:1.7em!important;
+.slider.slider-horizontal {
+    width: 80%;
+    height: 20px;
+    margin-left: 10%;
 }
-#mySidenav table{
-    font-size:1.2em;
-    margin:5%;
-    margin-top:10%;
-    width:90%;
-}
-#mySidenav table tr td{
-    height: 50px;
-}
-#mySidenav table tr td:first-of-type{
-  width: 15%;
-}
-#mySidenav table tr td.special{
-    width:100%;
-}
-#mySidenav label{
-    margin-bottom: -3px;
-}
-#mySidenav .slider.slider-horizontal {
-    width: 100%;
-}
-#mySidenav .slider-selection {
+.slider-selection {
     background: #BAD8F2;
 }
-#mySidenav .tooltip.tooltip-main.top{
-    filter: alpha(opacity=90)!important;
-    opacity: .9!important;
-}
+
 #mySidenav .copyright{
     position: absolute;
     bottom:1%;
@@ -223,7 +206,7 @@ h2{
 #mapCanvas{
     margin: 0;
     padding: 0;
-    height: 84%;
+    height: 85%;
 }
 
 .glyphicon.glyphicon-menu-right{
@@ -476,28 +459,30 @@ h2{
 
 #filter{
     z-index: 1;
-    display:none;
     position:absolute;
-    bottom:9%;
+    bottom:80px;
+    left: 7px!important;
     background-color: white;
-    padding-left: 5px;
-    padding-right: 5px;
+    padding-bottom:10px;
 }
 #filter label{
     margin-left:5px;
+    margin-bottom: 0;
 }
-
-#filterFacility{
-    z-index: 1;
-    display:none;
-    position:absolute;
-    bottom:9%;
-    background-color: white;
-    padding-left: 5px;
-    padding-right: 5px;
+#filter tr td{
+    padding-top:10px;
 }
-#filterFacility label{
-    margin-left:5px;
+#filter tr>td>label{
+    margin-left:10px;
+    margin-right:10px;
+}
+#filter th{
+    background-color: #789DCA;
+    padding-top:5px;
+    padding-bottom: 5px;
+    text-align:center;
+    color: white;
+    margin-bottom:10px;
 }
 #theme{
     width: 100%;
@@ -532,7 +517,7 @@ h2{
 }
 
 #input-group{
-    max-width:50vw;
+    max-width:60vw;
     margin-top: 10px;
 }
 
@@ -542,7 +527,6 @@ h2{
     -webkit-box-sizing: border-box;
     background-color: rgb(255,255,255);
     font-family: Roboto;
-    width: 45vw;
     height: 39px;
 }
 
@@ -613,10 +597,6 @@ h2{
     transform: translate(0, 0)!important;
 }
 
-#input1, #input2{
-    text-transform:uppercase
-}
-
 #waiting-respond{
     width: 100%;
 }
@@ -624,4 +604,9 @@ h2{
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
     .sidenav a {font-size: 18px;}
+}
+@media screen and (min-width: 600px){
+    #input-group{
+        max-width:90vw;
+    }
 }
