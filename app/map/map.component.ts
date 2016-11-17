@@ -200,7 +200,7 @@ export class MapComponent{
             this.infowindowDestination.open(_map, marker);
             google.maps.event.addDomListener(document.getElementById('close_search'),'click',()=>{
                 (<HTMLInputElement>document.getElementById('search_input')).value = '';
-                this.infowindowDestination.close();                      
+                this.infowindowDestination.close();
                 marker.setVisible(false);
                 this.clearDirection();
             });
@@ -208,7 +208,7 @@ export class MapComponent{
                 this.infowindowDestination.open(_map, marker);
             });
 
-            google.maps.event.addDomListener(document.getElementById('markerSearch'),'click',()=>{                        
+            google.maps.event.addDomListener(document.getElementById('markerSearch'),'click',()=>{
                 if(this.router.url == "/parkandride"){
                     this.showDirection(marker);
                 } else {
@@ -349,7 +349,7 @@ export class MapComponent{
                 temp.date=Date();
                 localStorage.setItem('carLocation',JSON.stringify(temp));
                 this.saveUpdated.emit(temp);
-            } 
+            }
         }else {
             var temp = data;
             temp.date=Date();
@@ -421,7 +421,7 @@ export class MapComponent{
                 });
             });
             return markerPark;
-        } 
+        }
     }
 
     placeMarkerFacility(f:any, _free:boolean = true, _all:boolean=false):void{
@@ -580,6 +580,17 @@ export class MapComponent{
                 });
             });
         });
+    }
+
+    placeMarkerEntrance(coords: Coords[]){
+        var map = this.map;
+        for (var i = 0; i < coords.length; i++) {
+            var markerEntrance = this.service.placeMarker(this.map, coords[i].lat, coords[i].lon, "default");
+            this.markers.push(markerEntrance);
+            google.maps.event.addListener(markerEntrance, 'click', () => {
+                    this.showDirection(markerEntrance,false);
+                });
+        }
     }
 
     updateRadius(event:any){

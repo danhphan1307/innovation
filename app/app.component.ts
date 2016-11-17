@@ -132,8 +132,8 @@ import { Component, OnInit,  Input,
             document.getElementById('filter').style.display="block";
           }
           this.MapComponent.center(this.lat,this.long);
-        } 
-      }     
+        }
+      }
     }
 
     /* Methods for displaying markers*/
@@ -180,6 +180,7 @@ import { Component, OnInit,  Input,
           case "Parking Facilities":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.MapComponent);
+          this.ZoneComponent.putEntrances(this.MapComponent);
           break;
         }
 
