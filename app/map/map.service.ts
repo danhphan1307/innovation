@@ -49,8 +49,8 @@ export class MapService{
     }
 
 
-    //url = "https://fabulous-backend-hsl-parking.herokuapp.com/api/checkout";
-    url = "http://localhost:8081/api/checkout"
+    url = "https://fabulous-backend-hsl-parking.herokuapp.com/api/checkout";
+    //url = "http://localhost:8081/api/checkout"
     constructor(private http: Http){
 
     }
