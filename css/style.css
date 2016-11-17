@@ -223,7 +223,7 @@ h2{
 #mapCanvas{
     margin: 0;
     padding: 0;
-    height: 83%;
+    height: 84%;
 }
 
 .glyphicon.glyphicon-menu-right{
@@ -299,7 +299,7 @@ h2{
 }
 .bottomNav{
     border-top:1px solid #ddd;
-    height: 9%;
+    height: 8%;
 }
 .bottomNav nav{
     height: 100%;
@@ -323,15 +323,6 @@ h2{
     float: left;
     text-align: center;
     text-transform: uppercase;
-    /*
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    */
-}
-
-.bottomNav li:not(:first-child){
-    border-left:1px solid #ddd;
 }
 
 .bottomNav img{
@@ -341,20 +332,26 @@ h2{
 .bottomNav li.active img{
     background-color:#2A6785;
 }
+.bottomNav li span{
+    width: 100%;
+    font-size:10px;
+}
 .bottomNav li.active span{
+
     color:#2A6785;
 }
 .bottomNav li div{
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+    height: 100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-wrap: wrap;
 }
 .custom-img-responsive{
   height: 100%;
   max-width: 30px;
   max-height: 30px;
 }
-
 #markerFacility, #markerBike, #polygon,#destination_marker, #markerSearch{
     background-color: #acacac;
 }
@@ -420,11 +417,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
- width: 100%;
- background: #FF9AD7;
- display:flex;justify-content:center;align-items:center;
- color:white;
- height:7vh;   
+   width: 100%;
+   background: #FF9AD7;
+   display:flex;justify-content:center;align-items:center;
+   color:white;
+   height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -537,18 +534,18 @@ h2{
     animation: all 0.5s;
 }
 #arrowUp{
-   background-color: white;
-   top:9vh;
-   z-index:1;
-   position: absolute;
-   width: auto;
-   max-width: 10vw;
-   text-align: center;
-   left: 0; 
-   right: 0; 
-   margin-left: auto; 
-   margin-right: auto;  
-   animation: all 0.5s;
+ background-color: white;
+ top:9vh;
+ z-index:1;
+ position: absolute;
+ width: auto;
+ max-width: 10vw;
+ text-align: center;
+ left: 0; 
+ right: 0; 
+ margin-left: auto; 
+ margin-right: auto;  
+ animation: all 0.5s;
 }
 .modal-dialog {
     margin-left: 10vw;
@@ -575,6 +572,7 @@ h2{
     pointer-events: all;
 }
 .modal .alert-danger,.modal .alert-success{
+    text-align: center;
     width: auto!important;
     position:relative!important;
     top: 0%!important;
