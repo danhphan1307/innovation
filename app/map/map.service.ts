@@ -47,9 +47,10 @@ export class MapService{
             icon: 'img/parkHereIconLarge.png'
         }
     }
-    
 
-    url = "https://fabulous-backend-hsl-parking.herokuapp.com/checkout";
+
+    //url = "https://fabulous-backend-hsl-parking.herokuapp.com/api/checkout";
+    url = "http://localhost:8081/api/checkout"
     constructor(private http: Http){
 
     }
@@ -149,8 +150,8 @@ export class MapService{
             optimizeWaypoints: true,
             travelMode: _mode,
         },(result:any, status:any) => {
-            this.renderDirections(_map, result, status, array,_vehicle, _suppressMarker) 
-        }); 
+            this.renderDirections(_map, result, status, array,_vehicle, _suppressMarker)
+        });
     }
 
     renderDirections(_map:any, result:any,status:any,array:any, vehicle:string, suppressMarker:boolean):any{
@@ -197,6 +198,8 @@ export class MapService{
     public openCheckout(_amount:number) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
+        var des = 'Payment for ticket ' +  localStorage.getItem('ticket');
+        var amount = _amount;
         var handler = (<any>window).StripeCheckout.configure({
             key: 'pk_test_cq1ut4ba4Ftin2AAUVEGnRbn',
             locale: 'auto',
@@ -204,13 +207,12 @@ export class MapService{
             token:  (token: any) => {
                 // You can access the token ID with `token.id`.
                 // Get the token ID to your server-side code for use.
-                this.http.post(this.url,{token},options)
+                this.http.post(this.url,{token,des,amount},options)
                 .subscribe(
                     res=>{console.log(res);},
                     error =>{console.log(error)}
                     )}
             });
-        var des = 'Payment for ticket' +  localStorage.getItem('ticket');
         handler.open({
             name: 'Ticket',
             description: des,
