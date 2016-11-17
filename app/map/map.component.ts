@@ -585,7 +585,7 @@ export class MapComponent{
     placeMarkerEntrance(coords: Coords[]){
         var map = this.map;
         for (var i = 0; i < coords.length; i++) {
-            var markerEntrance = this.service.placeMarker(this.map, coords[i].lat, coords[i].lon, "default");
+            var markerEntrance = this.service.placeMarker(this.map, coords[i].lat, coords[i].lon, "entrance");
             this.markers.push(markerEntrance);
             google.maps.event.addListener(markerEntrance, 'click', () => {
                     this.showDirection(markerEntrance,false);

@@ -48,6 +48,15 @@ export class MapService{
         }
     }
 
+    iconEntrance ={
+        small: {
+            icon:  'img/entrance.png'
+        },
+        large: {
+            icon:  'img/entrance.png'
+        },
+    }
+
 
     url = "https://fabulous-backend-hsl-parking.herokuapp.com/api/checkout";
     //url = "http://localhost:8081/api/checkout"
@@ -115,8 +124,10 @@ export class MapService{
             _icon = this.iconsParkHere['large'].icon;
         }else if(_type=="default"){
             //
-        }else if(_type="hiden"){
+        }else if(_type=="hiden"){
             _visible = false;
+        }else if(_type=="entrance"){
+            _icon = this.iconEntrance['large'].icon;
         }
         var temp_marker = new google.maps.Marker({
             position: new google.maps.LatLng(_lat, _lon),
