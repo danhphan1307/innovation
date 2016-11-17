@@ -487,6 +487,18 @@ h2{
     margin-left:5px;
 }
 
+#filterFacility{
+    z-index: 1;
+    display:none;
+    position:absolute;
+    bottom:9%;
+    background-color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+#filterFacility label{
+    margin-left:5px;
+}
 #theme{
     width: 100%;
 }

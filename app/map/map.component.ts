@@ -51,6 +51,7 @@ export class MapComponent{
 
     circles: any[] = [];
     parkMarker:any;
+    facilitymarkersInit:any[] = [];
     facilitymarkers:any[] = [];
     directionArray:any[] = [];
     parkingObject:any;
@@ -269,11 +270,19 @@ export class MapComponent{
     center(lat:number = this.centerLat,long:number = this.centerLon):void{
         this.map.panTo(new google.maps.LatLng(lat,long));
     }
-    clearFacilityMarkers(){
-        this.facilitymarkers.forEach((item, index) => {
+    clearFacilityMarkers(_all:boolean = false){
+        if(_all){
+            this.facilitymarkers.forEach((item, index) => {
+                item.setMap(null);
+            });
+            this.facilitymarkers=[];
+            
+        }
+        this.facilitymarkersInit.forEach((item, index) => {
             item.setMap(null);
         });
-        this.facilitymarkers=[];
+        this.facilitymarkersInit=[];
+        
     }
     clearMarkers(){
         this.markers.forEach((item, index) => {
@@ -415,7 +424,7 @@ export class MapComponent{
         } 
     }
 
-    placeMarkerFacility(f:any, _free:boolean = true):void{
+    placeMarkerFacility(f:any, _free:boolean = true, _all:boolean=false):void{
         var object:any;
         var cont:boolean = true;
         var markerFacility:any;
@@ -428,7 +437,11 @@ export class MapComponent{
             }else {
                 markerFacility = this.service.placeMarker(this.map, f[i].location.coordinates[0][0][1], f[i].location.coordinates[0][0][0], "carstation");
             }
-            this.facilitymarkers.push(markerFacility);
+            if(_all){
+                this.facilitymarkersInit.push(markerFacility);
+            }else {
+                this.facilitymarkers.push(markerFacility);
+            }
             var func = ((markerFacility, i) => {
                 google.maps.event.addListener(markerFacility, 'click', () => {
                     var content = '<div class="facility"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+f[i].name.en+ '</span><br>';

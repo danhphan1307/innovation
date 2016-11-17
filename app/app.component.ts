@@ -35,7 +35,8 @@ import { Component, OnInit,  Input,
   })
 
   export class AppComponent implements OnInit {
-    options = ['Zone','Free', 'Low', 'Medium' ,'High', 'Garage'];
+    options = ['Zone','Free', 'Unlimited Time' ,'Max 4h Parking', 'Max 1h Parking', 'Parking Facilities'];
+    optionsFacility= ['Show All'];
     private viewContainerRef: ViewContainerRef;
     public onlineOffline: boolean = navigator.onLine;
     router:Router;
@@ -116,6 +117,7 @@ import { Component, OnInit,  Input,
       if(this.bMapDone == true){
         this.reset();
         if(this.router.url == "/parkandride"){
+          document.getElementById('filterFacility').style.display="block";
           this.leftNav.SetliderState(true);
           this.displayParking();
           this.MapComponent.center();
@@ -163,19 +165,19 @@ import { Component, OnInit,  Input,
           this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.MapComponent);
           break;
           
-          case "Low":
+          case "Max 4h Parking":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
           break;
 
-          case "Medium":
+          case "Unlimited Time":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.MapComponent);
           break;
 
-          case "High":
+          case "Max 1h Parking":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
           break;
 
-          case "Garage":
+          case "Parking Facilities":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.MapComponent);
           break;
@@ -190,20 +192,36 @@ import { Component, OnInit,  Input,
           this.MapComponent.clearPolygonIndex(0);
           break;
           
-          case "Low":
+          case "Max 4h Parking":
           this.MapComponent.clearPolygonIndex(1);
           break;
 
-          case "Medium":
+          case "Unlimited Time":
           this.MapComponent.clearPolygonIndex(2);
           break;
 
-          case "High":
+          case "Max 1h Parking":
           this.MapComponent.clearPolygonIndex(3);
           break;
 
-          case "Garage":
+          case "Parking Facilities":
           this.MapComponent.clearPolygonIndex(4);
+          break;
+        }
+      }
+    }
+    displayAllFacility(e:any){
+      if(e.target.checked){
+        switch (e.target.name) {
+          case 'Show All':
+          this.FacilityComponent.loadAllFacilities(this.MapComponent);
+          break;
+        }
+
+      }else{
+        switch (e.target.name) {
+          case 'Show All':
+          this.MapComponent.clearFacilityMarkers(false);
           break;
         }
       }
@@ -216,7 +234,8 @@ import { Component, OnInit,  Input,
       document.getElementById('help').style.display="none";
       document.getElementById('direction').style.display="none";
       document.getElementById('filter').style.display="none";
-      this.MapComponent.clearFacilityMarkers();
+      document.getElementById('filterFacility').style.display="none";
+      this.MapComponent.clearFacilityMarkers(true);
       this.MapComponent.clearCircles();
       this.MapComponent.clearMarkers();
       this.MapComponent.clearPolygons();

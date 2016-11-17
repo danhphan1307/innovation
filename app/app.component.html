@@ -15,7 +15,14 @@
 <div id="filter">
 	<div *ngFor="let option of options; let i = index;">
 		<input type="checkbox" name={{option}} id={{option}} (change)="displayZone($event)"/>
-		<label >{{option}}</label>
+		<label>{{option}}</label>
+		<br>
+	</div>
+</div>
+<div id="filterFacility">
+	<div *ngFor="let option of optionsFacility; let i = index;">
+		<input type="checkbox" name={{option}} id={{option}} (change)="displayAllFacility($event)"/>
+		<label>{{option}}</label>
 		<br>
 	</div>
 </div>

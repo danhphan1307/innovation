@@ -46,6 +46,17 @@ export class FacilityComponent implements OnInit {
     this.loadFacilitiesNearby(_map, new Coords(_map.centerLat, _map.centerLon), this.radius);
   }
 
+  loadAllFacilities(mapComponent: MapComponent): void{
+    this.facilityService.getAllFacilities()
+    .subscribe((facilities) => {
+      //filter park and ride + active
+      this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
+        && f.status == FacilityStatus.IN_OPERATION
+        );
+      mapComponent.placeMarkerFacility(this.facilities, true, true);
+    });
+  }
+
   private loadFacilitiesNearby(mapComponent: MapComponent, coord: Coords, radius:number): void{
     this.facilityService.getFaclitiesNearby(coord,radius)
     .subscribe((facilities) => {
