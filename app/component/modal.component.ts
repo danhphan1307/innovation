@@ -20,13 +20,13 @@ import {Observable} from 'rxjs/Rx';
 	</div>
 	<div class="modal-body" id="modal-body">
 	<div class="input-group">
-	<span class="input-group-addon glyphicon glyphicon-credit-card" id="sizing-addon2"></span>
+	<span class="input-group-addon glyphicon glyphicon-info-sign" id="sizing-addon2"></span>
 	<input type="text" class="form-control" placeholder="License plate" aria-describedby="sizing-addon2" id="input1">
 	</div>
 	<br>
 	<div class="input-group">
 	<span class="input-group-addon glyphicon glyphicon glyphicon-retweet" id="sizing-addon3"></span>
-	<input type="text" class="form-control" placeholder="License plate" aria-describedby="sizing-addon3" id="input2">
+	<input type="text" class="form-control" placeholder="Retype license plate" aria-describedby="sizing-addon3" id="input2">
 	</div>
 	<br>
 	Price: {{value}} €/h <br>

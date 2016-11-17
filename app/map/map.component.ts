@@ -41,6 +41,8 @@ export class MapComponent{
     service: MapService;
     googleService: GoogleService;
     router:Router;
+    input:any;
+    autocomplete:any;
 
     map:any;
     centerLat: number = 60.1712179;
@@ -131,6 +133,11 @@ export class MapComponent{
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
+        this.input = /** @type {!HTMLInputElement} */(document.getElementById('search_input'));
+        this.autocomplete = new google.maps.places.Autocomplete(this.input);
+        this.autocomplete.bindTo('bounds', this.map);
+        var container_input = /** @type {!HTMLInputElement} */(document.getElementById('input-group'));
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(container_input);
     }
 
 
@@ -148,19 +155,15 @@ export class MapComponent{
         /*
         *Search bar
         */
-        var input = /** @type {!HTMLInputElement} */(document.getElementById('search_input'));
-        var autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.bindTo('bounds', this.map);
         var marker = new google.maps.Marker({
             map: this.map,
             anchorPoint: new google.maps.Point(0, -29)
         });
         this.addListenerForMainMarker(this.centerMarker,this.infowindowMainMarker);
-
-        autocomplete.addListener('place_changed',()=> {
+        this.autocomplete.addListener('place_changed',()=> {
             this.infowindowDestination.close();
             marker.setVisible(false);
-            var place = autocomplete.getPlace();
+            var place = this.autocomplete.getPlace();
             if (!place.geometry) {
                 // User entered the name of a Place that was not suggested and pressed the Enter key, or the Place Details request failed.
                 window.alert("No details available for input: '" + place.name + "'");

@@ -35,7 +35,7 @@ import { Component, OnInit,  Input,
   })
 
   export class AppComponent implements OnInit {
-    options = ['free', 'low', 'medium' ,'high', 'garage'];
+    options = ['Zone','Free', 'Low', 'Medium' ,'High', 'Garage'];
     private viewContainerRef: ViewContainerRef;
     public onlineOffline: boolean = navigator.onLine;
     router:Router;
@@ -120,7 +120,6 @@ import { Component, OnInit,  Input,
           this.displayParking();
           this.MapComponent.center();
         }else if(this.router.url == "/parking"){
-          this.MapComponent.displayKML();
           this.MapComponent.center();
         }
         else {
@@ -156,24 +155,27 @@ import { Component, OnInit,  Input,
     displayZone(e:any){
       if(e.target.checked){
         switch (e.target.name) {
-          case "free":
+          case 'Zone':
+          this.MapComponent.displayKML();
+          break;
+          case "Free":
           this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.MapComponent);
           break;
           
-          case "low":
+          case "Low":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.MapComponent);
           break;
 
-          case "medium":
+          case "Medium":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.MapComponent);
           break;
 
-          case "high":
+          case "High":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.MapComponent);
           break;
 
-          case "garage":
+          case "Garage":
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.MapComponent);
           this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.MapComponent);
           break;
@@ -181,23 +183,26 @@ import { Component, OnInit,  Input,
 
       }else{
         switch (e.target.name) {
-          case "free":
+          case 'Zone':
+          this.MapComponent.clearKML();
+          break;
+          case "Free":
           this.MapComponent.clearPolygonIndex(0);
           break;
           
-          case "low":
+          case "Low":
           this.MapComponent.clearPolygonIndex(1);
           break;
 
-          case "medium":
+          case "Medium":
           this.MapComponent.clearPolygonIndex(2);
           break;
 
-          case "high":
+          case "High":
           this.MapComponent.clearPolygonIndex(3);
           break;
 
-          case "garage":
+          case "Garage":
           this.MapComponent.clearPolygonIndex(4);
           break;
         }
