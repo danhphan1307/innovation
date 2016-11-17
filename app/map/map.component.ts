@@ -360,11 +360,11 @@ export class MapComponent{
             "location":{
                 "coordinates":[[[[0],[0]]]]
             },
-            "free": true,
-            "date" : "No data",
-            "diff" :"No data"
+            "free": true
         };
-        localStorage.setItem('duration',("No data"));
+        localStorage.setItem('ticket',"No data");
+        localStorage.setItem('date',"No data");
+        localStorage.setItem('duration',"No data");
         localStorage.setItem('carLocation',JSON.stringify(init_local_storage));
         this.saveUpdated.emit(null);
     }

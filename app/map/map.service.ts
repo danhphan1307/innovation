@@ -210,10 +210,10 @@ export class MapService{
                     error =>{console.log(error)}
                     )}
             });
-
+        var des = 'Payment for ticket' +  localStorage.getItem('ticket');
         handler.open({
             name: 'Ticket',
-            description: 'Payment for ticket',
+            description: des,
             amount: _amount
         });
     }

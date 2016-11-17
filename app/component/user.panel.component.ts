@@ -18,6 +18,7 @@ import {Coords} from '../models/location';
   <img src="img/person.png" alt="user icon" id="person">
   <div class="locationPanel"><span class="glyphicon glyphicon-map-marker" style="margin-right:5px;"></span> Car location</div>
   <div class="content">{{name}}<br>
+  Ticket: {{ticket}}<br>
   Park time: {{time}}<br>
   Time pass: {{diff}}</div>`,
   providers: []
@@ -27,26 +28,34 @@ export class UserComponent extends AbstractComponent implements OnInit {
   name:string = "Sorry, you did not save your car location";
   time:any;
   diff:any;
+  ticket:any;
   ngOnInit(){
     var object = JSON.parse(localStorage.getItem('carLocation'));
     this.name = object.name.en;
-    this.time = object.date;
+    this.time = localStorage.getItem('date');
+    (this.time!="No data")? this.time = this.convertDateString(this.time):this.time = this.time ;
     this.diff = localStorage.getItem('duration');
+    this.ticket = localStorage.getItem('ticket');
     setInterval(() => {
-      if(this.name!="Sorry, you did not save your car location")
-        this.diff = this.diffTwoDay(new Date(), new Date (this.time));
-      localStorage.setItem('duration',this.diff);
+      if(this.name!="Sorry, you did not save your car location"){
+        this.diff = this.diffTwoDay(new Date(), new Date (localStorage.getItem('date')));
+        localStorage.setItem('duration',this.diff);
+      }
+      
     }, 1000);
   }
 
   updateSave(event:any){
     if(event!=null){
       this.name = event.name.en;
-      this.time = event.date;
+      this.time = this.convertDateString(event.date);
+      this.ticket = localStorage.getItem('ticket');
+      this.diff = localStorage.getItem('duration');
     }else {
       this.name = "Sorry, you did not save your car location";
       this.time = "No data";
       this.diff = "No data";
+      this.ticket = "No data";
     }
   }
 

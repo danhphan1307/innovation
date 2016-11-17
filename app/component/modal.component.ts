@@ -29,9 +29,8 @@ import {Observable} from 'rxjs/Rx';
 	<input type="text" class="form-control" placeholder="License plate" aria-describedby="sizing-addon3" id="input2">
 	</div>
 	<br>
-	This spot will cost you {{value}} €/h <br>
-	Press Accept to confirm
-	<br><br>
+	Price: {{value}} €/h <br>
+	<img src="img/waiting-respond.gif" alt="loading" id="waiting-respond"/>
 	<div id="error-log" class="alert alert-danger" style="display:none"></div>
 	<div id="success-log" class="alert alert-success" style="display:none"></div>
 	</div>
@@ -72,7 +71,7 @@ export class ModalComponent {
 
 		return this.http.post(this.ticketURL, body, {headers : head})
 		.map( (response) => {let body = response.json()
-			return body[0].row || { }
+			return body['data'] || { }
 		});
 		
 	}
@@ -85,7 +84,7 @@ export class ModalComponent {
 		document.getElementById("btn-success").style.visibility = "visible";
 		document.getElementById("btn-danger").style.visibility = "visible";
 		document.getElementById("title").innerText= "Confirmation";
-
+		document.getElementById("waiting-respond").style.height = '0';
 		this.value=_param;
 		this.lgModal.show();
 	}
@@ -100,22 +99,27 @@ export class ModalComponent {
 			document.getElementById('input1').className="form-control has-success";
 			document.getElementById('input2').className="form-control has-success";
 			document.getElementById("error-log").style.display = "none";
+
+			document.getElementById("waiting-respond").style.height = '100%';
 			this.getTicket((<HTMLInputElement>document.getElementById('input1')).value).subscribe( (data:any) => {
 				if(data!="Success false"){
 					//this.lgModal.hide();
-					console.log(data);
 					document.getElementById("btn-success").style.visibility = "hidden";
 					document.getElementById("btn-danger").style.visibility = "hidden";
 					document.getElementById("success-log").style.display = "block";
-					var content = "Your ticket number is: " + data;
-					document.getElementById('success-log').innerText= content;
+					var content = "Your ticket number is: <br>" + (data.ticket_code);
+					document.getElementById('success-log').innerHTML= content;
 					document.getElementById("title").innerText= "Thank you";
+					document.getElementById("waiting-respond").style.height = '0';
+					localStorage.setItem('ticket',data.ticket_code);
+					localStorage.setItem('date',data.time_stamp);
 					this.resultUpdated.emit(data);
 					return true;
 				}
 				else {
 					document.getElementById("error-log").style.display = "block";
 					document.getElementById('error-log').innerText="Cannot get the ticket. Please try again.";
+					document.getElementById("waiting-respond").style.height = '0';
 				}
 			});
 			
