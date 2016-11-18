@@ -220,7 +220,7 @@ h2{
 .functionIcon{
     z-index: 10;
     margin-top:-5px;
-    margin-left:10px;
+    margin-left:0.8em;
 }
 
 .cityBike h3, .parkHere h3, .searchInfo h3, .facility h3, .parkPlace h3{
@@ -308,22 +308,13 @@ h2{
     text-transform: uppercase;
 }
 
-.bottomNav img{
-    margin-top: 5%;
-    background-color:#acacac;
-}
-
-.bottomNav li.active img{
-    background-color:#2A6785;
+.bottomNav li.active i, .bottomNav li.active span{
+    color:#789DCA;
 }
 .bottomNav li span{
     margin-top: -5px;
     width: 100%;
     font-size:10px;
-}
-.bottomNav li.active span{
-
-    color:#2A6785;
 }
 .bottomNav li div{
     height: 100%;
@@ -336,6 +327,9 @@ h2{
   height: 100%;
   max-width: 30px;
   max-height: 30px;
+}
+.custom-i{
+    margin-top: 5%;
 }
 #markerFacility, #markerBike, #polygon,#destination_marker, #markerSearch{
     background-color: #acacac;
@@ -379,21 +373,12 @@ h2{
     background-color:#1CBB9B;
     color:white;
 }
-.bottomDiv{
-    z-index: 2;
-    position: absolute;
-    bottom: 0;
-    height: 0;
-    width: 100%;
-    background-color: white;
-    transition: .5s;
-}
 .locationPanel{
     width: 100%;
     background: #1cbb9b;
     display:flex;justify-content:center;align-items:center;
     color:white;
-    height:7vh;
+    height:10vh;
 }
 .content{
     margin:2% 4%;
@@ -442,7 +427,7 @@ h2{
     padding-left: 5%;
 }
 
-#Help hr {
+#help hr {
     display: block;
     height: 1px;
     border: 0;
@@ -478,6 +463,7 @@ h2{
 }
 #filter th{
     background-color: #789DCA;
+    text-transform: uppercase;
     padding-top:5px;
     padding-bottom: 5px;
     text-align:center;
@@ -490,17 +476,21 @@ h2{
 #person {
     top: 50%;
     left: 50%;
-    transform: translate(-150%, -50%);
-    display:block;
-    margin: 0 auto;
-    max-width: 80px;
+    transform: translate(150%, -50%);
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     border: 2px solid white;
     border-radius:50%;
-    margin-bottom:-80px;
-
+}
+.bottomDiv{
+    z-index: 2;
+    position: absolute;
+    height: 0;
+    width: 100%;
+    background-color: white;
+    transition: .5s;
+    bottom: 8vh;
 }
 .bottomDiv #info{
     height:7vh;
@@ -508,6 +498,9 @@ h2{
     top:5px;
     position: relative;
     font-weight: bold;
+}
+.bottomDiv .content{
+    margin-top:-50px;
 }
 #search_input_wrap{
     z-index: 1;

@@ -14,9 +14,7 @@ import {Coords} from '../models/location';
     ])
   ],
   template: `<div class="bottomDiv" [@animationBottomNav]="state">
-
-  <img src="img/person.png" alt="user icon" id="person">
-  <div class="locationPanel"><span class="glyphicon glyphicon-map-marker" style="margin-right:5px;"></span> Car location</div>
+  <div class="locationPanel"></div><img src="img/person.png" alt="user icon" id="person">
   <div class="content">{{name}}<br>
   Ticket: {{ticket}}<br>
   Park time: {{time}}<br>

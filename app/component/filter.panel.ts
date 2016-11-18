@@ -27,7 +27,7 @@ declare var Slider: any;
   </td>
   </tr>
   <tr>
-  <td colspan="2"><label>Search Radius</label></td>
+  <td><label>Search Radius</label></td>
   </tr>
   <tr >
   <td class="special" colspan="2" (touchend)="ReturnSliderValue()">

@@ -14,31 +14,31 @@ import {BlackOverlay} from '../component/blackoverlay.component';
   <ul>
   <li routerLink="/parking" routerLinkActive="active">
   <div>
-  <img src="img/Free Parking-50.png" alt="parking zone"  class="custom-img-responsive">
-  <span>Pay Parking</span>
+  <i class="fa fa-car fa-2x custom-i"></i>
+  <span>Parking</span>
   </div>
   </li>
   <li routerLink="/hri" routerLinkActive="active">
   <div>
-  <img src="img/hri.png" alt="free parking" class="custom-img-responsive">
-  <span>Parking</span>
+  <i class="fa fa-database fa-2x custom-i"></i>
+  <span>Data</span>
   </div>
   </li>
   <li routerLink="/parkandride" routerLinkActive="active">
   <div>
-  <img src="img/Park Ride-50.png" alt="park ride"  class="custom-img-responsive">
+  <i class="fa fa-train fa-2x custom-i"></i>
   <span>Park & Ride</span>
   </div>
   </li>
   <li routerLink="/bike" routerLinkActive="active">
   <div>
-  <img src="img/Bicycle-50.png" alt="bike icon"  class="custom-img-responsive">
+  <i class="fa fa-bicycle fa-2x custom-i"></i>
   <span>City Bikes</span>
   </div>
   </li>
-  <li routeLink="/user" routerLinkActive="active" id="testImg" #testImg>
+  <li routerLink="/user" routerLinkActive="active">
   <div>
-  <img  src="img/User-Info.png" alt="user info"  class="custom-img-responsive">
+  <i class="fa fa-user-o fa-2x custom-i"></i>
   <span>User Info</span>
   </div>
   </li>

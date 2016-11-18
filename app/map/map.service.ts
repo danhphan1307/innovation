@@ -15,28 +15,28 @@ import 'rxjs/add/operator/toPromise';
 export class MapService{
     icons = {
         small: {
-            icon:  'img/parkingIconSmall.png'
+            icon:  'img/facilityCarIconSmall.png'
         },
         large: {
-            icon: 'img/parkingIconLarge.png'
+            icon: 'img/facilityCarIconLarge.png'
         }
     }
 
     iconsBikeStation = {
         small: {
-            icon:  'img/bikeStationIconSmall.png'
+            icon:  'img/cityBikeIconSmall.png'
         },
         large: {
-            icon: 'img/bikeStationIcon.png'
+            icon: 'img/facilityBikeIconLarge.png'
         }
     }
 
     iconsBike = {
         small: {
-            icon:  'img/smallBike.png'
+            icon:  'img/cityBikeIconSmall.png'
         },
         large: {
-            icon: 'img/largeBike.png'
+            icon: 'img/cityBikeIconLarge.png'
         }
     }
     iconsParkHere = {
@@ -57,9 +57,7 @@ export class MapService{
         },
     }
 
-
     url = "https://fabulous-backend-hsl-parking.herokuapp.com/api/checkout";
-    //url = "http://localhost:8081/api/checkout"
     constructor(private http: Http){
 
     }
@@ -121,14 +119,15 @@ export class MapService{
             _icon = this.iconsBike[type].icon;
         }else if(_type=="park"){
             _zIndex = 2;
-            _icon = this.iconsParkHere['large'].icon;
+            _icon = this.iconsParkHere[type].icon;
         }else if(_type=="default"){
-            //
+             _icon = "img/default.png"
         }else if(_type=="hiden"){
             _visible = false;
         }else if(_type=="entrance"){
             _icon = this.iconEntrance['large'].icon;
         }
+
         var temp_marker = new google.maps.Marker({
             position: new google.maps.LatLng(_lat, _lon),
             map: _map,
@@ -146,9 +145,9 @@ export class MapService{
             }else if(_type=="bike"){
                 temp_marker.setIcon(this.iconsBike[type].icon);
             }else if(_type=="park"){
-                temp_marker.setIcon(this.iconsParkHere['large'].icon);
+                temp_marker.setIcon(this.iconsParkHere[type].icon);
             }else if(_type=="fefault"){
-                temp_marker.setIcon(null);
+                //temp_marker.setIcon(null);
             }
         });
         return temp_marker;

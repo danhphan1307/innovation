@@ -76,10 +76,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
     this.FilterPanel.load(this.MapComponent,this.FacilityComponent, this.ZoneComponent);
-    document.getElementById('testImg').addEventListener('click',()=>{
-      this.blackOverlay.setState('open');
-      this.UserComponent.setState('open');
-    })
   }
 
   constructor(private _router: Router, viewContainerRef:ViewContainerRef ) {
@@ -104,24 +100,34 @@ export class AppComponent implements OnInit {
 
   public bottomtNav():void{
     if(this.bMapDone == true){
-      this.reset();
       if(this.router.url == "/parkandride"){
+
+        this.reset();
         this.FilterPanel.OpenPanel("Facility");
         this.MapComponent.center();
-      }else if(this.router.url == "/parking"){
+      }
+      else if(this.router.url == "/parking"){
+        this.reset();
         this.MapComponent.center();
       }
-      else {
-        if(this.router.url == "/bike"){
-          this.displayBikes()
-        }
-        if (this.router.url == "/hri"){
-          this.FilterPanel.OpenPanel("HRI");
-        }
+      else if(this.router.url == "/bike"){
+        this.reset();
+        this.displayBikes();
         this.MapComponent.center(this.lat,this.long);
+
+      }
+      else if (this.router.url == "/hri"){
+        this.reset();
+        this.FilterPanel.OpenPanel("HRI");
+        this.MapComponent.center(this.lat,this.long);
+      } 
+      else if(this.router.url == "/user"){
+        this.blackOverlay.setState('open');
+        this.UserComponent.setState('open');
       }
     }
   }
+
 
   /* Methods for displaying markers*/
   displayBikes(){
@@ -140,7 +146,7 @@ export class AppComponent implements OnInit {
       this.FilterPanel.OpenPanel("None");
     }
   }
-  
+
   reset(){
     document.getElementById('help').style.display="none";
     document.getElementById('direction').style.display="none";
