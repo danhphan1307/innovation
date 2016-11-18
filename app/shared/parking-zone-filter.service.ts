@@ -14,8 +14,6 @@ export class ParkingZoneFilterService{
     constructor(private http: Http){
 
     }
-
-
     //Test get data from files
     getParkingZone() : Observable<ParkingType[]> {
         return this.http.get('../free-and-paid-parking.json')
@@ -23,12 +21,10 @@ export class ParkingZoneFilterService{
         .catch(this.handleError);
     }
 
-
     private extractData(res: Response) {
         let body = res.json();
         return body.stations || { };
     }
-
 
     private getHeaders(){
         let headers = new Headers();

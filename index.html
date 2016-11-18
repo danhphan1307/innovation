@@ -95,7 +95,7 @@
 				content = '<div class="alert alert-danger" role="alert"  style="z-index: 10"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>You are offline<br>';
 				if(localStorage_hasData){
 					var object = JSON.parse(localStorage.getItem('carLocation'))
-					content+= 'Car location: '+ object.name.en + ' <br>Park time: ' + object.date ;
+					content+= 'Car location: '+ object.name.en + ' <br>Park time: ' + localStorage.getItem('date') ;
 				}else {
 					content+='Please check your internet connection';
 				}

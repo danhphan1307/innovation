@@ -1,8 +1,7 @@
 
 import {Injectable} from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import {Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import global = require('../globals');
-
 import {Observable} from 'rxjs/Rx';
 import {Marker} from '../marker/marker';
 import {Coords} from '../models/location';
@@ -57,7 +56,8 @@ export class MapService{
         },
     }
 
-    url = "https://fabulous-backend-hsl-parking.herokuapp.com/api/checkout";
+    private url = "https://fabulous-backend-hsl-parking.herokuapp.com/api/checkout";
+    private removeTicket = 'https://fabulous-backend-hsl-parking.herokuapp.com/api/ticket';
     constructor(private http: Http){
 
     }
@@ -119,9 +119,9 @@ export class MapService{
             _icon = this.iconsBike[type].icon;
         }else if(_type=="park"){
             _zIndex = 2;
-            _icon = this.iconsParkHere[type].icon;
+            _icon = this.iconsParkHere['large'].icon;
         }else if(_type=="default"){
-             _icon = "img/default.png"
+            _icon = "img/default.png"
         }else if(_type=="hiden"){
             _visible = false;
         }else if(_type=="entrance"){
@@ -145,7 +145,7 @@ export class MapService{
             }else if(_type=="bike"){
                 temp_marker.setIcon(this.iconsBike[type].icon);
             }else if(_type=="park"){
-                temp_marker.setIcon(this.iconsParkHere[type].icon);
+                //temp_marker.setIcon(this.iconsParkHere[type].icon);
             }else if(_type=="fefault"){
                 //temp_marker.setIcon(null);
             }
@@ -219,7 +219,15 @@ export class MapService{
                 // Get the token ID to your server-side code for use.
                 this.http.post(this.url,{token,des,amount},options)
                 .subscribe(
-                    res=>{console.log(res);},
+                    response => {let body = response.json()
+                        if(body.success){
+                            let temp_url = this.removeTicket + des;
+                            return this.http.delete(temp_url).map( (response) => {
+                                console.log(response);
+                            });    
+                        }
+                        return body.success || { }
+                    },
                     error =>{console.log(error)}
                     )}
             });

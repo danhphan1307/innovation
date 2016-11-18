@@ -145,13 +145,19 @@ export class FilterPanel{
     }
   }
 
+  setButtonOnOff(_element:any, _status:boolean){
+    for (var i = 0; i< _element.length; i++){
+      (<HTMLInputElement>document.getElementById(_element[i])).disabled = !_status;
+    }
+  }
+
   displayAllFacility(e:any){
     if(e.target.checked){
       switch (e.target.name) {
         case 'Show All':
-        (<HTMLInputElement>document.getElementById("Show All")).disabled = true;
+        this.setButtonOnOff(this.optionsFacility, false);
         this.facilityComponent.loadAllFacilities(this.map,():void =>{
-          (<HTMLInputElement>document.getElementById("Show All")).disabled = false;
+          this.setButtonOnOff(this.optionsFacility, true);
         });
         break;
       }
@@ -179,31 +185,44 @@ export class FilterPanel{
   //Display markers for parking
   displayZone(e:any){
     if(e.target.checked){
+      this.setButtonOnOff(this.options, false);
       switch (e.target.name) {
         case 'Zone':
-        this.map.displayKML();
+        this.map.displayKML(():void =>{
+          this.setButtonOnOff(this.options, true);
+        });
         break;
         case "Free":
         this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.map);
-        this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.map);
+        this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.map,():void =>{
+          this.setButtonOnOff(this.options, true);
+        });
         break;
 
         case "Max 4h Parking":
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.map);
+        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.map,():void =>{
+          this.setButtonOnOff(this.options, true);
+        });
         break;
 
         case "Unlimited Time":
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.map);
+        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.map,():void =>{
+          this.setButtonOnOff(this.options, true);
+        });
         break;
 
         case "Max 1h Parking":
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.map);
+        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.map,():void =>{
+          this.setButtonOnOff(this.options, true);
+        });
         break;
 
         case "Parking Facilities":
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.map);
-        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.map);
         this.ZoneComponent.putEntrances(this.map);
+        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.map);
+        this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.map,():void =>{
+          this.setButtonOnOff(this.options, true);
+        });
         break;
       }
 

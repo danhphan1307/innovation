@@ -155,7 +155,11 @@ export class MapComponent{
         if (localStorage_hasData()) {
             this.parkMarker = this.placeParkPlace();
         }
-
+        document.getElementById("gettingLocation").style.opacity = '0';
+        setTimeout(()=>{
+            document.getElementById("gettingLocation").style.display = 'none';
+        },250)
+        
         /*
         *Search bar
         */
@@ -270,8 +274,11 @@ export class MapComponent{
     }
 
 
-    center(lat:number = this.centerLat,long:number = this.centerLon):void{
+    center(lat:number = this.centerLat,long:number = this.centerLon,  _func?:()=>void){
         this.map.panTo(new google.maps.LatLng(lat,long));
+        if(_func){
+            _func();
+        }
     }
     clearFacilityMarkers(_init:boolean = false, _pageLoad:boolean = false){
         if(_init){
@@ -321,8 +328,9 @@ export class MapComponent{
         this.kmlLayer.setMap(null);
     }
 
-    displayKML(){
+    displayKML(_func?:()=>void){
         this.kmlLayer.setMap(this.map);
+        _func();
     }
 
     markerToJSON(_marker:any, _name:string):any{

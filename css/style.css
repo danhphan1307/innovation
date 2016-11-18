@@ -31,7 +31,7 @@ a{
     position:absolute;
     z-index: 2;
     width: 100%;
-    height: 100%;
+    height: 90%;
     background: rgba(0,0,0,0.4);
 }
 
@@ -97,7 +97,7 @@ a{
     display:inline-block;
 }
 #controlNav #navigate{
-    color:rgb(251,118,107);
+    color:#ca789d;
     font-size:2em;
     margin-right:3%;
     cursor:pointer;
@@ -119,6 +119,38 @@ a{
     display:inline-block;
     /*margin-left:45%;*/
 }
+
+#gettingLocation{
+    background-color: white;
+    position: absolute;
+    top: 40vh;
+    left:25vw;
+    width: 50vw;
+    z-index: 3;
+    text-align: center;
+    transition: 0.25s;
+}
+#gettingLocation img{
+    padding-top: 2vh;
+    max-height: 10vh;
+    display:block;
+    margin:auto;
+}
+#gettingLocation .title{
+    color:white;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    width: 100%;
+    background-color:#789DCA; 
+    text-transform: uppercase;  
+    font-weight: bold;
+}
+#gettingLocation span{
+    width: 100%;
+    text-transform: uppercase;
+    font-weight: bold;
+    color:#789DCA;
+}
 /*Side Nav CSS*/
 .slider.slider-horizontal {
     width: 80%;
@@ -127,19 +159,6 @@ a{
 }
 .slider-selection {
     background: #BAD8F2;
-}
-
-#mySidenav .copyright{
-    position: absolute;
-    bottom:1%;
-    width:100%;
-}
-#mySidenav .copyright p{
-    margin:auto 0; text-align: justify; -moz-text-align-last: center; text-align-last: center;
-}
-#mySidenav .copyright hr{
-    margin-left:-5%;
-    width: 110%;
 }
 /* The switch - the box around the sliderIOS */
 .switch {
@@ -592,6 +611,18 @@ h2{
 
 #waiting-respond{
     width: 100%;
+}
+.developer{
+    width: 100%;
+    text-align:center;
+    position: absolute;
+    bottom:1vh;
+    left:0;
+}
+.developer img{
+    display: block;
+    margin:auto;
+    max-height: 7vh;
 }
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {

@@ -22,32 +22,28 @@ export class ParkZoneComponent implements OnInit {
   data : string;
   markers : Marker[] = [];
 
- //Temporary coordinators
- staticLatLon = [[60.1731,24.9484],[60.1708,24.9397],[60.1736, 24.9386],[60.1747,24.9351],[60.1695, 24.9371],
-                 [60.1682,24.9404],[60.1682,24.9495],[60.1655 , 24.9496],[60.1646,24.9438],[60.1702,24.9305],
-                 [60.1709 , 24.9330],[60.1730 , 24.9295],[60.1781 , 24.9483],[60.1642, 24.9174],[60.1641 ,24.9100]
-                 ];
- coords : Coords[] = [];
+  //Temporary coordinators
+  staticLatLon = [[60.1731,24.9484],[60.1708,24.9397],[60.1736, 24.9386],[60.1747,24.9351],[60.1695, 24.9371],
+  [60.1682,24.9404],[60.1682,24.9495],[60.1655 , 24.9496],[60.1646,24.9438],[60.1702,24.9305],
+  [60.1709 , 24.9330],[60.1730 , 24.9295],[60.1781 , 24.9483],[60.1642, 24.9174],[60.1641 ,24.9100]
+  ];
+  coords : Coords[] = [];
   @Output()
   triggered = new EventEmitter<ActiveComponent>();
 
   constructor(private mapService: MapService,
     private parkingFilterService: ParkingZoneFilterService){
-
   }
 
   ngOnInit(){
     this.triggered.emit(ActiveComponent.PAIDZONE)
-
-
-
   }
 
   ngOnChanges(){
 
   }
 
-  public loadZones(pricingZone: PricingZoneEnum, map: MapComponent): void {
+  public loadZones(pricingZone: PricingZoneEnum, map: MapComponent, _func?:()=>void){
     this.parkingFilterService.getParkingZone().subscribe((res: ParkingType[]) => {
       this.parkZones = res;
 
@@ -86,7 +82,6 @@ export class ParkZoneComponent implements OnInit {
         indexAbcd = 4;
         break;
       }
-
       for (var z of this.parkZones) {
         if (z.geometry.type == "Polygon"){
           //Draw the outbounds
@@ -103,9 +98,10 @@ export class ParkZoneComponent implements OnInit {
         }
 
       }
+      if(_func){
+        _func();        
+      }
     });
-
-
   }
 
   public putEntrances(map: MapComponent){
@@ -113,7 +109,6 @@ export class ParkZoneComponent implements OnInit {
       var val = this.staticLatLon[i];
       this.coords.push(new Coords(val[0],val[1]));
     }
-       map.placeMarkerEntrance(this.coords);
-
+    map.placeMarkerEntrance(this.coords);
   }
 }

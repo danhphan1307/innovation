@@ -38,14 +38,16 @@ export class FacilityComponent implements OnInit {
     this.loadFacilitiesNearby(_map, new Coords(_map.centerLat, _map.centerLon), this.radius);
   }
 
-  loadAllFacilities(mapComponent: MapComponent, _func:()=>void){
+  loadAllFacilities(mapComponent: MapComponent, _func?:()=>void){
     this.facilityService.getAllFacilities().subscribe((facilities) => {
       //filter park and ride + active
       this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
         && f.status == FacilityStatus.IN_OPERATION
         );
       mapComponent.placeMarkerFacility(this.facilities, true, true);
-      _func();
+      if(_func){
+        _func();        
+      }
     });
   }
 

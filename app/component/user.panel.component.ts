@@ -8,8 +8,8 @@ import {Coords} from '../models/location';
   animations: [
 
   trigger("animationBottomNav", [
-    state("open", style({height:"50%", display: "block"})),
-    state("close", style({height: "0", display: "none" })),
+    state("open", style({height:"70%",opacity:'1', display: "block"})),
+    state("close", style({height: "0",opacity:'0', display: "none" })),
     transition("open <=> close", animate( "250ms" )),
     ])
   ],
@@ -18,7 +18,13 @@ import {Coords} from '../models/location';
   <div class="content">{{name}}<br>
   Ticket: {{ticket}}<br>
   Park time: {{time}}<br>
-  Time pass: {{diff}}</div>`,
+  Time pass: {{diff}}
+  <div class="developer">
+    <hr>
+    <img src="img/logo.png" alt="logo"><br>
+    Version: 1.0.0
+  </div>
+  </div>`,
   providers: []
 })
 

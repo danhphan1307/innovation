@@ -30,7 +30,6 @@ declare var Slider: any;
 })
 
 export class AppComponent implements OnInit {
-  options = ['Zone','Free', 'Unlimited Time' ,'Max 4h Parking', 'Max 1h Parking', 'Parking Facilities'];
   private viewContainerRef: ViewContainerRef;
   public onlineOffline: boolean = navigator.onLine;
   router:Router;
@@ -75,6 +74,7 @@ export class AppComponent implements OnInit {
   long: number = 24.9418765;
 
   ngOnInit(){
+    this.blackOverlay.setState('full');
     this.FilterPanel.load(this.MapComponent,this.FacilityComponent, this.ZoneComponent);
   }
 
@@ -90,40 +90,50 @@ export class AppComponent implements OnInit {
     this.UserComponent.setState('close');
   }
 
-  public loadData(event:boolean){
-    //call only if map is completely loaded. receive boolean true
+  public loadData(event:boolean){    //call only if map is completely loaded. receive boolean true
     if (event==true){
       this.bMapDone = true;
       this.bottomtNav();
     }
   }
+  options = ['parking','hri', 'parkandride' ,'bike', 'user'];
+  setButtonOnOff(_element:any, _status:string){
+    for (var i = 0; i< _element.length; i++){
+      (<HTMLInputElement>document.getElementById(_element[i])).style.pointerEvents = _status;
+    }
+  }
 
-  public bottomtNav():void{
-    if(this.bMapDone == true){
-      if(this.router.url == "/parkandride"){
-
-        this.reset();
-        this.FilterPanel.OpenPanel("Facility");
-        this.MapComponent.center();
-      }
-      else if(this.router.url == "/parking"){
-        this.reset();
-        this.MapComponent.center();
-      }
-      else if(this.router.url == "/bike"){
-        this.reset();
-        this.displayBikes();
-        this.MapComponent.center(this.lat,this.long);
-
-      }
-      else if (this.router.url == "/hri"){
-        this.reset();
-        this.FilterPanel.OpenPanel("HRI");
-        this.MapComponent.center(this.lat,this.long);
-      } 
-      else if(this.router.url == "/user"){
+  public bottomtNav(){
+    if(this.bMapDone){
+      if(this.router.url == '/user' ){
         this.blackOverlay.setState('open');
         this.UserComponent.setState('open');
+      }else {
+        this.setButtonOnOff(this.options,'none');
+        this.reset();
+        if(this.router.url == "/parkandride"){
+          this.FilterPanel.OpenPanel("Facility");
+          this.MapComponent.center(this.MapComponent.centerLat, this.MapComponent.centerLon, ():void =>{
+            this.setButtonOnOff(this.options,'auto');
+          });
+        }
+        else if(this.router.url == "/parking"){
+          this.MapComponent.center(this.MapComponent.centerLat, this.MapComponent.centerLon, ():void =>{
+            this.setButtonOnOff(this.options,'auto');
+          });
+        }
+        else if(this.router.url == "/bike"){
+          this.displayBikes();
+          this.MapComponent.center(this.lat,this.long,():void =>{
+            this.setButtonOnOff(this.options,'auto');
+          });
+        }
+        else if (this.router.url == "/hri"){
+          this.FilterPanel.OpenPanel("HRI");
+          this.MapComponent.center(this.lat,this.long,():void =>{
+            this.setButtonOnOff(this.options,'auto');
+          });
+        }
       }
     }
   }
@@ -134,7 +144,6 @@ export class AppComponent implements OnInit {
     this.FilterPanel.SetliderState(false);
     this.BikeComponent.loadBikeStations(this.MapComponent);
     this.MapComponent.markers = this.BikeComponent.markers;
-
   }
 
   openHelper(){
@@ -150,6 +159,8 @@ export class AppComponent implements OnInit {
   reset(){
     document.getElementById('help').style.display="none";
     document.getElementById('direction').style.display="none";
+    this.blackOverlay.setState('close');
+    this.UserComponent.setState('close');
     this.FilterPanel.closeAllPanel();
     this.MapComponent.clearFacilityMarkers(true,true);
     this.MapComponent.clearCircles();
