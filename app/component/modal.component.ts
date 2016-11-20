@@ -121,9 +121,7 @@ export class ModalComponent {
 					document.getElementById("btn-close").style.visibility = "visible";
 				}
 			});
-			
 		}
-		
 	}
 
 	hideLgModal() {

@@ -200,7 +200,7 @@ export class MapService{
         var geocoder = new google.maps.Geocoder();
         geocoder.geocode({'address': address}, function(res: any,status: any){
             if (status == google.maps.GeocoderStatus.OK){
-                console.log(res)
+                console.log(res);
             }
         })
     }

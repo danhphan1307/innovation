@@ -6,7 +6,8 @@ import {MapService} from './map.service'
 import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
 import {GoogleService} from '../google/google.service'
 import {ModalComponent} from '../component/modal.component'
-
+import { CustomComponent }  from '../component/custom.component';
+import {Help} from '../component/help.component';
 function localStorage_hasData() {
     try {
         if(JSON.parse(localStorage.getItem("carLocation")).name.en != "Sorry, you did not save your car location"){
@@ -26,6 +27,8 @@ declare var google: any;
     selector: 'map-gg',
     template: `
     <modal-bootstrap (resultUpdated)="ParkOrNot($event)"></modal-bootstrap>
+    <custom-bootstrap></custom-bootstrap>
+    <help id="help"></help>
     <div id="mapCanvas" ></div>
 
     `,
@@ -36,6 +39,10 @@ export class MapComponent{
     //Service
     @ViewChild(ModalComponent)
     private modalComponent:ModalComponent;
+    @ViewChild(CustomComponent)
+    private customComponent:CustomComponent;
+    @ViewChild(Help)
+    private help:Help;
 
     service: MapService;
     googleService: GoogleService;
@@ -60,9 +67,7 @@ export class MapComponent{
     infowindowBike = new google.maps.InfoWindow();
     infowindowDestination = new google.maps.InfoWindow();
     infowindowParkPlace = new google.maps.InfoWindow();
-    infowindowPolygon = new google.maps.InfoWindow({
-        maxWidth: 200
-    });
+    infowindowPolygon = new google.maps.InfoWindow();
 
     @Input()
     circleRadius: number;
@@ -142,6 +147,8 @@ export class MapComponent{
         this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(cog_icon);
         var filter = /** @type {!HTMLInputElement} */(document.getElementById('filter'));
         this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(filter);
+        var help = /** @type {!HTMLInputElement} */(document.getElementById('help'));
+        this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(help);
     }
 
 
@@ -167,6 +174,7 @@ export class MapComponent{
             map: this.map,
             anchorPoint: new google.maps.Point(0, -29)
         });
+
         this.addListenerForMainMarker(this.centerMarker,this.infowindowMainMarker);
         this.autocomplete.addListener('place_changed',()=> {
             this.infowindowDestination.close();
@@ -178,11 +186,7 @@ export class MapComponent{
                 return;
             }
             // If the place has a geometry, then present it on a map.
-            if (place.geometry.viewport) {
-                _map.fitBounds(place.geometry.viewport);
-            } else {
-                _map.setCenter(place.geometry.location);
-            }
+            _map.setCenter(place.geometry.location);
 
             marker.setIcon(/** @type {google.maps.Icon} */({
                 url: place.icon,
@@ -232,6 +236,10 @@ export class MapComponent{
         if(this.circleRadius != 0){
             this.circles.push(this.service.placeCircle(this.map,this.circleRadius,this.centerLat,this.centerLon));
         }
+    }
+
+    clickMainMarker(){
+        google.maps.event.trigger(this.centerMarker, 'click');
     }
 
     addListenerForMainMarker(_marker:any, _infowindow:any){
@@ -612,12 +620,15 @@ export class MapComponent{
         }
     }
 
+
+
     private showDirection(marker: any = null, multiDirection:boolean = true){
         var current = new google.maps.LatLng(this.centerLat,this.centerLon);
         var parkCar:any ;
         var chosenMarker:any;
         var min:number;
         var destination = marker.getPosition();
+        var geocoder  = new google.maps.Geocoder();
 
         if(multiDirection){
             if (!localStorage_hasData()) {
@@ -629,7 +640,13 @@ export class MapComponent{
                     }
                 });
                 new google.maps.event.trigger( chosenMarker, 'click' );
-                document.getElementById('saveButton').click();
+                geocoder.geocode({
+                    'latLng': chosenMarker.getPosition()
+                }, (result:any, status:any) =>{
+                    if (status == google.maps.GeocoderStatus.OK) {
+                        this.customComponent.showModal(result[0].formatted_address);
+                    }
+                });document.getElementById('saveButton').click();
             }else{
                 chosenMarker = new google.maps.Marker({
                     position: new google.maps.LatLng(JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][1], JSON.parse(localStorage.getItem('carLocation')).location.coordinates[0][0][0]),
@@ -650,10 +667,14 @@ export class MapComponent{
             this.service.directionsService(this.map, current, parkCar, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING);
             this.service.directionsService(this.map, parkCar, destination, this.directionArray,'public',google.maps.DirectionsTravelMode.TRANSIT);
             this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
+            this.help.updateSave('?saddr='+this.centerLat+','+this.centerLon +'&daddr='+destination.lat()+','+destination.lng());
         }else {
             this.clearDirection();
             document.getElementById('direction').innerHTML='';
-            this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
+            if (!localStorage_hasData()) {
+                this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
+            }
+            this.service.directionsService(this.map, current, destination, this.directionArray,'public',google.maps.DirectionsTravelMode.TRANSIT);
         }
     }
 }

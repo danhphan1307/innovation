@@ -118,6 +118,7 @@ export class AppComponent implements OnInit {
           });
         }
         else if(this.router.url == "/parking"){
+          this.MapComponent.clickMainMarker();
           this.MapComponent.center(this.MapComponent.centerLat, this.MapComponent.centerLon, ():void =>{
             this.setButtonOnOff(this.options,'auto');
           });
