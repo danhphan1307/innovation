@@ -1,5 +1,3 @@
-
-
 export interface BikeStation {
     id : string;
     name: string;

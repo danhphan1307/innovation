@@ -2,27 +2,30 @@
 <filter id="filter" (radiusUpdated)="MapComponent.updateRadius($event)" (radiusUpdated)="FacilityComponent.updateRadius($event, MapComponent)"></filter>
 <div id="controlNav">
 	<img src="../img/logo.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="MapComponent.center()"  class="glyphicon glyphicon-map-marker"></span>
-	<div *ngIf="!onlineOffline" class="alert alert-danger" role="alert"  style="z-index: 10">
-		<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-		<span class="sr-only">Error:</span>You are offline<br>
-		Car/Bike location: {{UserComponent.name}}<br>
-		Park time: {{UserComponent.time}}
-	</div>
+</div>
+<div *ngIf="!onlineOffline" class="alert alert-danger" role="alert"  style="z-index: 10">
+	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	<span class="sr-only">Error:</span>You are offline<br>
+	Car/Bike location: {{UserComponent.name}}<br>
+	Park time: {{UserComponent.time}}
 </div>
 <div id="gettingLocation">
 	<div class="title">Getting your location</div>
 	<img src="../img/funny.gif" alt="getting location" class="img-responsive">
 	<span> Please be patient </span>
 </div>
-
-<search-bar></search-bar>
-<div id="direction"></div>
+<div class="input-group" id="input-group">
+	<input id="search_input" type="text" class="form-control" placeholder="Enter destination" >
+	<div class="input-group-btn">
+		<button class="btn btn-default" id="close_search"><span class="glyphicon glyphicon-remove"></span></button>
+	</div>
+</div>
 <img alt="config" id="cog_icon" src="../img/cog.png" (click) = "openHelper()" />
 <map-gg (saveUpdated) = "UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
 <my-bike ></my-bike>
 <park-zone ></park-zone>
 <facility-component></facility-component>
 <user-panel></user-panel>
-<router-outlet></router-outlet>
 <bottom-nav (click)="bottomtNav()" ></bottom-nav>
+<router-outlet></router-outlet>
 

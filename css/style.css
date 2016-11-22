@@ -434,8 +434,6 @@ h2{
     z-index: 1;
     display:none;
     position: absolute;
-    width: 30%;
-    max-width: 200px;
     height: auto;
     left:0;
     background-color: rgba(255,255,255,0.7);
@@ -494,12 +492,13 @@ th{
 #person {
     top: 50%;
     left: 50%;
-    transform: translate(150%, -50%);
+    transform: translate(-50%, -50%);
     box-sizing: border-box;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     border: 2px solid white;
     border-radius:50%;
+    position: relative;
 }
 .bottomDiv{
     z-index: 2;

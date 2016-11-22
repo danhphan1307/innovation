@@ -8,10 +8,8 @@ import { UserComponent }  from './component/user.panel.component';
 import { ModalComponent }  from './component/modal.component';
 import { CustomComponent }  from './component/custom.component';
 import { Help} from './component/help.component';
-import { SearchBar} from './component/search.bar.component';
 import { AppComponent }  from './app.component';
 import { BikeComponent }  from './bikes/bike.component';
-
 import { HttpModule }    from '@angular/http';
 import { AgmCoreModule } from 'angular2-google-maps/core';
 import {MapComponent} from './map/map.component';
@@ -40,7 +38,7 @@ import { routing, appRoutingProviders }  from './app.routing';
     FacilityComponent,
     FilterPanel,
     BottomNavigation,
-    BlackOverlay,routing, Help, SearchBar,ModalComponent, CustomComponent],
+    BlackOverlay,routing, Help,ModalComponent, CustomComponent],
     providers:[ FacilityService,
     MapService,BikeService],
     bootstrap: [AppComponent]

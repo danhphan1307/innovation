@@ -72,6 +72,7 @@ export class MapService{
         var directionsService = new google.maps.DirectionsService;
         directionsService.route(request, (result:any, status: string) => callback(result,status));
     }
+    
     getZoomLevel(_map:any):string{
         if(_map.getZoom()<13){
             return 'small';
@@ -184,16 +185,16 @@ export class MapService{
                     strokeColor: colors[vehicle].color
                 }
             });
-            if(vehicle=='public'){
-                directionsRenderer.setPanel(document.getElementById('direction'));
-                document.getElementById('direction').style.display="none";
-            }
             directionsRenderer.setDirections(result);
             array.push(directionsRenderer);
             return directionsRenderer;
         }
     }
 
+    /*
+    *    Handle checkout, if user did not pay, it will not delete the data from database.
+    *    If the pay process succeed, it will remove the data from parking database.
+    */
     public openCheckout(_amount:number) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });

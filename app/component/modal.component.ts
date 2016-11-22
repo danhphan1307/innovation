@@ -45,19 +45,22 @@ import {Observable} from 'rxjs/Rx';
 })
 export class ModalComponent {
 	result:any; 
+	value:number = 0;
 	private ticketURL = 'https://fabulous-backend-hsl-parking.herokuapp.com/api/ticket';
 
 	constructor(private http: Http){
 
 	}
 
-	value:number = 0;
-
-	@ViewChild('lgModal') public lgModal:ModalDirective;
+	@ViewChild('lgModal')
+	lgModal:ModalDirective;
 
 	@Output()
 	resultUpdated:EventEmitter<any> = new EventEmitter<any>();
 
+	/*
+	* Get the ticket generate by server.
+	*/
 	getTicket(license: string): any{
 		let params: URLSearchParams = new URLSearchParams();
 		let data = {
@@ -88,6 +91,15 @@ export class ModalComponent {
 		this.lgModal.show();
 	}
 
+	hideLgModal() {
+		this.lgModal.hide();
+		this.resultUpdated.emit(false);
+		return false;
+	}
+	/*
+	*	This function will check the input, handle the response from server
+	*	and reset the form when being reopened
+	*/
 	accept(){
 		if((<HTMLInputElement>document.getElementById('input1')).value!=(<HTMLInputElement>document.getElementById('input2')).value||(<HTMLInputElement>document.getElementById('input1')).value=='' || (<HTMLInputElement>document.getElementById('input2')).value ==''){
 			document.getElementById('input1').className="form-control has-error";
@@ -122,11 +134,5 @@ export class ModalComponent {
 				}
 			});
 		}
-	}
-
-	hideLgModal() {
-		this.lgModal.hide();
-		this.resultUpdated.emit(false);
-		return false;
 	}
 }

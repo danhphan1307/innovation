@@ -235,10 +235,6 @@ export class MapComponent{
         }
     }
 
-    clickMainMarker(){
-        google.maps.event.trigger(this.centerMarker, 'click');
-    }
-
     addListenerForMainMarker(_marker:any, _infowindow:any){
         google.maps.event.addListener(_marker, 'click', ()=>{
             if(this.router.url == "/parking"){
@@ -338,6 +334,19 @@ export class MapComponent{
         _func();
     }
 
+    clickMainMarker(){
+        google.maps.event.trigger(this.centerMarker, 'click');
+    }
+    
+    closeInfowindow(){
+        this.infowindowMainMarker.close();
+        this.infowindowFacility.close();
+        this.infowindowBike.close();
+        this.infowindowDestination.close();
+        this.infowindowParkPlace.close();
+        this.infowindowPolygon.close();
+    }
+
     markerToJSON(_marker:any, _name:string):any{
         var temp:any = {
             "name": {
@@ -396,6 +405,9 @@ export class MapComponent{
         this.saveUpdated.emit(null);
     }
 
+    /*
+    *    Check if there is any data in localstorage or not, if there is , show it to the map
+    */
     placeParkPlace(_free:boolean = true){
         if(this.parkMarker!== undefined){
             this.parkMarker.setMap(null);
@@ -439,6 +451,9 @@ export class MapComponent{
         }
     }
 
+    /*
+    *    Each marker will handle different infowindow => different placemarker function.
+    */
     placeMarkerFacility(f:any, _free:boolean = true, _all:boolean=false):void{
         var object:any;
         var cont:boolean = true;
@@ -492,28 +507,9 @@ export class MapComponent{
         }
     }
 
-    park(_container:any, _newLocation:any, _elementIDForPark:string,_elementIDForUnpark:string, _infoWindow:any, _free:boolean=true){
-        this.editLocalStorage(_newLocation);
-        document.getElementById(_elementIDForPark).className="active";
-        document.getElementById(_elementIDForPark).innerHTML="You parked here";
-        this.placeParkPlace(_free);
-        if(document.getElementById(_elementIDForUnpark)==null){
-            var node = document.createElement("button");
-            node.setAttribute("id", _elementIDForUnpark);
-            var textnode = document.createTextNode("Unpark");
-            node.appendChild(textnode);
-            document.getElementsByClassName(_container)[0].appendChild(node);
-        }
-        google.maps.event.addDomListener(document.getElementById(_elementIDForUnpark),'click',()=>{
-            document.getElementById(_elementIDForPark).className = "";
-            document.getElementById(_elementIDForPark).innerHTML ="Park here";
-
-            this.resetLocalStorage();
-            this.placeParkPlace(_free);
-            _infoWindow.close();
-        });
-    }
-
+    /*
+    *    Each marker will handle different infowindow => different placemarker function.
+    */
     placeMarkerBicycle(stations:any):void{
         var map = this.map;
         for (var i = 0; i < stations.length; i++) {
@@ -541,24 +537,33 @@ export class MapComponent{
         }
     }
 
-    stringHandler(input_string:string) {
-        return (input_string.charAt(0).toUpperCase() + input_string.slice(1)).replace(/_/g," ");
+    /*
+    * Handle parking when user click park here
+    */
+    park(_container:any, _newLocation:any, _elementIDForPark:string,_elementIDForUnpark:string, _infoWindow:any, _free:boolean=true){
+        this.editLocalStorage(_newLocation);
+        document.getElementById(_elementIDForPark).className="active";
+        document.getElementById(_elementIDForPark).innerHTML="You parked here";
+        this.placeParkPlace(_free);
+        if(document.getElementById(_elementIDForUnpark)==null){
+            var node = document.createElement("button");
+            node.setAttribute("id", _elementIDForUnpark);
+            var textnode = document.createTextNode("Unpark");
+            node.appendChild(textnode);
+            document.getElementsByClassName(_container)[0].appendChild(node);
+        }
+        google.maps.event.addDomListener(document.getElementById(_elementIDForUnpark),'click',()=>{
+            document.getElementById(_elementIDForPark).className = "";
+            document.getElementById(_elementIDForPark).innerHTML ="Park here";
+
+            this.resetLocalStorage();
+            this.placeParkPlace(_free);
+            _infoWindow.close();
+        });
     }
 
-    getNameFromGeocoder(_marker:any):string{
-        var geocoder  = new google.maps.Geocoder();
-        var sResult = " ";
-        geocoder.geocode({
-            'latLng': _marker.getPosition()
-        }, (result:any, status:any) =>{
-            if (status == google.maps.GeocoderStatus.OK) {
-                return sResult =  result[0].formatted_address;
-            } else {
-                console.log('Geocoder failed due to: ' + status);
-                return sResult =  "Location not found";
-            }
-        });
-        return sResult;
+    stringHandler(input_string:string) {
+        return (input_string.charAt(0).toUpperCase() + input_string.slice(1)).replace(/_/g," ");
     }
 
     placePolygon(coordArray: any[], colorCode : string, type: string = " ", enumabcd : any){
@@ -597,6 +602,9 @@ export class MapComponent{
         });
     }
 
+    /*
+    *    Indicate the entrance for the garrage.
+    */
     placeMarkerEntrance(coords: Coords[]){
         var map = this.map;
         for (var i = 0; i < coords.length; i++) {
@@ -608,6 +616,9 @@ export class MapComponent{
         }
     }
 
+    /*
+    * Receive new radius from Emitter from filter panel
+    */
     updateRadius(event:any){
         this.circleRadius = event;
         if (this.centerLat != null && this.centerLon != null) {
@@ -617,8 +628,12 @@ export class MapComponent{
         }
     }
 
-
-
+    /*
+    * Handle event when user click show direction. It will cal function from map service.
+    * At the beginning, it will check if user parked his/her car or not. 
+    * If not and in parkandride URL, it will automatically chose the nearest parking slot for the user.
+    * If user parked already, it will only show the direction by public transportation.
+    */
     private showDirection(marker: any = null, multiDirection:boolean = true){
         var current = new google.maps.LatLng(this.centerLat,this.centerLon);
         var parkCar:any ;
@@ -660,18 +675,16 @@ export class MapComponent{
 
             parkCar = chosenMarker.getPosition();
             this.clearDirection();
-            document.getElementById('direction').innerHTML='';
             this.service.directionsService(this.map, current, parkCar, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING);
             this.service.directionsService(this.map, parkCar, destination, this.directionArray,'public',google.maps.DirectionsTravelMode.TRANSIT);
             this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
-            this.help.updateSave('?saddr='+this.centerLat+','+this.centerLon +'&daddr='+destination.lat()+','+destination.lng());
         }else {
             this.clearDirection();
-            document.getElementById('direction').innerHTML='';
             if (!localStorage_hasData()) {
                 this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
             }
             this.service.directionsService(this.map, current, destination, this.directionArray,'public',google.maps.DirectionsTravelMode.TRANSIT);
         }
+        this.help.updateSave('?saddr='+this.centerLat+','+this.centerLon +'&daddr='+destination.lat()+','+destination.lng());
     }
 }

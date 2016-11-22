@@ -6,7 +6,6 @@ import {BottomNavigation} from './component/bottom.navigation.component';
 import {BlackOverlay} from './component/blackoverlay.component';
 import {FacilityComponent} from './facilities/facility.component';
 import {Help} from './component/help.component';
-import {SearchBar} from './component/search.bar.component';
 import {FilterPanel} from './component/filter.panel';
 import {UserComponent} from './component/user.panel.component';
 import {BikeComponent} from './bikes/bike.component';
@@ -30,6 +29,7 @@ declare var Slider: any;
 })
 
 export class AppComponent implements OnInit {
+  options = ['parking','hri', 'parkandride' ,'bike', 'user'];
   private viewContainerRef: ViewContainerRef;
   public onlineOffline: boolean = navigator.onLine;
   router:Router;
@@ -52,9 +52,6 @@ export class AppComponent implements OnInit {
 
   @ViewChild(UserComponent)
   private UserComponent: UserComponent;
-
-  @ViewChild(SearchBar)
-  private SearchBar: SearchBar;
 
   @ViewChild(ParkZoneComponent)
   private ZoneComponent: ParkZoneComponent;
@@ -88,19 +85,31 @@ export class AppComponent implements OnInit {
     this.UserComponent.setState('close');
   }
 
-  public loadData(event:boolean){    //call only if map is completely loaded. receive boolean true
+  /*
+  *  Call only if map is completely loaded by receiving boolean true
+  */
+  public loadData(event:boolean){
     if (event==true){
       this.bMapDone = true;
       this.bottomtNav();
     }
   }
-  options = ['parking','hri', 'parkandride' ,'bike', 'user'];
+
+  /*
+  *  Block Navbar, explain bewlow
+  */
   setButtonOnOff(_element:any, _status:string){
     for (var i = 0; i< _element.length; i++){
       (<HTMLInputElement>document.getElementById(_element[i])).style.pointerEvents = _status;
     }
   }
 
+  /*  Handling the click activities. This function will only execute after
+  *   the map finishes loading. There are callback functions because I want to lock
+  *   the navbar and only unlock it when the data is shown on the Map.
+  *   For example, after click /bike, user continuously click to parkandride.
+  *   The execute order now is reset-> bike->parkandride since the /bike must be fetched with data from HTTP request.
+  */
   public bottomtNav(){
     if(this.bMapDone){
       if(this.router.url == '/user' ){
@@ -138,12 +147,16 @@ export class AppComponent implements OnInit {
   }
 
 
-  /* Methods for displaying markers*/
+  /* Function for displaying bike markers*/
   displayBikes(){
     this.FilterPanel.SetliderState(false);
     this.BikeComponent.loadBikeStations(this.MapComponent);
   }
 
+  /*  Function for displaying small guide panel in bottom left . 
+  *   From this panel user will be able to open the map
+  *   from Apple Map or Google Map depends on their choice.
+  */
   openHelper(){
     if(this.router.url == "/hri"){
       this.FilterPanel.OpenPanel("HRI");
@@ -156,7 +169,7 @@ export class AppComponent implements OnInit {
 
   reset(){
     document.getElementById('help').style.display="none";
-    document.getElementById('direction').style.display="none";
+    this.MapComponent.closeInfowindow();
     this.blackOverlay.setState('close');
     this.UserComponent.setState('close');
     this.FilterPanel.closeAllPanel();
@@ -167,6 +180,4 @@ export class AppComponent implements OnInit {
     this.MapComponent.clearDirection();
     this.MapComponent.clearKML();
   }
-
-  //Set active component
 }
