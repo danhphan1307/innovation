@@ -1,7 +1,4 @@
 import { Component, OnInit, OnChanges, ViewChild, Output, EventEmitter } from '@angular/core';
-
-import {Marker} from '../marker/marker';
-import {MarkerComponent} from '../marker/marker.component'
 import {MapService} from '../map/map.service'
 import {ParkingZoneFilterService} from '../shared/parking-zone-filter.service'
 import {AgmCoreModule} from 'angular2-google-maps/core';
@@ -20,7 +17,6 @@ export class ParkZoneComponent implements OnInit {
   parkZones : ParkingType[];
   freeZones: ParkingType[];
   data : string;
-  markers : Marker[] = [];
 
   //Temporary coordinators
   staticLatLon = [[60.1731,24.9484],[60.1708,24.9397],[60.1736, 24.9386],[60.1747,24.9351],[60.1695, 24.9371],

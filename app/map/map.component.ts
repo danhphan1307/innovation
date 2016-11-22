@@ -4,7 +4,6 @@ import {Coords} from '../models/location';
 import {Router} from '@angular/router';
 import {MapService} from './map.service'
 import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
-import {GoogleService} from '../google/google.service'
 import {ModalComponent} from '../component/modal.component'
 import { CustomComponent }  from '../component/custom.component';
 import {Help} from '../component/help.component';
@@ -32,7 +31,7 @@ declare var google: any;
     <div id="mapCanvas" ></div>
 
     `,
-    providers: [MapService,GoogleService]
+    providers: [MapService]
 })
 
 export class MapComponent{
@@ -45,7 +44,6 @@ export class MapComponent{
     private help:Help;
 
     service: MapService;
-    googleService: GoogleService;
     router:Router;
     input:any;
     autocomplete:any;
@@ -91,10 +89,9 @@ export class MapComponent{
 
     });
 
-    constructor(private _router: Router, private _mapService: MapService,  private _googleService: GoogleService ) {
+    constructor(private _router: Router, private _mapService: MapService ) {
         this.router = _router;
         this.service = _mapService;
-        this.googleService = _googleService;
     }
 
     ngOnInit(){

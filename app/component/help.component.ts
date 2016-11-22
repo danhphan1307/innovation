@@ -34,6 +34,7 @@ export class Help extends AbstractComponent implements OnInit {
 	linkOpen:string = 'https://maps.apple.com/';
 	linkOpenTrain:string  = 'https://maps.apple.com/';
 	linkOpenCar:string  = 'https://maps.apple.com/';
+	
 	ngOnInit(){
 		this.state="close";
 	}

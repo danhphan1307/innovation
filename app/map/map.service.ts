@@ -3,7 +3,6 @@ import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions, URLSearchParams } from '@angular/http';
 import global = require('../globals');
 import {Observable} from 'rxjs/Rx';
-import {Marker} from '../marker/marker';
 import {Coords} from '../models/location';
 declare var google : any;
 //Requiered method
@@ -193,16 +192,6 @@ export class MapService{
             array.push(directionsRenderer);
             return directionsRenderer;
         }
-    }
-
-
-    public geocodeTesting(address: string){
-        var geocoder = new google.maps.Geocoder();
-        geocoder.geocode({'address': address}, function(res: any,status: any){
-            if (status == google.maps.GeocoderStatus.OK){
-                console.log(res);
-            }
-        })
     }
 
     public openCheckout(_amount:number) {

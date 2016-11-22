@@ -7,8 +7,8 @@ import { BlackOverlay } from './component/blackoverlay.component';
 import { UserComponent }  from './component/user.panel.component';
 import { ModalComponent }  from './component/modal.component';
 import { CustomComponent }  from './component/custom.component';
-import {Help} from './component/help.component';
-import {SearchBar} from './component/search.bar.component';
+import { Help} from './component/help.component';
+import { SearchBar} from './component/search.bar.component';
 import { AppComponent }  from './app.component';
 import { BikeComponent }  from './bikes/bike.component';
 

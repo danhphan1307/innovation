@@ -12,11 +12,9 @@ export abstract class AbstractComponent {
   }
 
   public beginAnim(){
-    //this.state = this.state === 'open' ? 'closed' : 'open';
     this.state = 'open';
   }
   
-  //abstract closeAnim():void;
   closeAnim():void{
     this.setState('close');
   }

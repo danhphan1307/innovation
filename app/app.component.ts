@@ -18,7 +18,7 @@ import {Coords} from './models/location';
 
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {PricingZoneEnum, ActiveComponent} from './models/model-enum';
+import {PricingZoneEnum} from './models/model-enum';
 
 declare var google: any;
 declare var Slider: any;
@@ -64,8 +64,6 @@ export class AppComponent implements OnInit {
 
   stations : BikeStation[];
   data : string
-
-  active : ActiveComponent
   // google maps zoom level
   zoom: number = 14;
 
@@ -144,7 +142,6 @@ export class AppComponent implements OnInit {
   displayBikes(){
     this.FilterPanel.SetliderState(false);
     this.BikeComponent.loadBikeStations(this.MapComponent);
-    this.MapComponent.markers = this.BikeComponent.markers;
   }
 
   openHelper(){
@@ -172,7 +169,4 @@ export class AppComponent implements OnInit {
   }
 
   //Set active component
-  setStatus(event: ActiveComponent){
-    this.active = event
-  }
 }

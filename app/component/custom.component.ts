@@ -34,13 +34,12 @@ import {Observable} from 'rxjs/Rx';
 export class CustomComponent {
 	content:string; 
 
-	constructor(private http: Http){
-
-	}
+	constructor(private http: Http){}
 
 	value:number = 0;
 
-	@ViewChild('customModal') public customModal:ModalDirective;
+	@ViewChild('customModal') 
+	customModal:ModalDirective;
 
 	showModal(_content:string) {
 		this.content = _content;

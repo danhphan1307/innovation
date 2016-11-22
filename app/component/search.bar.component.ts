@@ -19,6 +19,7 @@ export class SearchBar {
   bShow:boolean ;
   values:string;
   service: MapService;
+  
   constructor(private _mapService: MapService) {
     this.bShow = true;
     this.values  = '';

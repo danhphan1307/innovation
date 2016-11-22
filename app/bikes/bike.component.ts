@@ -2,8 +2,6 @@ import { Component, OnInit, OnChanges, ViewChild , Output, EventEmitter} from '@
 
 import { BikeService } from './bike.service';
 import {BikeStation} from './bike';
-import {Marker} from '../marker/marker';
-import {MarkerComponent} from '../marker/marker.component'
 import {MapService} from '../map/map.service'
 import {AgmCoreModule} from 'angular2-google-maps/core';
 import {MapComponent} from '../map/map.component';
@@ -20,10 +18,6 @@ export class BikeComponent implements OnInit {
 
   data : string;
   title = 'Bike Station';
-  markers : Marker[] = [];
-
-  @ViewChild(MarkerComponent)
-  markerComponent: MarkerComponent
 
   @Output()
   triggered = new EventEmitter<ActiveComponent>();
