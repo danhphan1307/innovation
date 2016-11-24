@@ -13,7 +13,6 @@ const appRoutes: Routes = [
   { path: 'parkandride', component: FacilityComponent },
   { path: 'bike', component: BikeComponent },
   { path: 'user', component: UserComponent },
-  { path: 'hri',component: ParkZoneComponent},
   { path: 'parking',component: FacilityComponent}
 ];
 

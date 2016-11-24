@@ -46,7 +46,6 @@ export class CustomComponent {
 		this.customModal.show();
 	}
 
-
 	hideModal() {
 		this.customModal.hide();
 	}

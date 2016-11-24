@@ -18,12 +18,6 @@ import {BlackOverlay} from '../component/blackoverlay.component';
   <span>Parking</span>
   </div>
   </li>
-  <li routerLink="/hri" routerLinkActive="active" id="hri">
-  <div>
-  <i class="fa fa-database fa-2x custom-i"></i>
-  <span>Data</span>
-  </div>
-  </li>
   <li routerLink="/parkandride" routerLinkActive="active" id="parkandride">
   <div>
   <i class="fa fa-train fa-2x custom-i"></i>

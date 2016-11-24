@@ -76,7 +76,7 @@ export class FilterPanel{
 
   @ViewChild('ex1Slider')ex1Slider: any;
 
-  options = ['Zone','Free', 'Unlimited Time' ,'Max 4h Parking', 'Max 1h Parking', 'Parking Facilities'];
+  options = ['Select All','Zone','Free', 'Unlimited Time' ,'Max 4h Parking', 'Max 1h Parking', 'Parking Facilities'];
   optionsFacility= ['Show All'];
   b_OpenHelper_HRI:boolean = false;
   b_OpenHelper_Facility:boolean = false;
@@ -187,6 +187,11 @@ export class FilterPanel{
     if(e.target.checked){
       this.setButtonOnOff(this.options, false);
       switch (e.target.name) {
+        case 'Select All':
+        this.reset();
+        this.checkOrUncheck(true);
+
+        break;
         case 'Zone':
         this.map.displayKML(():void =>{
           this.setButtonOnOff(this.options, true);
@@ -228,6 +233,10 @@ export class FilterPanel{
 
     }else{
       switch (e.target.name) {
+        case 'Select All':
+        this.reset();
+        this.checkOrUncheck(false);
+        break;
         case 'Zone':
         this.map.clearKML();
         break;
@@ -252,6 +261,34 @@ export class FilterPanel{
         this.map.clearMarkers();
         break;
       }
+    }
+  }
+
+  checkOrUncheck(_bool:boolean, _func?:()=>void){
+    for (var i = 1; i< this.options.length; i++){
+      (<HTMLInputElement>document.getElementById(this.options[i])).checked = _bool;
+    }
+    if(_bool){
+      this.map.displayKML();
+      this.ZoneComponent.putEntrances(this.map);
+      this.ZoneComponent.loadZones(PricingZoneEnum.FREE_1,this.map);
+      this.ZoneComponent.loadZones(PricingZoneEnum.FREE_2,this.map);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_1,this.map);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_2,this.map);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_4,this.map);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_5,this.map);
+      this.ZoneComponent.loadZones(PricingZoneEnum.PAID_3,this.map,()=>{
+        this.setButtonOnOff(this.options, true)
+      });
+    }
+  }
+
+
+  reset(){
+    this.map.clearKML();
+    this.map.clearMarkers();
+    for(var i = 0;i<5;i++){
+      this.map.clearPolygonIndex(i);
     }
   }
 }

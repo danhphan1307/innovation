@@ -331,7 +331,9 @@ export class MapComponent{
 
     displayKML(_func?:()=>void){
         this.kmlLayer.setMap(this.map);
-        _func();
+        if(_func){
+            _func();
+        }
     }
 
     clickMainMarker(){
@@ -680,9 +682,9 @@ export class MapComponent{
             this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
         }else {
             this.clearDirection();
-            if (!localStorage_hasData()) {
-                this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
-            }
+
+            this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
+            
             this.service.directionsService(this.map, current, destination, this.directionArray,'public',google.maps.DirectionsTravelMode.TRANSIT);
         }
         this.help.updateSave('?saddr='+this.centerLat+','+this.centerLon +'&daddr='+destination.lat()+','+destination.lng());

@@ -29,7 +29,7 @@ declare var Slider: any;
 })
 
 export class AppComponent implements OnInit {
-  options = ['parking','hri', 'parkandride' ,'bike', 'user'];
+  options = ['parking', 'parkandride' ,'bike', 'user'];
   private viewContainerRef: ViewContainerRef;
   public onlineOffline: boolean = navigator.onLine;
   router:Router;
@@ -126,18 +126,13 @@ export class AppComponent implements OnInit {
         }
         else if(this.router.url == "/parking"){
           this.MapComponent.clickMainMarker();
+          this.FilterPanel.OpenPanel("HRI");
           this.MapComponent.center(this.MapComponent.centerLat, this.MapComponent.centerLon, ():void =>{
             this.setButtonOnOff(this.options,'auto');
           });
         }
         else if(this.router.url == "/bike"){
           this.displayBikes();
-          this.MapComponent.center(this.lat,this.long,():void =>{
-            this.setButtonOnOff(this.options,'auto');
-          });
-        }
-        else if (this.router.url == "/hri"){
-          this.FilterPanel.OpenPanel("HRI");
           this.MapComponent.center(this.lat,this.long,():void =>{
             this.setButtonOnOff(this.options,'auto');
           });
@@ -158,7 +153,7 @@ export class AppComponent implements OnInit {
   *   from Apple Map or Google Map depends on their choice.
   */
   openHelper(){
-    if(this.router.url == "/hri"){
+    if(this.router.url == "/parking"){
       this.FilterPanel.OpenPanel("HRI");
     }else if(this.router.url == "/parkandride"){
       this.FilterPanel.OpenPanel("Facility");
