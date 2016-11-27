@@ -15,6 +15,46 @@ body {
     z-index: 0;
 }
 
+@media all and (orientation:landscape) {
+    #mapCanvas{
+        margin: 0;
+        padding: 0;
+        height: 80%;
+    }
+    #controlNav{
+        position: relative;
+        height: 10%;
+        display:flex;
+        align-items:center;
+    }
+    .bottomNav{
+        border-top:1px solid #ddd;
+        height: 10%;
+    }
+}
+
+@media all and (orientation:portrait) {
+
+    #mapCanvas{
+        margin: 0;
+        padding: 0;
+        height: 85%;
+    }
+    #controlNav{
+        position: relative;
+        height: 7%;
+        display:flex;
+        align-items:center;
+    }
+    .bottomNav{
+        border-top:1px solid #ddd;
+        height: 8%;
+    }
+    .custom-i{
+        margin-top: 5%;
+    }
+}
+
 a{
     text-decoration: none!important;
     outline:0!important;
@@ -74,12 +114,6 @@ a{
     transition: margin-left .5s;
     padding: 0;
     height:100%;
-}
-#controlNav{
-    position: relative;
-    height: 7%;
-    display:flex;
-    align-items:center;
 }
 #controlNav h1{
     color:#464962;
@@ -222,12 +256,6 @@ h2{
     margin-bottom:20%;
 }
 
-#mapCanvas{
-    margin: 0;
-    padding: 0;
-    height: 85%;
-}
-
 .glyphicon.glyphicon-menu-right{
     right:0;
     float:right;
@@ -299,10 +327,6 @@ h2{
     color:#484B64;
     font-weight:normal;
 }
-.bottomNav{
-    border-top:1px solid #ddd;
-    height: 8%;
-}
 .bottomNav nav{
     height: 100%;
 }
@@ -347,9 +371,7 @@ h2{
   max-width: 30px;
   max-height: 30px;
 }
-.custom-i{
-    margin-top: 5%;
-}
+
 #markerFacility, #markerBike, #polygon,#destination_marker, #markerSearch{
     background-color: #acacac;
 }

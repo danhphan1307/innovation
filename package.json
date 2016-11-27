@@ -1,5 +1,5 @@
 {
-  "name": "angular-quickstart",
+  "name": "parkingapp",
   "version": "1.0.0",
   "engines":{
    "node":"6.7.0",
@@ -8,7 +8,6 @@
  "description": "QuickStart package.json from the documentation, supplemented with testing support",
  "scripts": {
   "start": "webpack-dev-server --inline --progress --port 8080",
-  "test": "karma start",
   "build": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail"
 },
 "keywords": [],

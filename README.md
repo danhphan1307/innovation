@@ -12,7 +12,7 @@ To use Parking App, please visit: [Parking App](https://hsl-parking.herokuapp.co
 ## Support
 
 Lost? Need help? Try the
-[Parking Appdocumentation](https://github.com/danhphan1307/innovation/wiki).
+[Parking Appdocumentation ](https://github.com/danhphan1307/innovation/wiki).
 
 
 # License
