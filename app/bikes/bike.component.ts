@@ -37,7 +37,7 @@ export class BikeComponent implements OnInit {
   }
 
   /*
-  *  Just get data from Bike Service
+  *
   */
   public loadBikeStations(mapComponent: MapComponent): void{
     this.bikeService.getBikeStations()

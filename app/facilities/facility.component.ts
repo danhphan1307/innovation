@@ -32,12 +32,22 @@ export class FacilityComponent implements OnInit {
 
   }
 
+  /**
+   * Update radius value according to slider value
+   * @param {number} event [capture output event from slider]
+   * @param {any}    _map  [map object]
+   */
   updateRadius(event:number, _map:any){
     this.radius = event;
     _map.clearMarkers();
     this.loadFacilitiesNearby(_map, new Coords(_map.centerLat, _map.centerLon), this.radius);
   }
 
+  /**
+   * Load all available facilities
+   * @param {MapComponent} mapComponent [map component]
+   * @param {()=>void}     _func        [callback handler]
+   */
   loadAllFacilities(mapComponent: MapComponent, _func?:()=>void){
     this.facilityService.getAllFacilities().subscribe((facilities) => {
       //filter park and ride + active
@@ -46,11 +56,17 @@ export class FacilityComponent implements OnInit {
         );
       mapComponent.placeMarkerFacility(this.facilities, true, true);
       if(_func){
-        _func();        
+        _func();
       }
     });
   }
 
+  /**
+   * Load all nearby facilities which are within given raidus
+   * @param {MapComponent} mapComponent [map component]
+   * @param {Coords}       coord        [center coordinate]
+   * @param {number}       radius       [radius to scan]
+   */
   private loadFacilitiesNearby(mapComponent: MapComponent, coord: Coords, radius:number): void{
     this.facilityService.getFaclitiesNearby(coord,radius)
     .subscribe((facilities) => {

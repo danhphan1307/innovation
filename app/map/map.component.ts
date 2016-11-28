@@ -7,6 +7,7 @@ import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
 import {ModalComponent} from '../component/modal.component'
 import { CustomComponent }  from '../component/custom.component';
 import {Help} from '../component/help.component';
+
 function localStorage_hasData() {
     try {
         if(JSON.parse(localStorage.getItem("carLocation")).name.en != "Sorry, you did not save your car location"){
@@ -120,6 +121,8 @@ export class MapComponent{
         };
     }
 
+
+
     noGeolocation() {
         document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Please enable Geolocation to use our service.</div>';
     }
@@ -163,7 +166,7 @@ export class MapComponent{
         setTimeout(()=>{
             document.getElementById("gettingLocation").style.display = 'none';
         },250)
-        
+
         /*
         *Search bar
         */
@@ -287,14 +290,14 @@ export class MapComponent{
                 item.setMap(null);
             });
             this.facilitymarkers=[];
-            
+
         }
         if(_pageLoad){
             this.facilitymarkersInit.forEach((item, index) => {
                 item.setMap(null);
             });
             this.facilitymarkersInit=[];
-        } 
+        }
     }
     clearMarkers(){
         this.markers.forEach((item, index) => {
@@ -339,7 +342,7 @@ export class MapComponent{
     clickMainMarker(){
         google.maps.event.trigger(this.centerMarker, 'click');
     }
-    
+
     closeInfowindow(){
         this.infowindowMainMarker.close();
         this.infowindowFacility.close();
@@ -632,7 +635,7 @@ export class MapComponent{
 
     /*
     * Handle event when user click show direction. It will cal function from map service.
-    * At the beginning, it will check if user parked his/her car or not. 
+    * At the beginning, it will check if user parked his/her car or not.
     * If not and in parkandride URL, it will automatically chose the nearest parking slot for the user.
     * If user parked already, it will only show the direction by public transportation.
     */
@@ -684,7 +687,7 @@ export class MapComponent{
             this.clearDirection();
 
             this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
-            
+
             this.service.directionsService(this.map, current, destination, this.directionArray,'public',google.maps.DirectionsTravelMode.TRANSIT);
         }
         this.help.updateSave('?saddr='+this.centerLat+','+this.centerLon +'&daddr='+destination.lat()+','+destination.lng());
