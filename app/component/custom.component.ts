@@ -32,20 +32,27 @@ import {Observable} from 'rxjs/Rx';
 	providers: []
 })
 export class CustomComponent {
-	content:string; 
+	content:string;
 
 	constructor(private http: Http){}
 
 	value:number = 0;
 
-	@ViewChild('customModal') 
+	@ViewChild('customModal')
 	customModal:ModalDirective;
 
+	/**
+	 * [showModal description]
+	 * @param {string} _content [description]
+	 */
 	showModal(_content:string) {
 		this.content = _content;
 		this.customModal.show();
 	}
 
+	/**
+	 * [hideModal description]
+	 */
 	hideModal() {
 		this.customModal.hide();
 	}

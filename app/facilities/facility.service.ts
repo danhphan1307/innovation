@@ -19,7 +19,10 @@ export class FacilityService{
 
   }
 
-  //Get all facilities , for testing purpose only
+  /**
+   * Http service to get all available facilities. Used for testing purpose only
+   * @return {Observable<Facility[]>} [observable array of facilities]
+   */
   getAllFacilities() : Observable<Facility[]>{
     return this.http.get(this.facilityUrl,{headers: this.getHeaders()})
     //.map(this.mapStations)
@@ -27,8 +30,12 @@ export class FacilityService{
     .catch(this.handleError);
   }
 
-  //Get facilites nearby, radius in meters
-
+  /**
+   * Http service to get all facilities within a given radius
+   * @param  {Coords}                 coords [Center coordinations]
+   * @param  {number}                 radius [Radius in which scan will be performed]
+   * @return {Observable<Facility[]>}        [Observable array of facilities]
+   */
   getFaclitiesNearby(coords: Coords, radius: number): Observable<Facility[]>{
     let params: URLSearchParams = new URLSearchParams();
     let strParams = "POINT(" + String(coords.lon) + "+" + String(coords.lat) + ")";

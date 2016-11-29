@@ -59,8 +59,7 @@ export class FacilityComponent implements OnInit {
    }
 
   /**
-   * @class Load all available facilities
-   * @method Load fucking value
+   * Load all available facilities
    * @param {MapComponent} mapComponent [map component]
    * @param {()=>void}     _func        [callback handler]
    */
@@ -78,7 +77,7 @@ export class FacilityComponent implements OnInit {
    }
 
   /**
-   * Load all nearby facilities which are within given raidus
+   * @method Load all nearby facilities which are within given raidus
    * @param {MapComponent} mapComponent [map component]
    * @param {Coords}       coord        [center coordinate]
    * @param {number}       radius       [radius to scan]

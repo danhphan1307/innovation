@@ -8,6 +8,9 @@ import {ModalComponent} from '../component/modal.component'
 import { CustomComponent }  from '../component/custom.component';
 import {Help} from '../component/help.component';
 
+/**
+ * [localStorage_hasData description]
+ */
 function localStorage_hasData() {
     try {
         if(JSON.parse(localStorage.getItem("carLocation")).name.en != "Sorry, you did not save your car location"){
@@ -122,15 +125,23 @@ export class MapComponent{
     }
 
 
-
+    /**
+     * [noGeolocation description]
+     */
     noGeolocation() {
         document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Please enable Geolocation to use our service.</div>';
     }
 
+    /**
+     * [geolocationNotSupported description]
+     */
     geolocationNotSupported() {
         document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> This browser does not support Geolocation.</div>';
     }
 
+    /**
+     * [initialize description]
+     */
     initialize():void {
         var mapProp = {
             center: new google.maps.LatLng(this.centerLat, this.centerLon),
@@ -151,7 +162,10 @@ export class MapComponent{
         this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(help);
     }
 
-
+    /**
+     * [createMap description]
+     * @param {any} position [description]
+     */
     createMap(position: any): void{
         this.centerLat = position.coords.latitude;
         this.centerLon = position.coords.longitude;
@@ -238,6 +252,11 @@ export class MapComponent{
         }
     }
 
+    /**
+     * [addListenerForMainMarker description]
+     * @param {any} _marker     [description]
+     * @param {any} _infowindow [description]
+     */
     addListenerForMainMarker(_marker:any, _infowindow:any){
         google.maps.event.addListener(_marker, 'click', ()=>{
             if(this.router.url == "/parking"){
@@ -268,6 +287,10 @@ export class MapComponent{
         });
     }
 
+    /**
+     * [ParkOrNot description]
+     * @param {boolean} event [description]
+     */
     ParkOrNot(event:boolean){
         if(event!=false){
             this.park("parkHere",this.markerToJSON(this.parkingObject.marker,this.parkingObject.name),this.parkingObject.saveButton,this.parkingObject.unpark,this.parkingObject.infowindow,false);
@@ -277,13 +300,24 @@ export class MapComponent{
         }
     }
 
-
+    /**
+     * [center description]
+     * @param {number =     this.centerLat} lat  [description]
+     * @param {number =     this.centerLon} long [description]
+     * @param {()=>void}  _func [description]
+     */
     center(lat:number = this.centerLat,long:number = this.centerLon,  _func?:()=>void){
         this.map.panTo(new google.maps.LatLng(lat,long));
         if(_func){
             _func();
         }
     }
+
+    /**
+     * [clearFacilityMarkers description]
+     * @param {boolean = false} _init     [description]
+     * @param {boolean = false} _pageLoad [description]
+     */
     clearFacilityMarkers(_init:boolean = false, _pageLoad:boolean = false){
         if(_init){
             this.facilitymarkers.forEach((item, index) => {
@@ -299,17 +333,29 @@ export class MapComponent{
             this.facilitymarkersInit=[];
         }
     }
+
+    /**
+     * [clearMarkers description]
+     */
     clearMarkers(){
         this.markers.forEach((item, index) => {
             item.setMap(null);
         });
         this.markers=[];
     }
+
+    /**
+     * [clearCircles description]
+     */
     clearCircles(){
         this.circles.forEach((item, index) => {
             item.setMap(null);
         });
     }
+
+    /**
+     * [clearPolygons description]
+     */
     clearPolygons(){
         this.polygons.forEach((item, index) => {
             item.forEach((item2:any, index2:any)=>{
@@ -317,21 +363,37 @@ export class MapComponent{
             })
         });
     }
+
+    /**
+     * [clearPolygonIndex description]
+     * @param {number} _index [description]
+     */
     clearPolygonIndex(_index:number){
         this.polygons[_index].forEach((item:any, index:any) => {
             item.setMap(null);
         });
     }
+
+    /**
+     * [clearDirection description]
+     */
     clearDirection(){
         this.directionArray.forEach((item, index) => {
             item.setMap(null);
         });
     }
 
+    /**
+     * [clearKML description]
+     */
     clearKML(){
         this.kmlLayer.setMap(null);
     }
 
+    /**
+     * [displayKML description]
+     * @param {()=>void} _func [description]
+     */
     displayKML(_func?:()=>void){
         this.kmlLayer.setMap(this.map);
         if(_func){
@@ -339,10 +401,16 @@ export class MapComponent{
         }
     }
 
+    /**
+     * [clickMainMarker description]
+     */
     clickMainMarker(){
         google.maps.event.trigger(this.centerMarker, 'click');
     }
 
+    /**
+     * [closeInfowindow description]
+     */
     closeInfowindow(){
         this.infowindowMainMarker.close();
         this.infowindowFacility.close();
@@ -352,6 +420,12 @@ export class MapComponent{
         this.infowindowPolygon.close();
     }
 
+    /**
+     * [markerToJSON description]
+     * @param  {any}    _marker [description]
+     * @param  {string} _name   [description]
+     * @return {any}            [description]
+     */
     markerToJSON(_marker:any, _name:string):any{
         var temp:any = {
             "name": {
@@ -372,6 +446,10 @@ export class MapComponent{
         return temp;
     }
 
+    /**
+     * [editLocalStorage description]
+     * @param {any} data [description]
+     */
     editLocalStorage(data:any){
         if(localStorage_hasData()){
             var object = JSON.parse(localStorage.getItem('carLocation'));
@@ -386,6 +464,10 @@ export class MapComponent{
             this.saveUpdated.emit(data);
         }
     }
+
+    /**
+     * [resetLocalStorage description]
+     */
     resetLocalStorage(){
         var init_local_storage= {
             "name": {
@@ -410,9 +492,10 @@ export class MapComponent{
         this.saveUpdated.emit(null);
     }
 
-    /*
-    *    Check if there is any data in localstorage or not, if there is , show it to the map
-    */
+    /**
+     * [Check if there is any data in localstorage or not, if there is , show it to the map]
+     * @param {boolean = true} _free [description]
+     */
     placeParkPlace(_free:boolean = true){
         if(this.parkMarker!== undefined){
             this.parkMarker.setMap(null);
@@ -456,9 +539,12 @@ export class MapComponent{
         }
     }
 
-    /*
-    *    Each marker will handle different infowindow => different placemarker function.
-    */
+    /**
+     * [Each marker will handle different infowindow => different placemarker function.]
+     * @param {any}           f    [description]
+     * @param {boolean    =    true}        _free [description]
+     * @param {boolean=false} _all [description]
+     */
     placeMarkerFacility(f:any, _free:boolean = true, _all:boolean=false):void{
         var object:any;
         var cont:boolean = true;
@@ -512,9 +598,10 @@ export class MapComponent{
         }
     }
 
-    /*
-    *    Each marker will handle different infowindow => different placemarker function.
-    */
+    /**
+     * [Each marker will handle different infowindow => different placemarker function.]
+     * @param {any} stations [description]
+     */
     placeMarkerBicycle(stations:any):void{
         var map = this.map;
         for (var i = 0; i < stations.length; i++) {
@@ -542,9 +629,15 @@ export class MapComponent{
         }
     }
 
-    /*
-    * Handle parking when user click park here
-    */
+    /**
+     * [Handle parking when user click park here]
+     * @param {any}          _container          [description]
+     * @param {any}          _newLocation        [description]
+     * @param {string}       _elementIDForPark   [description]
+     * @param {string}       _elementIDForUnpark [description]
+     * @param {any}          _infoWindow         [description]
+     * @param {boolean=true} _free               [description]
+     */
     park(_container:any, _newLocation:any, _elementIDForPark:string,_elementIDForUnpark:string, _infoWindow:any, _free:boolean=true){
         this.editLocalStorage(_newLocation);
         document.getElementById(_elementIDForPark).className="active";
@@ -567,10 +660,21 @@ export class MapComponent{
         });
     }
 
+    /**
+     * [stringHandler description]
+     * @param {string} input_string [description]
+     */
     stringHandler(input_string:string) {
         return (input_string.charAt(0).toUpperCase() + input_string.slice(1)).replace(/_/g," ");
     }
 
+    /**
+     * [placePolygon description]
+     * @param {any[]}     coordArray [description]
+     * @param {string}    colorCode  [description]
+     * @param {string =          "             "} type [description]
+     * @param {any}       enumabcd   [description]
+     */
     placePolygon(coordArray: any[], colorCode : string, type: string = " ", enumabcd : any){
         var path : any[] = [];
         var bounds = new google.maps.LatLngBounds();
@@ -607,9 +711,10 @@ export class MapComponent{
         });
     }
 
-    /*
-    *    Indicate the entrance for the garrage.
-    */
+    /**
+     * [Indicate the entrance for the garrage.]
+     * @param {Coords[]} coords [description]
+     */
     placeMarkerEntrance(coords: Coords[]){
         var map = this.map;
         for (var i = 0; i < coords.length; i++) {
@@ -621,8 +726,9 @@ export class MapComponent{
         }
     }
 
-    /*
-    * Receive new radius from Emitter from filter panel
+   /**
+    * [Receive new radius from Emitter from filter panel]
+    * @param {any} event [description]
     */
     updateRadius(event:any){
         this.circleRadius = event;
@@ -633,11 +739,13 @@ export class MapComponent{
         }
     }
 
-    /*
-    * Handle event when user click show direction. It will cal function from map service.
+   /**
+    * [Handle event when user click show direction. It will cal function from map service.
     * At the beginning, it will check if user parked his/her car or not.
     * If not and in parkandride URL, it will automatically chose the nearest parking slot for the user.
-    * If user parked already, it will only show the direction by public transportation.
+    * If user parked already, it will only show the direction by public transportation.]
+    * @param {any     = null} marker         [description]
+    * @param {boolean = true} multiDirection [description]
     */
     private showDirection(marker: any = null, multiDirection:boolean = true){
         var current = new google.maps.LatLng(this.centerLat,this.centerLon);

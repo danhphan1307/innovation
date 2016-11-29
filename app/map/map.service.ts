@@ -10,7 +10,12 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/toPromise';
 @Injectable()
+
 export class MapService{
+    /**
+     * Icon for parking slot
+     * @type {Object}
+     */
     icons = {
         small: {
             icon:  'img/facilityCarIconSmall.png'
@@ -20,6 +25,10 @@ export class MapService{
         }
     }
 
+    /**
+     * Icon for bike station
+     * @type {Object}
+     */
     iconsBikeStation = {
         small: {
             icon:  'img/cityBikeIconSmall.png'
@@ -28,7 +37,10 @@ export class MapService{
             icon: 'img/facilityBikeIconLarge.png'
         }
     }
-
+    /**
+     * ????
+     * @type {Object}
+     */
     iconsBike = {
         small: {
             icon:  'img/cityBikeIconSmall.png'
@@ -37,6 +49,11 @@ export class MapService{
             icon: 'img/cityBikeIconLarge.png'
         }
     }
+
+    /**
+     * Icon for park here button
+     * @type {Object}
+     */
     iconsParkHere = {
         small: {
             icon:  'img/parkHereIconSmall.png'
@@ -46,6 +63,10 @@ export class MapService{
         }
     }
 
+    /**
+     * Icon for entrance of garage
+     * @type {Object}
+     */
     iconEntrance ={
         small: {
             icon:  'img/entrance.png'
@@ -61,6 +82,12 @@ export class MapService{
 
     }
 
+    /**
+     * [Show direction guide between 2 points]
+     * @param {Coords}     origin [Starting point]
+     * @param {any}        marker [Marker which represents destination]
+     * @param {string) =>     void}        callback [Callback handler]
+     */
     showDirection(origin: Coords,marker: any, callback: (result:any, status:string) => void){
         var start = new google.maps.LatLng(origin.lat,origin.lon);
         var end = marker.getPosition();
@@ -72,7 +99,12 @@ export class MapService{
         var directionsService = new google.maps.DirectionsService;
         directionsService.route(request, (result:any, status: string) => callback(result,status));
     }
-    
+
+    /**
+     * [Adjust zoom level and marker size]
+     * @param  {any}    _map [Map object]
+     * @return {string}      [String to identify whether icons should be small or large]
+     */
     getZoomLevel(_map:any):string{
         if(_map.getZoom()<13){
             return 'small';
@@ -81,6 +113,13 @@ export class MapService{
         }
     }
 
+    /**
+     * [Place polygon on map]
+     * @param  {any} _map   [Map object]
+     * @param  {any} _path  [Array of coordinates]
+     * @param  {any} _color [Stroke color]
+     * @return {any}        [An instance of polygon]
+     */
     placePolygon(_map:any, _path:any, _color:any):any{
         var polygon = new google.maps.Polygon({
             map:_map,
@@ -93,6 +132,14 @@ export class MapService{
         return polygon;
     }
 
+    /**
+     * [Place circle on map]
+     * @param  {any}    _map    [Map object]
+     * @param  {number} _radius [Radius of circle]
+     * @param  {number} _lat    [Latitude of center]
+     * @param  {number} _lon    [Longitude of center]
+     * @return {any}            [An instance of circle]
+     */
     placeCircle(_map:any, _radius:number, _lat:number, _lon:number):any{
         var circle = new google.maps.Circle({
             strokeColor: '#4a6aa5',
@@ -105,6 +152,14 @@ export class MapService{
         return circle;
     }
 
+    /**
+     * [Place marker on map]
+     * @param  {any}    _map  [Map object]
+     * @param  {number} _lat  [Latitude of marker]
+     * @param  {number} _lon  [Longitude of marker]
+     * @param  {string} _type [Name of icons]
+     * @return {any}          [An instance of marker]
+     */
     placeMarker( _map: any, _lat: number, _lon: number, _type:string): any{
         var _icon:any = null;
         var _zIndex:any = 0;
@@ -152,6 +207,18 @@ export class MapService{
         });
         return temp_marker;
     }
+
+    /**
+     * [Service for rendering direction]
+     * @param  {any}        _map   [Map object]
+     * @param  {any}        _start [Starting coordinates]
+     * @param  {any}        _end   [Destionation coordinates]
+     * @param  {any}        array  [description]
+     * @param  {string  =      'public'}    _vehicle        [Transportation method]
+     * @param  {any}        _mode  [description]
+     * @param  {boolean =      false}       _suppressMarker [description]
+     * @return {any}               [description]
+     */
     directionsService(_map:any, _start:any, _end:any, array:any, _vehicle:string = 'public',_mode:any, _suppressMarker:boolean = false):any{
         var directionsService = new google.maps.DirectionsService;
         directionsService.route({
@@ -164,6 +231,16 @@ export class MapService{
         });
     }
 
+    /**
+     * [renderDirections description]
+     * @param  {any}     _map           [description]
+     * @param  {any}     result         [description]
+     * @param  {any}     status         [description]
+     * @param  {any}     array          [description]
+     * @param  {string}  vehicle        [description]
+     * @param  {boolean} suppressMarker [description]
+     * @return {any}                    [description]
+     */
     renderDirections(_map:any, result:any,status:any,array:any, vehicle:string, suppressMarker:boolean):any{
         if ( status == google.maps.DirectionsStatus.OK ) {
             document.getElementById('help').style.display="block";
@@ -191,10 +268,10 @@ export class MapService{
         }
     }
 
-    /*
-    *    Handle checkout, if user did not pay, it will not delete the data from database.
-    *    If the pay process succeed, it will remove the data from parking database.
-    */
+    /**
+     * [Open checkout form]
+     * @param {number} _amount [Ticket's fee]
+     */
     public openCheckout(_amount:number) {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
@@ -214,7 +291,7 @@ export class MapService{
                             let temp_url = this.removeTicket + des;
                             return this.http.delete(temp_url).map( (response) => {
                                 console.log(response);
-                            });    
+                            });
                         }
                         return body.success || { }
                     },
