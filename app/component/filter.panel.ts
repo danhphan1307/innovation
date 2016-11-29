@@ -98,7 +98,7 @@ export class FilterPanel{
   };
 
   /**
-   * [load description]
+   * [load get reference to private variable]
    * @param {any} _map      [description]
    * @param {any} _facility [description]
    * @param {any} _zone     [description]
@@ -110,7 +110,7 @@ export class FilterPanel{
   }
 
   /**
-   * [ReturnSliderValue description]
+   * [ReturnSliderValue get slider number to search, this feature is used in park and ride ]
    * @return {number} [description]
    */
   ReturnSliderValue():number{
@@ -130,7 +130,7 @@ export class FilterPanel{
   }
 
   /**
-   * [closeAllPanel description]
+   * [closeAllPanel close all panel]
    */
   closeAllPanel(){
     this.b_OpenHelper_Facility=false;
@@ -145,13 +145,12 @@ export class FilterPanel{
   }
 
   /**
-   * [OpenPanel description]
+   * [OpenPanel open specific panel]
    * @param {string} _panel [description]
    */
   OpenPanel(_panel:string){
     switch (_panel) {
       case 'Facility':
-      this.SetliderState(true);
       this.b_OpenHelper_Facility?this.b_OpenHelper_Facility=false:this.b_OpenHelper_Facility=true;
       break;
       case "HRI":
@@ -164,7 +163,7 @@ export class FilterPanel{
   }
 
   /**
-   * [setButtonOnOff description]
+   * [setButtonOnOff prevent unwanted error, explained in app.component]
    * @param {any}     _element [description]
    * @param {boolean} _status  [description]
    */
@@ -175,7 +174,7 @@ export class FilterPanel{
   }
 
   /**
-   * [displayAllFacility description]
+   * [displayAllFacility show all facility]
    * @param {any} e [description]
    */
   displayAllFacility(e:any){
@@ -197,7 +196,7 @@ export class FilterPanel{
     }
   }
 
-  SetliderState(state:boolean):void{
+  SetSliderState(state:boolean):void{
     this.bState= state;
     if(state){
       this.mySlider.enable();
@@ -210,7 +209,7 @@ export class FilterPanel{
 
 
   /**
-   * [displayZone description]
+   * [displayZone show the zone from JSON file]
    * @param {any} e [description]
    */
   displayZone(e:any){
@@ -295,7 +294,7 @@ export class FilterPanel{
   }
 
   /**
-   * [checkOrUncheck description]
+   * [checkOrUncheck this function is for check all]
    * @param {boolean}  _bool [description]
    * @param {()=>void} _func [description]
    */
@@ -319,7 +318,7 @@ export class FilterPanel{
   }
 
   /**
-   * [reset description]
+   * [reset remove everything]
    */
   reset(){
     this.map.clearKML();

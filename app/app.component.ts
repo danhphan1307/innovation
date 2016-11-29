@@ -83,33 +83,33 @@ export class AppComponent implements OnInit {
   /**
    * [Close all]
    */
-  public closeAll():void{
-    this.blackOverlay.setState('close');
-    this.UserComponent.setState('close');
-  }
+   public closeAll():void{
+     this.blackOverlay.setState('close');
+     this.UserComponent.setState('close');
+   }
 
   /**
    * [Called when map is fully loaded]
    * @param {boolean} event [description]
    */
-  public loadData(event:boolean){
-    if (event==true){
-      this.bMapDone = true;
-      this.bottomtNav();
-    }
-  }
+   public loadData(event:boolean){
+     if (event==true){
+       this.bMapDone = true;
+       this.bottomtNav();
+     }
+   }
 
 
   /**
-   * [setButtonOnOff description]
+   * [setButtonOnOff prevent unwanted problems. For example, users click the nav bar too fast, the data did not finish loading]
    * @param {any}    _element [description]
    * @param {string} _status  [description]
    */
-  setButtonOnOff(_element:any, _status:string){
-    for (var i = 0; i< _element.length; i++){
-      (<HTMLInputElement>document.getElementById(_element[i])).style.pointerEvents = _status;
-    }
-  }
+   setButtonOnOff(_element:any, _status:string){
+     for (var i = 0; i< _element.length; i++){
+       (<HTMLInputElement>document.getElementById(_element[i])).style.pointerEvents = _status;
+     }
+   }
 
  /**
   * [Handling the click activities. This function will only execute after
@@ -127,14 +127,13 @@ export class AppComponent implements OnInit {
         this.setButtonOnOff(this.options,'none');
         this.reset();
         if(this.router.url == "/parkandride"){
-          this.FilterPanel.OpenPanel("Facility");
+          this.FilterPanel.SetSliderState(true);
           this.MapComponent.center(this.MapComponent.centerLat, this.MapComponent.centerLon, ():void =>{
             this.setButtonOnOff(this.options,'auto');
           });
         }
         else if(this.router.url == "/parking"){
           this.MapComponent.clickMainMarker();
-          this.FilterPanel.OpenPanel("HRI");
           this.MapComponent.center(this.MapComponent.centerLat, this.MapComponent.centerLon, ():void =>{
             this.setButtonOnOff(this.options,'auto');
           });
@@ -153,10 +152,10 @@ export class AppComponent implements OnInit {
   /**
    * [Display bike markers]
    */
-  displayBikes(){
-    this.FilterPanel.SetliderState(false);
-    this.BikeComponent.loadBikeStations(this.MapComponent);
-  }
+   displayBikes(){
+     this.FilterPanel.SetSliderState(false);
+     this.BikeComponent.loadBikeStations(this.MapComponent);
+   }
 
 
  /**
@@ -175,19 +174,19 @@ export class AppComponent implements OnInit {
   }
 
   /**
-   * [reset description]
+   * [reset reset everything]
    */
-  reset(){
-    document.getElementById('help').style.display="none";
-    this.MapComponent.closeInfowindow();
-    this.blackOverlay.setState('close');
-    this.UserComponent.setState('close');
-    this.FilterPanel.closeAllPanel();
-    this.MapComponent.clearFacilityMarkers(true,true);
-    this.MapComponent.clearCircles();
-    this.MapComponent.clearMarkers();
-    this.MapComponent.clearPolygons();
-    this.MapComponent.clearDirection();
-    this.MapComponent.clearKML();
-  }
-}
+   reset(){
+     document.getElementById('help').style.display="none";
+     this.MapComponent.closeInfowindow();
+     this.blackOverlay.setState('close');
+     this.UserComponent.setState('close');
+     this.FilterPanel.closeAllPanel();
+     this.MapComponent.clearFacilityMarkers(true,true);
+     this.MapComponent.clearCircles();
+     this.MapComponent.clearMarkers();
+     this.MapComponent.clearPolygons();
+     this.MapComponent.clearDirection();
+     this.MapComponent.clearKML();
+   }
+ }

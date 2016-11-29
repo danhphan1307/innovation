@@ -51,7 +51,7 @@ export class UserComponent extends AbstractComponent implements OnInit {
   }
 
   /**
-   * [updateSave description]
+   * [updateSave emiter handler]
    * @param {any} event [description]
    */
   updateSave(event:any){
@@ -80,7 +80,7 @@ export class UserComponent extends AbstractComponent implements OnInit {
   }
 
   /**
-   * [diffTwoDay description]
+   * [diffTwoDay print the different of two days in hours, maximum is 24hrs only]
    * @param  {any}    _date1 [description]
    * @param  {any}    _date2 [description]
    * @return {string}        [description]

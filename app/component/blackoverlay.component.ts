@@ -16,7 +16,7 @@ import {AbstractComponent} from './abstract.class.component';
 
   template:
   `
-  <div id="blackOverlay" [@animationBlackOverlay]="state" (click)="closeAnim()">
+  <div id="blackOverlay" [@animationBlackOverlay]="state">
 
   </div>
   `

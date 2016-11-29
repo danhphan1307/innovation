@@ -91,7 +91,7 @@
 		}else {
 			var content='';
 			if(!navigator.onLine) {
-				content = '<div class="alert alert-danger" role="alert"  style="z-index: 10"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>You are offline<br>';
+				content = '<my-app></my-app><div class="alert alert-danger" role="alert"  style="z-index: 10"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>You are offline<br>';
 				if(localStorage_hasData){
 					var object = JSON.parse(localStorage.getItem('carLocation'))
 					content+= 'Car location: '+ object.name.en + ' <br>Park time: ' + localStorage.getItem('date') ;
@@ -100,7 +100,7 @@
 				}
 				content+='</div>';
 			}else if(!localStorage_isSupported){
-				content = '<div class="alert alert-danger" role="alert"  style="z-index: 10"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>Your current browser is not supported<br>Please update/change your browser</div>';
+				content = '<my-app></my-app><div class="alert alert-danger" role="alert"  style="z-index: 10"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>Your current browser is not supported<br>Please update/change your browser</div>';
 			}
 			document.body.innerHTML=content;
 		}

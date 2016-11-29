@@ -7,43 +7,35 @@ import {Observable} from 'rxjs/Rx';
 	selector: 'modal-bootstrap',
 	template: `
 
-	<div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-
+<div bsModal #lgModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	<div class="vertical-alignment-helper modal-dialog modal-lg">
-	<div class="modal-dialog vertical-align-center">
-	<div class="modal-content">
-	<div class="modal-header">
-	<button type="button" class="close" (click)="hideLgModal()" aria-label="Close">
-	<span aria-hidden="true">&times;</span>
-	</button>
-	<h4 class="modal-title" id="title">Ticket Price: {{value}} €/h</h4>
-	</div>
-	<div class="modal-body" id="modal-body">
-	<div class="input-group">
-	<span class="input-group-addon glyphicon glyphicon-info-sign" id="sizing-addon2"></span>
-	<input type="text" class="form-control" placeholder="License plate" aria-describedby="sizing-addon2" id="input1">
-	</div>
-	<br>
-	<div class="input-group">
-	<span class="input-group-addon glyphicon glyphicon glyphicon-retweet" id="sizing-addon3"></span>
-	<input type="text" class="form-control" placeholder="Retype license plate" aria-describedby="sizing-addon3" id="input2">
-	</div>
-	<img src="img/waiting-respond.gif" alt="loading" id="waiting-respond"/>
-	<div id="error-log" class="alert alert-danger" style="display:none"></div>
-	<div id="success-log" class="alert alert-success" style="display:none"></div>
-	</div>
-	<div class="modal-footer" id="modal-footer">
-	<button type="submit" class="btn btn-success" id="btn-success" (click) = "accept()">Accept</button>
-	<button type="button" class="btn btn-danger" id="btn-danger" (click)="hideLgModal()">Cancel</button>
-	<button type="button" class="btn btn-danger" id="btn-close" (click)="hideLgModal()">Close</button>
-	</div>
-	</div>
-
-	</div>	</div>
-	</div>`,
+		<div class="modal-dialog vertical-align-center">
+			<div class="modal-content">
+				<div class="modal-body" id="modal-body">
+					<h4 class="modal-title" id="title">Ticket Price: {{value}} €/h</h4><br>
+					
+					<input type="text" placeholder="License plate" aria-describedby="sizing-addon2" id="input1">
+					<br><br>
+					<input type="text" placeholder="Retype license plate" aria-describedby="sizing-addon3" id="input2">
+					<img src="img/waiting-respond.gif" alt="loading" id="waiting-respond"/>
+					<div id="error-log" class="alert alert-danger" style="display:none"></div>
+					<div id="success-log" class="alert alert-success" style="display:none"></div>
+					<div style="display:block;margin:0 auto;text-align:center;" *ngIf=!boughtTicket>
+						<button type="submit" class="btn btn-success" id="btn-success" (click) = "accept()">Accept</button>
+						<button type="button" class="btn btn-danger" id="btn-danger" (click)="hideLgModal()">Cancel</button>
+					</div>
+					<div style="display:block;margin:0 auto;text-align:center;" *ngIf=boughtTicket>
+						<button type="button" class="btn btn-danger" id="btn-close" (click)="hideLgModal()">Close</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</div>`,
 	providers: []
 })
 export class ModalComponent {
+	boughtTicket:boolean = false;
 	result:any;
 	value:number = 0;
 	private ticketURL = 'https://fabulous-backend-hsl-parking.herokuapp.com/api/ticket';
@@ -81,25 +73,21 @@ export class ModalComponent {
 	}
 
 	/**
-	 * [showLgModal description]
+	 * [showLgModal reset the modal]
 	 * @param {number} _param [description]
 	 */
 	showLgModal(_param:number) {
-		document.getElementById('input1').className="form-control";
-		document.getElementById('input2').className="form-control";
+		this.boughtTicket = false;
 		document.getElementById("error-log").style.display = "none";
 		document.getElementById("success-log").style.display = "none";
-		document.getElementById("btn-success").style.visibility = "visible";
-		document.getElementById("btn-danger").style.visibility = "visible";
-		document.getElementById("btn-close").style.visibility = "hidden";
-		document.getElementById("title").innerText= "Confirmation";
+		document.getElementById("title").innerText= "Ticket Price: 4 €/h";
 		document.getElementById("waiting-respond").style.height = '0';
 		this.value=_param;
 		this.lgModal.show();
 	}
 
 	/**
-	 * [hideLgModal description]
+	 * [hideLgModal hide the modal]
 	 */
 	hideLgModal() {
 		this.lgModal.hide();
@@ -113,19 +101,16 @@ export class ModalComponent {
 	 */
 	accept(){
 		if((<HTMLInputElement>document.getElementById('input1')).value!=(<HTMLInputElement>document.getElementById('input2')).value||(<HTMLInputElement>document.getElementById('input1')).value=='' || (<HTMLInputElement>document.getElementById('input2')).value ==''){
-			document.getElementById('input1').className="form-control has-error";
-			document.getElementById('input2').className="form-control has-error";
 			document.getElementById('error-log').innerText="Please check the information again";
 			document.getElementById("error-log").style.display = "block";
 		}else {
-			document.getElementById('input1').className="form-control has-success";
-			document.getElementById('input2').className="form-control has-success";
 			document.getElementById("error-log").style.display = "none";
 			document.getElementById("btn-success").style.visibility = "hidden";
 			document.getElementById("btn-danger").style.visibility = "hidden";
 			document.getElementById("waiting-respond").style.height = '100%';
 			this.getTicket((<HTMLInputElement>document.getElementById('input1')).value).subscribe( (data:any) => {
 				if(data!="Success false"){
+					this.boughtTicket = true;
 					document.getElementById("waiting-respond").style.height = '0';
 					document.getElementById("success-log").style.display = "block";
 					var content = "Your ticket number is: <br>" + (data.ticket_code);

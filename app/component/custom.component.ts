@@ -42,7 +42,7 @@ export class CustomComponent {
 	customModal:ModalDirective;
 
 	/**
-	 * [showModal description]
+	 * [showModal show payment panel]
 	 * @param {string} _content [description]
 	 */
 	showModal(_content:string) {
@@ -51,7 +51,7 @@ export class CustomComponent {
 	}
 
 	/**
-	 * [hideModal description]
+	 * [hideModal hide payment panel]
 	 */
 	hideModal() {
 		this.customModal.hide();

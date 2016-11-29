@@ -188,7 +188,8 @@ export class MapService{
             map: _map,
             icon: _icon,
             zIndex: _zIndex,
-            visible:_visible
+            visible:_visible,
+            optimized: false
         });
 
         google.maps.event.addDomListener(_map,'zoom_changed',()=>{

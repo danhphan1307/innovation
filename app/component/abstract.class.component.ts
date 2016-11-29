@@ -4,7 +4,7 @@ export abstract class AbstractComponent {
   public state = 'close';
 
   /**
-   * [setState description]
+   * [setState set state of the component]
    * @param {string} sState [description]
    */
   public setState(sState: string){
@@ -12,21 +12,21 @@ export abstract class AbstractComponent {
   }
 
   /**
-   * [getState description]
+   * [getState return open or close state]
    */
   public getState(){
     return this.state;
   }
 
   /**
-   * [beginAnim description]
+   * [beginAnim start the animation for open event]
    */
   public beginAnim(){
     this.state = 'open';
   }
 
   /**
-   * [closeAnim description]
+   * [closeAnim star the animation for close event]
    */
   closeAnim():void{
     this.setState('close');

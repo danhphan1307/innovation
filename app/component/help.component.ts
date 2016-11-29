@@ -12,7 +12,7 @@ import {AbstractComponent} from './abstract.class.component';
 		transition("open <=> close", animate( "250ms" )),
 		])
 	],
-	template: `<table class="help">
+	template: `<table class="help" style="    background-color: transparent!important;">
 	<tr>
 	<th colspan="2"><a href="{{linkOpen}}">Open with Map</a></th>
 	</tr>
@@ -40,7 +40,7 @@ export class Help extends AbstractComponent implements OnInit {
 	}
 
 	/**
-	 * [updateSave description]
+	 * [updateSave get the lat and long from event and then generate a new link for direction service]
 	 * @param {any} event [description]
 	 */
 	updateSave(event:any){

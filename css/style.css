@@ -131,14 +131,13 @@ a{
     display:inline-block;
 }
 #controlNav #navigate{
-    color:#ca789d;
-    font-size:2em;
     margin-right:3%;
     cursor:pointer;
+    right:0;
     display:inline-block;
     position: absolute;
-    right:0;
-    top: 25%;
+    max-width: 100%;
+    max-height: 80%;
 }
 
 #cog_icon{
@@ -428,11 +427,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
-   width: 100%;
-   background: #FF9AD7;
-   display:flex;justify-content:center;align-items:center;
-   color:white;
-   height:7vh;   
+ width: 100%;
+ background: #FF9AD7;
+ display:flex;justify-content:center;align-items:center;
+ color:white;
+ height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -453,12 +452,14 @@ h2{
     width:50;
 }
 #help{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     z-index: 1;
     display:none;
     position: absolute;
     height: auto;
     left:0;
-    background-color: rgba(255,255,255,0.7);
+    background-color: rgba(255,255,255,1);
 }
 #help td{
     width:45%;
@@ -481,6 +482,8 @@ h2{
 }
 
 #filter{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     z-index: 1;
     position:absolute;
     bottom:80px;
@@ -499,7 +502,15 @@ h2{
     margin-left:10px;
     margin-right:10px;
 }
+
+.help{
+    max-width: 120px;
+    background-color: white;
+}
+
 th{
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     background-color: #789DCA;
     text-transform: uppercase;
     padding-top:5px;
@@ -583,18 +594,18 @@ th{
     animation: all 0.5s;
 }
 #arrowUp{
- background-color: white;
- top:9vh;
- z-index:1;
- position: absolute;
- width: auto;
- max-width: 10vw;
- text-align: center;
- left: 0; 
- right: 0; 
- margin-left: auto; 
- margin-right: auto;  
- animation: all 0.5s;
+   background-color: white;
+   top:9vh;
+   z-index:1;
+   position: absolute;
+   width: auto;
+   max-width: 10vw;
+   text-align: center;
+   left: 0; 
+   right: 0; 
+   margin-left: auto; 
+   margin-right: auto;  
+   animation: all 0.5s;
 }
 .modal-dialog {
     margin-left: 10vw;
@@ -643,6 +654,61 @@ th{
     display: block;
     margin:auto;
     max-height: 7vh;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+#input1,#input2{
+    width: 100%;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dedede;
+}
+
+#title{
+    font-size: 14px;
+    font-weight: normal;
+    background: #afc0de; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #afc0de , #7995C7); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #afc0de, #7995C7); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #afc0de, #7995C7); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #afc0de , #7995C7); /* Standard syntax */
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    line-height: 3.5;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -90%);
+    min-width: 60%;
+}
+.btn-success {
+    color: #fff;
+    background: #18e18b; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #18e18b , #15ca7d); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #18e18b, #15ca7d); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #18e18b, #15ca7d); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #18e18b , #15ca7d); /* Standard syntax */
+    border: none;
+    border-radius: 5px;
+    padding-left:15px;
+    padding-right: 15px;
+    text-transform: uppercase;
+    box-shadow: 0px 7px 20px #dedede;
+}
+.btn-danger {
+    color: #fff;
+    background: #FD98BD; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #FD98BD , #FD78A9); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #FD98BD, #FD78A9); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #FD98BD, #FD78A9); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #FD98BD , #FD78A9); /* Standard syntax */
+    border: none;
+    border-radius: 5px;
+    padding-left:15px;
+    padding-right: 15px;
+    text-transform: uppercase;
+    box-shadow: 0px 7px 20px #dedede;
 }
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {

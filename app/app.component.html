@@ -1,7 +1,7 @@
-<blackoverlay (click)="closeAll()"></blackoverlay>
+<blackoverlay></blackoverlay>
 <filter id="filter" (radiusUpdated)="MapComponent.updateRadius($event)" (radiusUpdated)="FacilityComponent.updateRadius($event, MapComponent)"></filter>
 <div id="controlNav">
-	<img src="../img/logo.png" alt="app-logo" id="app-logo"><span id="navigate" (click)="MapComponent.center()"  class="glyphicon glyphicon-map-marker"></span>
+	<img src="../img/logo.png" alt="app-logo" id="app-logo"><img src="../img/default.png" alt ="navigate icon" id="navigate" (click)="MapComponent.center()"/>
 </div>
 <div *ngIf="!onlineOffline" class="alert alert-danger" role="alert"  style="z-index: 10">
 	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
