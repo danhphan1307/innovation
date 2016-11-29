@@ -17,7 +17,10 @@ export class BikeService{
   constructor(private http: Http){
 
   }
-
+  /**
+   * [Http service to get bike stations]
+   * @return {Observable<BikeStation[]>} [Observable array of bike station]
+   */
   getBikeStations() : Observable<BikeStation[]>{
     return this.http.get(this.bikeUrl,{headers: this.getHeaders()})
     .map(this.extractData)

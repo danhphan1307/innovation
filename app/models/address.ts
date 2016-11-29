@@ -1,5 +1,8 @@
+var typedoc = require('typedoc');
+var app = new typedoc.Application();
 import { MultilligualString} from './multilligual-string';
 
+/*
 export class Address{
     streetAddress: MultilligualString;
     postalCode : String;

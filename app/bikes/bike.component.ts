@@ -36,9 +36,10 @@ export class BikeComponent implements OnInit {
     console.log("change in bike");
   }
 
-  /*
-  *  Just get data from Bike Service
-  */
+  /**
+   * [loadBikeStations description]
+   * @param {MapComponent} mapComponent [description]
+   */
   public loadBikeStations(mapComponent: MapComponent): void{
     this.bikeService.getBikeStations()
     .subscribe((stations:BikeStation[]) => {

@@ -80,14 +80,18 @@ export class AppComponent implements OnInit {
     window.addEventListener('offline', () => {this.onlineOffline = false});
   }
 
+  /**
+   * [Close all]
+   */
   public closeAll():void{
     this.blackOverlay.setState('close');
     this.UserComponent.setState('close');
   }
 
-  /*
-  *  Call only if map is completely loaded by receiving boolean true
-  */
+  /**
+   * [Called when map is fully loaded]
+   * @param {boolean} event [description]
+   */
   public loadData(event:boolean){
     if (event==true){
       this.bMapDone = true;
@@ -95,20 +99,24 @@ export class AppComponent implements OnInit {
     }
   }
 
-  /*
-  *  Block Navbar, explain bewlow
-  */
+
+  /**
+   * [setButtonOnOff description]
+   * @param {any}    _element [description]
+   * @param {string} _status  [description]
+   */
   setButtonOnOff(_element:any, _status:string){
     for (var i = 0; i< _element.length; i++){
       (<HTMLInputElement>document.getElementById(_element[i])).style.pointerEvents = _status;
     }
   }
 
-  /*  Handling the click activities. This function will only execute after
+ /**
+  * [Handling the click activities. This function will only execute after
   *   the map finishes loading. There are callback functions because I want to lock
   *   the navbar and only unlock it when the data is shown on the Map.
   *   For example, after click /bike, user continuously click to parkandride.
-  *   The execute order now is reset-> bike->parkandride since the /bike must be fetched with data from HTTP request.
+  *   The execute order now is reset-> bike->parkandride since the /bike must be fetched with data from HTTP request.]
   */
   public bottomtNav(){
     if(this.bMapDone){
@@ -142,15 +150,19 @@ export class AppComponent implements OnInit {
   }
 
 
-  /* Function for displaying bike markers*/
+  /**
+   * [Display bike markers]
+   */
   displayBikes(){
     this.FilterPanel.SetliderState(false);
     this.BikeComponent.loadBikeStations(this.MapComponent);
   }
 
-  /*  Function for displaying small guide panel in bottom left . 
+
+ /**
+  * [Function for displaying small guide panel in bottom left .
   *   From this panel user will be able to open the map
-  *   from Apple Map or Google Map depends on their choice.
+  *   from Apple Map or Google Map depends on their choice.]
   */
   openHelper(){
     if(this.router.url == "/parking"){
@@ -162,6 +174,9 @@ export class AppComponent implements OnInit {
     }
   }
 
+  /**
+   * [reset description]
+   */
   reset(){
     document.getElementById('help').style.display="none";
     this.MapComponent.closeInfowindow();

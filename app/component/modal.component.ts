@@ -44,7 +44,7 @@ import {Observable} from 'rxjs/Rx';
 	providers: []
 })
 export class ModalComponent {
-	result:any; 
+	result:any;
 	value:number = 0;
 	private ticketURL = 'https://fabulous-backend-hsl-parking.herokuapp.com/api/ticket';
 
@@ -58,9 +58,12 @@ export class ModalComponent {
 	@Output()
 	resultUpdated:EventEmitter<any> = new EventEmitter<any>();
 
-	/*
-	* Get the ticket generate by server.
-	*/
+
+	/**
+	 * [Get the ticket generate by server.]
+	 * @param  {string} license [description]
+	 * @return {any}            [description]
+	 */
 	getTicket(license: string): any{
 		let params: URLSearchParams = new URLSearchParams();
 		let data = {
@@ -74,9 +77,13 @@ export class ModalComponent {
 		return this.http.post(this.ticketURL, body, {headers : head})
 		.map( (response) => {let body = response.json()
 			return body['data'] || { }
-		});	
+		});
 	}
 
+	/**
+	 * [showLgModal description]
+	 * @param {number} _param [description]
+	 */
 	showLgModal(_param:number) {
 		document.getElementById('input1').className="form-control";
 		document.getElementById('input2').className="form-control";
@@ -91,15 +98,19 @@ export class ModalComponent {
 		this.lgModal.show();
 	}
 
+	/**
+	 * [hideLgModal description]
+	 */
 	hideLgModal() {
 		this.lgModal.hide();
 		this.resultUpdated.emit(false);
 		return false;
 	}
-	/*
-	*	This function will check the input, handle the response from server
-	*	and reset the form when being reopened
-	*/
+
+	/**
+	 * [This function will check the input, handle the response from server
+	*	and reset the form when being reopened]
+	 */
 	accept(){
 		if((<HTMLInputElement>document.getElementById('input1')).value!=(<HTMLInputElement>document.getElementById('input2')).value||(<HTMLInputElement>document.getElementById('input1')).value=='' || (<HTMLInputElement>document.getElementById('input2')).value ==''){
 			document.getElementById('input1').className="form-control has-error";

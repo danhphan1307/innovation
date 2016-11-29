@@ -1,0 +1,37 @@
+{
+	"tags":
+	{
+		"allowUnknownTags" : true
+	},
+	"plugins":[
+		 "plugins/markdown"
+		,"/usr/local/lib/node_modules/tsdoc/template/plugins/TSDoc.js"
+	],
+	"opts":
+	{
+		"template"	:"/usr/local/lib/node_modules/tsdoc/template",
+		"recurse"	:"true"
+	},
+	"templates" : {
+		"cleverLinks"     : false,
+		"monospaceLinks"  : false
+	},
+	"source":
+	{
+		"includePattern": "(\\.d)?\\.ts$"
+	},
+	"markdown"  : {
+		"parser"   : "gfm",
+		"hardwrap" : true
+	},
+	"tsdoc":{
+		"source"		:"/Users/nguyenluong/innovation/app/src/",
+		"destination"	:"/Users/nguyenluong/innovation/app/docs",
+		"tutorials"		:"",
+		"systemName"	: "app",
+		"footer"		: "",
+		"copyright"		: "app Copyright © 2016 nguyenluong.",
+		"outputSourceFiles" : true,
+		"commentsOnly": true
+	}
+}

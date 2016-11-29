@@ -49,7 +49,7 @@ declare var Slider: any;
   <div class="sliderIOS round"></div>
   </label>
   </td>
-  </tr>  
+  </tr>
   </table>
 
   <table [hidden]="!b_OpenHelper_None">
@@ -60,7 +60,7 @@ declare var Slider: any;
   <td>
   <label>Nothing to setting</label>
   </td>
-  </tr>  
+  </tr>
   </table>
   `
 })
@@ -96,12 +96,23 @@ export class FilterPanel{
     );
     this.radius = 1000;
   };
+
+  /**
+   * [load description]
+   * @param {any} _map      [description]
+   * @param {any} _facility [description]
+   * @param {any} _zone     [description]
+   */
   load(_map:any, _facility:any, _zone:any){
     this.map = _map;
     this.facilityComponent = _facility;
     this.ZoneComponent = _zone;
   }
 
+  /**
+   * [ReturnSliderValue description]
+   * @return {number} [description]
+   */
   ReturnSliderValue():number{
     if(this.bState){
       /*It is a must to put the delay here. The reason is that with the touchend
@@ -118,6 +129,9 @@ export class FilterPanel{
     }
   }
 
+  /**
+   * [closeAllPanel description]
+   */
   closeAllPanel(){
     this.b_OpenHelper_Facility=false;
     this.b_OpenHelper_HRI=false;
@@ -130,6 +144,10 @@ export class FilterPanel{
     }
   }
 
+  /**
+   * [OpenPanel description]
+   * @param {string} _panel [description]
+   */
   OpenPanel(_panel:string){
     switch (_panel) {
       case 'Facility':
@@ -145,12 +163,21 @@ export class FilterPanel{
     }
   }
 
+  /**
+   * [setButtonOnOff description]
+   * @param {any}     _element [description]
+   * @param {boolean} _status  [description]
+   */
   setButtonOnOff(_element:any, _status:boolean){
     for (var i = 0; i< _element.length; i++){
       (<HTMLInputElement>document.getElementById(_element[i])).disabled = !_status;
     }
   }
 
+  /**
+   * [displayAllFacility description]
+   * @param {any} e [description]
+   */
   displayAllFacility(e:any){
     if(e.target.checked){
       switch (e.target.name) {
@@ -182,7 +209,10 @@ export class FilterPanel{
   }
 
 
-  //Display markers for parking
+  /**
+   * [displayZone description]
+   * @param {any} e [description]
+   */
   displayZone(e:any){
     if(e.target.checked){
       this.setButtonOnOff(this.options, false);
@@ -264,6 +294,11 @@ export class FilterPanel{
     }
   }
 
+  /**
+   * [checkOrUncheck description]
+   * @param {boolean}  _bool [description]
+   * @param {()=>void} _func [description]
+   */
   checkOrUncheck(_bool:boolean, _func?:()=>void){
     for (var i = 1; i< this.options.length; i++){
       (<HTMLInputElement>document.getElementById(this.options[i])).checked = _bool;
@@ -283,7 +318,9 @@ export class FilterPanel{
     }
   }
 
-
+  /**
+   * [reset description]
+   */
   reset(){
     this.map.clearKML();
     this.map.clearMarkers();

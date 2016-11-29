@@ -14,51 +14,82 @@ import {Observable} from 'rxjs/Rx';
 
 export class FacilityComponent implements OnInit {
 
-  @Output()
-  triggered = new EventEmitter<ActiveComponent>();
+/**
+ * output event. emit if facility tab is selected
+ */
+ @Output()
+ triggered = new EventEmitter<ActiveComponent>();
 
-  facilities : Facility[];
-  markers : Coords[] = [];
-  title = 'Park and Ride';
+/**
+ * Array contains scanned facilities
+ * @type {Facility[]}
+ */
+ facilities : Facility[];
+  /**
+   * Array contains markers on map
+   * @type {Coords[]}
+   */
 
-  radius:number;
+   markers : Coords[] = [];
+   title = 'Park and Ride';
+   /**
+    * Radius value in which facilitie service will scan
+    * @type {number}
+    */
+   radius:number;
 
-  constructor(private facilityService: FacilityService){
+   constructor(private facilityService: FacilityService){
 
-  }
+   }
 
-  ngOnInit(){
-    this.triggered.emit(ActiveComponent.PARKING)
+   ngOnInit(){
+     this.triggered.emit(ActiveComponent.PARKING)
 
-  }
+   }
 
-  updateRadius(event:number, _map:any){
-    this.radius = event;
-    _map.clearMarkers();
-    this.loadFacilitiesNearby(_map, new Coords(_map.centerLat, _map.centerLon), this.radius);
-  }
+  /**
+   * Update radius value according to slider value
+   * @param {number} event [capture output event from slider]
+   * @param {any}    _map  [map object]
+   */
+   updateRadius(event:number, _map:any){
+     this.radius = event;
+     _map.clearMarkers();
+     this.loadFacilitiesNearby(_map, new Coords(_map.centerLat, _map.centerLon), this.radius);
+   }
 
-  loadAllFacilities(mapComponent: MapComponent, _func?:()=>void){
-    this.facilityService.getAllFacilities().subscribe((facilities) => {
+  /**
+   * Load all available facilities
+   * @param {MapComponent} mapComponent [map component]
+   * @param {()=>void}     _func        [callback handler]
+   */
+   loadAllFacilities(mapComponent: MapComponent, _func?:()=>void){
+     this.facilityService.getAllFacilities().subscribe((facilities) => {
       //filter park and ride + active
       this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
         && f.status == FacilityStatus.IN_OPERATION
         );
       mapComponent.placeMarkerFacility(this.facilities, true, true);
       if(_func){
-        _func();        
+        _func();
       }
     });
-  }
+   }
 
-  private loadFacilitiesNearby(mapComponent: MapComponent, coord: Coords, radius:number): void{
-    this.facilityService.getFaclitiesNearby(coord,radius)
-    .subscribe((facilities) => {
+  /**
+   * @method Load all nearby facilities which are within given raidus
+   * @param {MapComponent} mapComponent [map component]
+   * @param {Coords}       coord        [center coordinate]
+   * @param {number}       radius       [radius to scan]
+   */
+   private loadFacilitiesNearby(mapComponent: MapComponent, coord: Coords, radius:number): void{
+     this.facilityService.getFaclitiesNearby(coord,radius)
+     .subscribe((facilities) => {
       //filter park and ride + active
       this.facilities = facilities.filter(f => f.usages.indexOf(Usage.PARK_AND_RIDE) != -1
         && f.status == FacilityStatus.IN_OPERATION
         );
       mapComponent.placeMarkerFacility(this.facilities);
     });
-  }
-}
+   }
+ }

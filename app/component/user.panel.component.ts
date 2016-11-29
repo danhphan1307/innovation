@@ -46,10 +46,14 @@ export class UserComponent extends AbstractComponent implements OnInit {
         this.diff = this.diffTwoDay(new Date(), new Date (localStorage.getItem('date')));
         localStorage.setItem('duration',this.diff);
       }
-      
+
     }, 1000);
   }
 
+  /**
+   * [updateSave description]
+   * @param {any} event [description]
+   */
   updateSave(event:any){
     if(event!=null){
       this.name = event.name.en;
@@ -64,13 +68,23 @@ export class UserComponent extends AbstractComponent implements OnInit {
     }
   }
 
-
+  /**
+   * [Utility for date to string conversion]
+   * @param  {any}    _date [description]
+   * @return {string}       [description]
+   */
   convertDateString(_date:any):string{
     var d = new Date(_date);
     return ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
     d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
   }
 
+  /**
+   * [diffTwoDay description]
+   * @param  {any}    _date1 [description]
+   * @param  {any}    _date2 [description]
+   * @return {string}        [description]
+   */
   diffTwoDay(_date1:any, _date2:any):string{
     var timeDiff = Math.abs(_date1.getTime() - _date2.getTime());
     var diffHour = Math.round((timeDiff % 86400000) / 3600000);

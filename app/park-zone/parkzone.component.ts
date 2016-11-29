@@ -18,11 +18,15 @@ export class ParkZoneComponent implements OnInit {
   freeZones: ParkingType[];
   data : string;
 
-  //Temporary coordinators
+  /**
+   * [Temporary coordinates for entrances]
+   * @type {Array}
+   */
   staticLatLon = [[60.1731,24.9484],[60.1708,24.9397],[60.1736, 24.9386],[60.1747,24.9351],[60.1695, 24.9371],
   [60.1682,24.9404],[60.1682,24.9495],[60.1655 , 24.9496],[60.1646,24.9438],[60.1702,24.9305],
   [60.1709 , 24.9330],[60.1730 , 24.9295],[60.1781 , 24.9483],[60.1642, 24.9174],[60.1641 ,24.9100]
   ];
+
   coords : Coords[] = [];
   @Output()
   triggered = new EventEmitter<ActiveComponent>();
@@ -39,6 +43,12 @@ export class ParkZoneComponent implements OnInit {
 
   }
 
+  /**
+   * [Load free and paid zones from json files]
+   * @param {PricingZoneEnum} pricingZone [Type of payment]
+   * @param {MapComponent}    map         [Map component]
+   * @param {()=>void}        _func       [Callback handler]
+   */
   public loadZones(pricingZone: PricingZoneEnum, map: MapComponent, _func?:()=>void){
     this.parkingFilterService.getParkingZone().subscribe((res: ParkingType[]) => {
       this.parkZones = res;
@@ -95,11 +105,15 @@ export class ParkZoneComponent implements OnInit {
 
       }
       if(_func){
-        _func();        
+        _func();
       }
     });
   }
 
+  /**
+   * [Put entrance markers]
+   * @param {MapComponent} map [Map component]
+   */
   public putEntrances(map: MapComponent){
     for (var i =  0 ; i <  this.staticLatLon.length ; i++){
       var val = this.staticLatLon[i];
