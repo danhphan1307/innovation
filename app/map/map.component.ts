@@ -160,6 +160,10 @@ import {Help} from '../component/help.component';
          this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(filter);
          var help = /** @type {!HTMLInputElement} */(document.getElementById('help'));
          this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(help);
+         document.getElementById("gettingLocation").style.opacity = '1';
+         setTimeout(()=>{
+             document.getElementById("gettingLocation").style.display = 'block';
+         },250)
      }
 
     /**
