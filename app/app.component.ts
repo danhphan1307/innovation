@@ -173,6 +173,11 @@ export class AppComponent implements OnInit {
     }
   }
 
+  closeHelper(event:boolean){
+    if(event)
+      this.FilterPanel.OpenPanel("Close");
+  }
+
   /**
    * [reset reset everything]
    */
@@ -181,12 +186,12 @@ export class AppComponent implements OnInit {
      this.MapComponent.closeInfowindow();
      this.blackOverlay.setState('close');
      this.UserComponent.setState('close');
-     this.FilterPanel.closeAllPanel();
      this.MapComponent.clearFacilityMarkers(true,true);
      this.MapComponent.clearCircles();
      this.MapComponent.clearMarkers();
      this.MapComponent.clearPolygons();
      this.MapComponent.clearDirection();
      this.MapComponent.clearKML();
+     this.FilterPanel.closeAllPanel();
    }
  }

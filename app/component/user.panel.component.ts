@@ -8,7 +8,7 @@ import {Coords} from '../models/location';
   animations: [
 
   trigger("animationBottomNav", [
-    state("open", style({height:"70%",opacity:'1', display: "block"})),
+    state("open", style({height:"92%",opacity:'1', display: "block"})),
     state("close", style({height: "0",opacity:'0', display: "none" })),
     transition("open <=> close", animate( "250ms" )),
     ])

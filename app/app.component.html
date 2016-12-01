@@ -21,7 +21,7 @@
 	</div>
 </div>
 <img alt="config" id="cog_icon" src="../img/cog.png" (click) = "openHelper()" />
-<map-gg (saveUpdated) = "UserComponent.updateSave($event)" (doneLoading)="loadData($event)"></map-gg>
+<map-gg (saveUpdated) = "UserComponent.updateSave($event)" (doneLoading)="loadData($event)" (mapClicked)="closeHelper($event)"></map-gg>
 <my-bike ></my-bike>
 <park-zone ></park-zone>
 <facility-component></facility-component>

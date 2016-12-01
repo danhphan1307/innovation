@@ -81,6 +81,9 @@ import {Help} from '../component/help.component';
      doneLoading: any = new EventEmitter<boolean>();
 
      @Output()
+     mapClicked: any = new EventEmitter<boolean>();
+
+     @Output()
      saveUpdated: any= new EventEmitter();
 
      //Polygons for HRI data
@@ -102,6 +105,8 @@ import {Help} from '../component/help.component';
          if (navigator.geolocation) {
              this.initialize();
              google.maps.event.addDomListener(window, "load", ()=>{
+                 document.getElementById("gettingLocation").style.opacity = '1';
+                 document.getElementById("gettingLocation").style.display = 'block';
                  navigator.geolocation.getCurrentPosition(this.createMap.bind(this), this.noGeolocation)
              });
          } else {
@@ -129,14 +134,18 @@ import {Help} from '../component/help.component';
      * [noGeolocation alert if user do not allow to access the geolocation]
      */
      noGeolocation() {
-         document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Please enable Geolocation to use our service.</div>';
+         document.getElementById("mapCanvas").innerHTML += '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> Please enable Geolocation to use our service.</div>';
+         document.getElementById("gettingLocation").style.opacity = '0';
+         document.getElementById("gettingLocation").style.display = 'none';
      }
 
     /**
      * [geolocationNotSupported alert if browser does not support the geolocation]
      */
      geolocationNotSupported() {
-         document.getElementById("mapCanvas").innerHTML = '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> This browser does not support Geolocation.</div>';
+         document.getElementById("mapCanvas").innerHTML += '<div class="alert alert-danger" role="alert"> <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span> This browser does not support Geolocation.</div>';
+         document.getElementById("gettingLocation").style.opacity = '0';
+         document.getElementById("gettingLocation").style.display = 'none';
      }
 
     /**
@@ -160,8 +169,6 @@ import {Help} from '../component/help.component';
          this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(filter);
          var help = /** @type {!HTMLInputElement} */(document.getElementById('help'));
          this.map.controls[google.maps.ControlPosition.BOTTOM_LEFT].push(help);
-         document.getElementById("gettingLocation").style.opacity = '1';
-         document.getElementById("gettingLocation").style.display = 'block';
      }
 
     /**
@@ -178,6 +185,9 @@ import {Help} from '../component/help.component';
          if (localStorage_hasData()) {
              this.parkMarker = this.placeParkPlace();
          }
+         _map.addListener('click', ()=> {
+             this.mapClicked.emit(true);
+         });
          document.getElementById("gettingLocation").style.opacity = '0';
          setTimeout(()=>{
              document.getElementById("gettingLocation").style.display = 'none';

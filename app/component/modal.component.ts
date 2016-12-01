@@ -14,9 +14,8 @@ import {Observable} from 'rxjs/Rx';
 				<div class="modal-body" id="modal-body">
 					<h4 class="modal-title" id="title">Ticket Price: {{value}} €/h</h4><br>
 					
-					<input type="text" placeholder="License plate" aria-describedby="sizing-addon2" id="input1">
-					<br><br>
-					<input type="text" placeholder="Retype license plate" aria-describedby="sizing-addon3" id="input2">
+					<input type="text" placeholder="License plate" aria-describedby="sizing-addon2" id="input1" value ="ABC-789" style="text-align:center">
+					<br>
 					<img src="img/waiting-respond.gif" alt="loading" id="waiting-respond"/>
 					<div id="error-log" class="alert alert-danger" style="display:none"></div>
 					<div id="success-log" class="alert alert-success" style="display:none"></div>
@@ -100,8 +99,8 @@ export class ModalComponent {
 	*	and reset the form when being reopened]
 	 */
 	accept(){
-		if((<HTMLInputElement>document.getElementById('input1')).value!=(<HTMLInputElement>document.getElementById('input2')).value||(<HTMLInputElement>document.getElementById('input1')).value=='' || (<HTMLInputElement>document.getElementById('input2')).value ==''){
-			document.getElementById('error-log').innerText="Please check the information again";
+		if((<HTMLInputElement>document.getElementById('input1')).value=='' || !(/\S/.test((<HTMLInputElement>document.getElementById('input1')).value))){
+			document.getElementById('error-log').innerText="Please check the license again";
 			document.getElementById("error-log").style.display = "block";
 		}else {
 			document.getElementById("error-log").style.display = "none";
