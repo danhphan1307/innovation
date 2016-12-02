@@ -49,15 +49,15 @@ export class CarouselComponent {
       var yDiff = yDown - yUp;
 
       if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+        (<any>document.getElementsByClassName('item active')[0]).fadeOut("slow");
         if ( xDiff > 0 ) {
-           (<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-left')[0]).click();
-          
+          (<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-right')[0]).click();
           /* left swipe */ 
         } else {
-
-           (<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-right')[0]).click();
+          (<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-left')[0]).click();
           /* right swipe */
-        }                       
+        }   
+        (<any>document.getElementsByClassName('item active')[0]).fadeIn("slow");                    
       } else {
         if ( yDiff > 0 ) {
           /* up swipe */ 

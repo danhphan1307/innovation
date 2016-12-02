@@ -12,5 +12,6 @@ import '../css/bootstrap.min.css';
 import '../bootstrap-slider/bootstrap-slider.min.css';
 import '../css/style.css';
 import '../css/font-awesome.min.css';
+
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, ts, css, sass, ...
