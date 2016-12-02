@@ -114,7 +114,7 @@ export class ModalComponent {
 					document.getElementById("success-log").style.display = "block";
 					var content = "Your ticket number is: <br>" + (data.ticket_code);
 					document.getElementById('success-log').innerHTML= content;
-					document.getElementById("title").innerText= "Thank you - Ticket Information";
+					document.getElementById("title").innerText= "Ticket Information";
 					document.getElementById("btn-close").style.visibility = "visible";
 					localStorage.setItem('ticket',data.ticket_code);
 					localStorage.setItem('date',data.time_stamp);

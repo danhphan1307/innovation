@@ -72,7 +72,11 @@ a{
     z-index: 2;
     width: 100%;
     height: 90%;
-    background: rgba(0,0,0,0.4);
+    background: rgba(95,225,250,0.7); /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, rgba(95,225,250,0.7), rgba(178,98,251,0.5)); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, rgba(95,225,250,0.7), rgba(178,98,251,0.5)); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, rgba(95,225,250,0.7), rgba(178,98,251,0.5)); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, rgba(95,225,250,0.7), rgba(178,98,251,0.5)); /* Standard syntax */
 }
 
 .sidenav{
@@ -154,13 +158,14 @@ a{
 }
 
 #gettingLocation{
+    border-radius: 15px;
     opacity: 0;
     display:none;
     background-color: white;
     position: absolute;
     top: 40vh;
-    left:25vw;
-    width: 50vw;
+    left: 20vw;
+    width: 60vw;
     z-index: 3;
     text-align: center;
     transition: 0.25s;
@@ -172,13 +177,19 @@ a{
     margin:auto;
 }
 #gettingLocation .title{
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     color:white;
     padding-top: 1vh;
     padding-bottom: 1vh;
     width: 100%;
-    background-color:#789DCA; 
     text-transform: uppercase;  
     font-weight: bold;
+    background: #47E7A3; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #47E7A3 , #38BAFC); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #47E7A3, #38BAFC); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #47E7A3, #38BAFC); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #47E7A3 , #38BAFC); /* Standard syntax */
 }
 #gettingLocation span{
     width: 100%;
@@ -277,6 +288,8 @@ h2{
     margin:0;
     color:#484B64;
     font-size: 16px;
+    min-width:55vw;
+    max-width: 500px;
 }
 
 .cityBike .separate, .searchInfo .separate, .facility .separate, .parkPlace .separate{
@@ -289,16 +302,6 @@ h2{
     color:#484B64;
     font-size:15px;
     font-weight: normal;
-}
-.cityBike .register{
-    margin-left:25%;
-    width: 50%;
-    min-height: 30px;
-    border-radius: 5%;
-    background-color:#484B64;
-}
-.cityBike .register a{
-    color:white;
 }
 .cityBike .moreInfo, .searchInfo .moreInfo, .facility .moreInfo, .parkPlace .moreInfo {
     display:block;
@@ -373,21 +376,32 @@ h2{
   max-height: 30px;
 }
 
-#markerFacility, #markerBike, #polygon,#destination_marker, #markerSearch{
+#destination_marker{
     background-color: #acacac;
 }
-#markerFacility:active, #markerBike:active, #polygon:active, #destination_marker:active, #markerSearch:active{
+#destination_marker:active{
     background-color: #4A6AA5;
 }
-#saveButton{
+#saveButton, #markerFacility, #markerSearch,#markerBike, .cityBike .register, #polygon{
     outline:none;
-    margin-left:25%;
-    width: 50%;
+    display:inline-block;
+    width: 48%;
     min-height: 30px;
     border-radius: 5%;
     background-color:white;
+}
+#saveButton,.cityBike .register{
+    margin-left:2%;
     border:1px solid #1CBB9B;
-    color:#1CBB9B;
+    color:#1CBB9B; 
+}
+.cityBike .register a{
+ color:#1CBB9B;  
+}
+#markerFacility, #markerSearch,#markerBike, #polygon{
+    margin-right:2%;
+    border:1px solid #779ECB;
+    color:#779ECB;  
 }
 #unpark{
     outline:none;
@@ -405,14 +419,20 @@ h2{
     color:white;
 }
 #saveButton.active{
-    margin-left:15%;
-    width:70%;
     background-color:#1CBB9B;
     color:white;
 
 }
-#saveButton:active{
+#saveButton:active, .cityBike .register:active{
     background-color:#1CBB9B;
+    color:white;
+}
+
+#markerFacility:active,  #markerSearch:active, #markerBike:active, #polygon:active{
+    background-color:#779ECB;
+    color:white;   
+}
+.cityBike .register:active a{
     color:white;
 }
 .locationPanel{
@@ -429,11 +449,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
- width: 100%;
- background: #FF9AD7;
- display:flex;justify-content:center;align-items:center;
- color:white;
- height:7vh;   
+   width: 100%;
+   background: #FF9AD7;
+   display:flex;justify-content:center;align-items:center;
+   color:white;
+   height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -552,7 +572,23 @@ th{
     font-weight: bold;
 }
 .bottomDiv .content{
-    margin-top:-50px;
+    height:100%;
+    margin:0;
+    background: #5FE1FA; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #5FE1FA , #B262FB); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #5FE1FA, #B262FB); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #5FE1FA, #B262FB); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #5FE1FA , #B262FB); /* Standard syntax */
+}
+
+.bottomDiv .content .userInfo{
+    position: relative;
+    top: 30%;
+    width:70%;
+    margin-left:15%;
+}
+.bottomDiv hr{
+    margin-top:0;
 }
 #search_input_wrap{
     z-index: 1;
@@ -596,18 +632,18 @@ th{
     animation: all 0.5s;
 }
 #arrowUp{
-   background-color: white;
-   top:9vh;
-   z-index:1;
-   position: absolute;
-   width: auto;
-   max-width: 10vw;
-   text-align: center;
-   left: 0; 
-   right: 0; 
-   margin-left: auto; 
-   margin-right: auto;  
-   animation: all 0.5s;
+ background-color: white;
+ top:9vh;
+ z-index:1;
+ position: absolute;
+ width: auto;
+ max-width: 10vw;
+ text-align: center;
+ left: 0; 
+ right: 0; 
+ margin-left: auto; 
+ margin-right: auto;  
+ animation: all 0.5s;
 }
 .modal-dialog {
     margin-left: 10vw;
@@ -649,13 +685,38 @@ th{
     width: 100%;
     text-align:center;
     position: absolute;
-    bottom:1vh;
+    bottom:0;
+    padding-bottom: 1vh;
     left:0;
+    background-color: white
 }
 .developer img{
     display: block;
     margin:auto;
     max-height: 7vh;
+}
+#userInfoTitle{
+    font-size: 14px;
+    font-weight: normal;
+    background: #afc0de; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(left, #afc0de , #7995C7); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(right, #afc0de, #7995C7); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(right, #afc0de, #7995C7); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(to right, #afc0de , #7995C7); /* Standard syntax */
+    color: white;
+    text-align: center;
+    border-radius: 30px;
+    line-height: 3.5;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    min-width: 60%;
+}
+#userInfoContent{
+    padding:5vh 4vw 2vh 4vw;
+    border-radius:15px;
+    box-shadow: 0 3px 9px rgba(0,0,0,.5);
+    background-color: white;
 }
 
 textarea:focus, input:focus{
@@ -677,12 +738,13 @@ textarea:focus, input:focus{
     background: linear-gradient(to right, #afc0de , #7995C7); /* Standard syntax */
     color: white;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 30px;
     line-height: 3.5;
     position: absolute;
     left: 50%;
     transform: translate(-50%, -90%);
     min-width: 60%;
+    text-transform: uppercase;
 }
 .btn-success {
     color: #fff;
@@ -692,7 +754,7 @@ textarea:focus, input:focus{
     background: -moz-linear-gradient(right, #18e18b, #15ca7d); /* For Firefox 3.6 to 15 */
     background: linear-gradient(to right, #18e18b , #15ca7d); /* Standard syntax */
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     padding-left:15px;
     padding-right: 15px;
     text-transform: uppercase;
@@ -706,11 +768,30 @@ textarea:focus, input:focus{
     background: -moz-linear-gradient(right, #FD98BD, #FD78A9); /* For Firefox 3.6 to 15 */
     background: linear-gradient(to right, #FD98BD , #FD78A9); /* Standard syntax */
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     padding-left:15px;
     padding-right: 15px;
     text-transform: uppercase;
     box-shadow: 0px 7px 20px #dedede;
+}
+#instruction{
+    background-color: transparent;
+    bottom: 20%;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    text-align: center;
+    border: 1px solid white;
+    border-radius: 30px;
+    color:white;
+    position: absolute;
+    width: 40%;
+    margin-left: 30%;
+    outline:none;
+}
+#instruction:active{
+    background-color: white;
+    border: 1px solid white;
+    color:#7995C7;
 }
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {

@@ -13,7 +13,7 @@ import {Help} from '../component/help.component';
  */
  function localStorage_hasData() {
      try {
-         if(JSON.parse(localStorage.getItem("carLocation")).name.en != "Sorry, you did not save your car location"){
+         if(JSON.parse(localStorage.getItem("carLocation")).name.en != "No data"){
              return true;
          }else {
              return false;
@@ -89,7 +89,7 @@ import {Help} from '../component/help.component';
      //Polygons for HRI data
      polygons: any[] =  [[],[],[],[],[]];
 
-     klmSrc : String = 'https://sites.google.com/site/lnknguyenmyfiles/kmlfiles/vyohykerajat_ETRS.kml';
+     klmSrc : String = 'https://sites.google.com/site/parkingappkml/kml/vyohykerajat_ETRS.kml';
      kmlLayer : any = new google.maps.KmlLayer(this.klmSrc, {
          suppressInfoWindows: true,
          preserveViewport: true
@@ -154,7 +154,7 @@ import {Help} from '../component/help.component';
      initialize():void {
          var mapProp = {
              center: new google.maps.LatLng(this.centerLat, this.centerLon),
-             zoom: 12,
+             zoom: 10,
              mapTypeId: google.maps.MapTypeId.ROADMAP
          };
          this.map = new google.maps.Map(document.getElementById("mapCanvas"), mapProp);
@@ -188,6 +188,7 @@ import {Help} from '../component/help.component';
          _map.addListener('click', ()=> {
              this.mapClicked.emit(true);
          });
+         
          document.getElementById("gettingLocation").style.opacity = '0';
          setTimeout(()=>{
              document.getElementById("gettingLocation").style.display = 'none';
@@ -232,7 +233,7 @@ import {Help} from '../component/help.component';
                 (place.address_components[2] && place.address_components[2].short_name || '')
                 ].join(' ');
             }
-            var content = '<div class="searchInfo"><div class="title"><h3>'+ place.name + '</h3><img id="markerSearch" src="img/directionIcon.png" alt="direction icon" class="functionIcon"><br><span>'+address+ '</span></div>' ;
+            var content = '<div class="searchInfo"><div class="title"><h3>'+ place.name + '</h3><br><span>'+address+ '</span><br><button style="width: 50%; margin-left: 25%;" id="markerSearch">Direction</button></div>' ;
             this.infowindowDestination.setContent(content);
             this.infowindowDestination.open(_map, marker);
             google.maps.event.addDomListener(document.getElementById('close_search'),'click',()=>{
@@ -278,7 +279,7 @@ import {Help} from '../component/help.component';
                  }, (result:any, status:any) =>{
                      if (status == google.maps.GeocoderStatus.OK) {
                          var content = '<div class="parkHere"><h3>Current Location</h3><br><span>'+result[0].formatted_address+'</span>';
-                         content+='<hr class="separate"><button id="saveButton" type="button">Park here - 4€/h</button></div>' ;
+                         content+='<hr class="separate"><button style="width: 50%; margin-left: 25%;" id="saveButton" type="button">Park here - 4€/h</button></div>' ;
                          _infowindow.setContent(content);
                          _infowindow.open(this.map, _marker);
                          google.maps.event.addDomListener(document.getElementById('saveButton'),'click',()=>{
@@ -490,9 +491,9 @@ import {Help} from '../component/help.component';
      resetLocalStorage(){
          var init_local_storage= {
              "name": {
-                 "fi": "Sorry, you did not save your car location",
-                 "sv": "Sorry, you did not save your car location",
-                 "en": "Sorry, you did not save your car location"
+                 "fi": "No data",
+                 "sv": "No data",
+                 "en": "No data"
              },"builtCapacity":{
                  "CAR": "No data",
                  "MOTORCYCLE": "No data",
@@ -526,7 +527,7 @@ import {Help} from '../component/help.component';
              var markerPark = this.service.placeMarker(this.map,object.location.coordinates[0][0][1], object.location.coordinates[0][0][0], "park");
              this.parkMarker = markerPark;
              google.maps.event.addListener(markerPark, 'click', () => {
-                 var content = '<div class="parkPlace"><div class="title"><h3>Your Park Place</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+object.name.en+ '</span><br>';
+                 var content = '<div class="parkPlace"><div class="title"><h3>Your Park Place</h3><br><span>'+object.name.en+ '</span><br>';
                  if(object.name.en.indexOf('bike') !== -1){
                      content+='Bicycle Capacity :'+ (object.builtCapacity.BICYCLE||0);
                  } else {
@@ -534,7 +535,7 @@ import {Help} from '../component/help.component';
                      content+='Disabled Capacity:'+ (object.builtCapacity.DISABLED|| 0)+'<br>';
                      content+='Motorbike Capacity:'+ (object.builtCapacity.MOTORCYCLE|| 0);
                  }
-                 content+='<hr class="separate"><button id="saveButton" class="active">You parked here</button><br><button id="unpark">Unpark</button></div></div>' ;
+                 content+='<hr class="separate"><button id="markerFacility">Direction</button><button id="saveButton" class="active">You parked here</button><br><button id="unpark">Unpark</button></div></div>' ;
                  this.infowindowParkPlace.setContent(content);
                  this.infowindowParkPlace.open(this.map, markerPark);
 
@@ -584,7 +585,7 @@ import {Help} from '../component/help.component';
              }
              var func = ((markerFacility, i) => {
                  google.maps.event.addListener(markerFacility, 'click', () => {
-                     var content = '<div class="facility"><div class="title"><h3>Park and Ride</h3><img id="markerFacility" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+f[i].name.en+ '</span><br>';
+                     var content = '<div class="facility" ><div class="title"><h3>Park and Ride</h3><br><span>'+f[i].name.en+ '</span><br>';
                      if(f[i].name.en.indexOf('bike') !== -1){
                          content+='Bicycle Capacity :'+ (f[i].builtCapacity.BICYCLE||0);
                      } else {
@@ -592,7 +593,7 @@ import {Help} from '../component/help.component';
                          content+='Disabled Capacity:'+ (f[i].builtCapacity.DISABLED|| 0)+'<br>';
                          content+='Motorbike Capacity:'+ (f[i].builtCapacity.MOTORCYCLE|| 0);
                      }
-                     content+='<hr class="separate"><button id="saveButton">Park here</button></div></div>' ;
+                     content+='<hr class="separate"><button id="markerFacility">Direction</button><button id="saveButton">Park here</button></div></div>' ;
                      this.infowindowFacility.setContent(content);
                      this.infowindowFacility.open(this.map, markerFacility);
                      google.maps.event.addDomListener(document.getElementById('markerFacility'),'click',()=>{
@@ -628,14 +629,14 @@ import {Help} from '../component/help.component';
              this.markers.push(markerBike);
              var func = ((markerBike, i) => {
                  google.maps.event.addListener(markerBike, 'click', () => {
-                     var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><img id="markerBike" src="img/directionIcon.png" alt="love icon" class="functionIcon"><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
+                     var content = '<div class="cityBike"><div class="title"><h3>Citybike Station</h3><br><span>'+stations[i].name+ '</span><h4 class="info"> Bike Available: '+stations[i].bikesAvailable + '/' +(stations[i].bikesAvailable+stations[i].spacesAvailable)+ '</h4></div>' ;
                      for (var counter = 0; counter < (stations[i].bikesAvailable); counter++) {
                          content+='<div class="freeBike">&nbsp;</div>';
                      }
                      for (var counter = 0; counter < (stations[i].spacesAvailable); counter++) {
                          content+='<div class="freeSpot">&nbsp;</div>';
                      }
-                     content+='<hr class="separate"><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
+                     content+='<hr class="separate"><button id="markerBike">Direction</button><button class="register"><a href="https://www.hsl.fi/citybike">Register to use</a></button><br><br><a href="https://www.hsl.fi/kaupunkipyorat" class="moreInfo"><span class="glyphicon glyphicon-info-sign"></span> More information</a></div>';
                      this.infowindowBike.setContent(content);
                      this.infowindowBike.open(this.map, markerBike);
                      var el = document.getElementById('markerBike');
@@ -709,12 +710,13 @@ import {Help} from '../component/help.component';
          this.polygons[enumabcd].push(polygon);
 
          google.maps.event.addDomListener(polygon,'click',(event:any)=>{
-             var content = '<div class="cityBike"><div class="title"><h3>Parking Spot</h3><img id="polygon" src="img/directionIcon.png" alt="show direction icon" class="functionIcon" style="margin-right:10px;"><br><span>'+this.stringHandler(type)+'</span><br>';
+             var content = '<div class="cityBike"><div class="title"><h3>Parking Spot</h3><br><span>'+this.stringHandler(type)+'</span><br>';
              geocoder.geocode({
                  'latLng': markerPolygon.getPosition()
              }, (result:any, status:any) =>{
                  if (status == google.maps.GeocoderStatus.OK) {
                      content+=result[0].formatted_address;
+                     content+='<br><button id="polygon" style="margin-left:25%;width:50%">Direction</button>';
                  } else {
                      console.log('Geocoder failed due to: ' + status);
                  }

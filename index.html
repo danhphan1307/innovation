@@ -45,7 +45,7 @@
 				return false;
 			}
 		})();
-		var localStorage_hasData = (function () {
+		function localStorage_hasData() {
 			try {
 				if(localStorage_isSupported){
 					if(localStorage.getItem("carLocation") !== null){
@@ -60,13 +60,13 @@
 			catch (e) {
 				return false;
 			}
-		})();
+		}
 		function initLocalStorage(){
 			var init_local_storage= {
 				"name": {
-					"fi": "Sorry, you did not save your car location",
-					"sv": "Sorry, you did not save your car location",
-					"en": "Sorry, you did not save your car location"
+					"fi": "No data",
+					"sv": "No data",
+					"en": "No data"
 				},"builtCapacity":{
 					"CAR": "No data",
 					"MOTORCYCLE": "No data",
@@ -85,14 +85,14 @@
 		}
 		if(navigator.onLine && localStorage_isSupported) {
 			document.body.innerHTML='<my-app><img src="img/loading.gif" alt="loading" style ="position:fixed; display:block; top: 50%;left: 50%; transform: translate(-50%, -50%);"></my-app>';
-			if(!localStorage_hasData){
+			if(!localStorage_hasData()){
 				initLocalStorage();
 			}
 		}else {
 			var content='';
 			if(!navigator.onLine) {
 				content = '<my-app></my-app><div class="alert alert-danger" role="alert"  style="z-index: 10"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span><span class="sr-only">Error:</span>You are offline<br>';
-				if(localStorage_hasData){
+				if(localStorage_hasData()){
 					var object = JSON.parse(localStorage.getItem('carLocation'))
 					content+= 'Car location: '+ object.name.en + ' <br>Park time: ' + localStorage.getItem('date') ;
 				}else {
