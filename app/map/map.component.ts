@@ -64,7 +64,7 @@ import {Help} from '../component/help.component';
      directionArray:any[] = [];
      parkingObject:any;
 
-     infowindowMainMarker = new google.maps.InfoWindow();
+     infowindowMainMarker = new google.maps.InfoWindow({disableAutoPan : true});
      infowindowFacility = new google.maps.InfoWindow();
      infowindowBike = new google.maps.InfoWindow();
      infowindowDestination = new google.maps.InfoWindow();
@@ -192,7 +192,8 @@ import {Help} from '../component/help.component';
          document.getElementById("gettingLocation").style.opacity = '0';
          setTimeout(()=>{
              document.getElementById("gettingLocation").style.display = 'none';
-         },250)
+         },250);
+         document.getElementById("carouselInstruction").style.opacity = '1';
 
         /*
         *Search bar

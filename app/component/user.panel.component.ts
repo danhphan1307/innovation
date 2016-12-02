@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, trigger, state, style, animate, transitio
 import {AbstractComponent} from './abstract.class.component';
 import {BlackOverlay} from '../component/blackoverlay.component';
 import {Coords} from '../models/location';
+import { CarouselComponent } from '../component/instruction.component';
 
 @Component({
   selector: 'user-panel',
@@ -24,7 +25,7 @@ import {Coords} from '../models/location';
   Time pass: {{diff}}
   </div>
   </div>
-  <button id="instruction">
+  <button id="instruction" (click)="carouselComponent.showInstruction()">
   Instruction
   </button>
   </div>
@@ -42,6 +43,8 @@ export class UserComponent extends AbstractComponent implements OnInit {
   time:any;
   diff:any;
   ticket:any;
+  carouselComponent:CarouselComponent;
+
   ngOnInit(){
     var object = JSON.parse(localStorage.getItem('carLocation'));
     this.name = object.name.en;
@@ -57,6 +60,10 @@ export class UserComponent extends AbstractComponent implements OnInit {
         this.diff = "No data";
       }
     }, 1000);
+  }
+
+  loadElement(_ele:any){
+    this.carouselComponent = _ele;
   }
 
   /**

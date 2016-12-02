@@ -14,7 +14,7 @@ import {AgmCoreModule} from 'angular2-google-maps/core';
 import {AlertComponent } from 'ng2-bootstrap/ng2-bootstrap';
 import {NgModel} from '@angular/forms';
 import {Coords} from './models/location';
-
+import { CarouselComponent } from './component/instruction.component';
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {PricingZoneEnum} from './models/model-enum';
@@ -59,6 +59,9 @@ export class AppComponent implements OnInit {
   @ViewChild(FilterPanel)
   private FilterPanel: FilterPanel;
 
+  @ViewChild(CarouselComponent)
+  private carouselComponent: CarouselComponent;
+
   stations : BikeStation[];
   data : string
   // google maps zoom level
@@ -71,6 +74,7 @@ export class AppComponent implements OnInit {
   ngOnInit(){
     this.blackOverlay.setState('full');
     this.FilterPanel.load(this.MapComponent,this.FacilityComponent, this.ZoneComponent);
+    this.UserComponent.loadElement(this.carouselComponent);
   }
 
   constructor(private _router: Router, viewContainerRef:ViewContainerRef ) {
