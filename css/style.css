@@ -15,6 +15,7 @@ body {
     z-index: 0;
 }
 .carousel-control.right,.carousel-control.left {
+    opacity: 0;
     top: -30%;
     background-image:none;
 }
