@@ -48,26 +48,20 @@ export class CarouselComponent {
       var xDiff = xDown - xUp;
       var yDiff = yDown - yUp;
 
-      if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
+      if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant, this time we just care about x movement*/
         (<HTMLElement>document.getElementsByClassName('item text-center active')[0].childNodes[2]).className ='img-responsive';
-        if ( xDiff > 0) {
-          Promise.resolve((<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-right')[0]).click()).then(()=>{
-             (<HTMLElement>document.getElementsByClassName('item text-center active')[0].childNodes[2]).className += " leftAni";
-          });
-         ;
+        if ( xDiff > 5) {
           /* left swipe */ 
-        } else if ( xDiff < 0)  {
-          Promise.resolve((<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-left')[0]).click()).then(()=>{
-             (<HTMLElement>document.getElementsByClassName('item text-center active')[0].childNodes[2]).className += " rightAni";
+          Promise.resolve((<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-right')[0]).click()).then(()=>{
+            (<HTMLElement>document.getElementsByClassName('item text-center active')[0].childNodes[2]).className += " leftAni";
           });
+          ;
+        } else if ( xDiff < -5)  {
           /* right swipe */
+          Promise.resolve((<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-left')[0]).click()).then(()=>{
+            (<HTMLElement>document.getElementsByClassName('item text-center active')[0].childNodes[2]).className += " rightAni";
+          });
         }        
-      } else {
-        if ( yDiff > 0 ) {
-          /* up swipe */ 
-        } else { 
-          /* down swipe */
-        }                                                                 
       }
       /* reset values */
       xDown = null;
