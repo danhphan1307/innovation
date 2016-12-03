@@ -18,8 +18,39 @@ body {
     top: -30%;
     background-image:none;
 }
-#carouselInstruction img, #carouselInstruction .item{
-    transition: all 0.2s;
+@-webkit-keyframes leftAni{
+ from {opacity: 0;left: -100px;}
+ to {opacity: 1;left:0;} 
+}
+@keyframes leftAni {
+    from {opacity: 0;left: -100px;}
+    to {opacity: 1;left:0;}
+}
+
+/* The element to apply the animation to */
+.leftAni{
+    position: relative;
+    opacity: 0;
+    left: -100px;
+    -webkit-animation: leftAni 0.5s forwards;
+    animation: leftAni 0.5s forwards;
+}
+@-webkit-keyframes rightAni {
+    from {opacity: 0;right: -100px;}
+    to {opacity: 1;right:0;}
+}
+@keyframes rightAni {
+    from {opacity: 0;right: -100px;}
+    to {opacity: 1;right:0;}
+}
+
+/* The element to apply the animation to */
+.rightAni{
+    position: relative;
+    opacity: 0;
+    right: -100px;
+    -webkit-animation: rightAni 0.5s forwards;
+    animation: rightAni 0.5s forwards;
 }
 #carouselInstruction{
     opacity: 0;
@@ -457,7 +488,7 @@ h2{
     color:#1CBB9B; 
 }
 .cityBike .register a{
-   color:#1CBB9B;  
+ color:#1CBB9B;  
 }
 #markerFacility, #markerSearch,#markerBike, #polygon, #carouselInstruction button{
     margin-right:2%;
@@ -510,11 +541,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
- width: 100%;
- background: #FF9AD7;
- display:flex;justify-content:center;align-items:center;
- color:white;
- height:7vh;   
+   width: 100%;
+   background: #FF9AD7;
+   display:flex;justify-content:center;align-items:center;
+   color:white;
+   height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -693,18 +724,18 @@ th{
     animation: all 0.5s;
 }
 #arrowUp{
-   background-color: white;
-   top:9vh;
-   z-index:1;
-   position: absolute;
-   width: auto;
-   max-width: 10vw;
-   text-align: center;
-   left: 0; 
-   right: 0; 
-   margin-left: auto; 
-   margin-right: auto;  
-   animation: all 0.5s;
+ background-color: white;
+ top:9vh;
+ z-index:1;
+ position: absolute;
+ width: auto;
+ max-width: 10vw;
+ text-align: center;
+ left: 0; 
+ right: 0; 
+ margin-left: auto; 
+ margin-right: auto;  
+ animation: all 0.5s;
 }
 .modal-dialog {
     margin-left: 10vw;

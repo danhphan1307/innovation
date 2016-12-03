@@ -49,15 +49,16 @@ export class CarouselComponent {
       var yDiff = yDown - yUp;
 
       if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {/*most significant*/
-        (<any>document.getElementsByClassName('item active')[0]).fadeOut("slow");
-        if ( xDiff > 0 ) {
+        (<HTMLElement>document.getElementsByClassName('item text-center active')[0].childNodes[2]).className ='img-responsive';
+        if ( xDiff > 0) {
           (<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-right')[0]).click();
+          (<HTMLElement>document.getElementsByClassName('item text-center active')[0].childNodes[2]).className += " leftAni";
           /* left swipe */ 
-        } else {
+        } else if ( xDiff < 0)  {
           (<HTMLElement>document.getElementsByClassName('glyphicon glyphicon-chevron-left')[0]).click();
+          (<HTMLElement>document.getElementsByClassName('item text-center active')[0].childNodes[2]).className += " rightAni"; 
           /* right swipe */
-        }   
-        (<any>document.getElementsByClassName('item active')[0]).fadeIn("slow");                    
+        }        
       } else {
         if ( yDiff > 0 ) {
           /* up swipe */ 
@@ -86,7 +87,7 @@ export class CarouselComponent {
     this.slides.push({
       image: `../img/${newWidth}.png`,
       title:`${['Parking', 'Ticket', 'Payment', 'Finding', 'Park and Ride', 'City Bikes', 'User Information', 'Let\'s Park'][this.slides.length % this.pictureNumber]}`,
-      text: `${['You can instant see the parking price of your current location', 'Cannot be simplier to buy a ticket', 'Why have to pay with coin when you can uses our app ?', 'Access Helsinki Region Infoshare Database to find a parking spot', 'Park your car and use public transportation to save the enviroment', 'Bicycling arround the city. Why not ?', 'Get your car location, even offline!', ''][this.slides.length % this.pictureNumber]}`
+      text: `${['You can instantly see the parking price of your current location', 'Cannot be simplier to buy a ticket', 'Why you have to pay with coin if you use our app ?', 'Access Helsinki Region Infoshare Database to find a parking spot', 'Park your car and use public transportation to save the enviroment', 'Bicycling arround the city. Why not ?', 'Get your car location, even offline!', ''][this.slides.length % this.pictureNumber]}`
     });
   }
 }
