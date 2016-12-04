@@ -30,7 +30,7 @@ import { CarouselComponent } from '../component/instruction.component';
   </button>
   </div>
   <div class="developer">
-  <hr><br>
+  <hr>
   Version: 1.0<br>
   Copyright: Parking Group
 

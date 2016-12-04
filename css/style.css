@@ -20,8 +20,8 @@ body {
     background-image:none;
 }
 @-webkit-keyframes leftAni{
- from {opacity: 0;left: -100px;}
- to {opacity: 1;left:0;} 
+   from {opacity: 0;left: -100px;}
+   to {opacity: 1;left:0;} 
 }
 @keyframes leftAni {
     from {opacity: 0;left: -100px;}
@@ -124,6 +124,17 @@ body {
         border-top:1px solid #ddd;
         height: 10%;
     }
+    .bottomDiv {
+        bottom: 10vh;
+    }
+    .bottomDiv .content{
+        top:5vh;
+        height:70%;
+        position:relative;
+    }
+    .bottomDiv .developer{
+        height: 25%;
+    }
 }
 
 @media all and (orientation:portrait) {
@@ -145,6 +156,15 @@ body {
     }
     .custom-i{
         margin-top: 5%;
+    }
+    .bottomDiv {
+        bottom: 8vh;
+    }
+    .bottomDiv .content{
+        height:85%;
+    }
+    .bottomDiv .developer{
+        height: 15%;
     }
 }
 
@@ -489,7 +509,7 @@ h2{
     color:#1CBB9B; 
 }
 .cityBike .register a{
- color:#1CBB9B;  
+   color:#1CBB9B;  
 }
 #markerFacility, #markerSearch,#markerBike, #polygon, #carouselInstruction button{
     margin-right:2%;
@@ -542,11 +562,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
-   width: 100%;
-   background: #FF9AD7;
-   display:flex;justify-content:center;align-items:center;
-   color:white;
-   height:7vh;   
+ width: 100%;
+ background: #FF9AD7;
+ display:flex;justify-content:center;align-items:center;
+ color:white;
+ height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -653,9 +673,7 @@ th{
     position: absolute;
     height: 0;
     width: 100%;
-    background-color: white;
     transition: .5s;
-    bottom: 8vh;
 }
 .bottomDiv #info{
     height:7vh;
@@ -665,13 +683,26 @@ th{
     font-weight: bold;
 }
 .bottomDiv .content{
-    height:85%;
     margin:0;
     background: #5FE1FA; /* For browsers that do not support gradients */
     background: -webkit-linear-gradient(left, #5FE1FA , #B262FB); /* For Safari 5.1 to 6.0 */
     background: -o-linear-gradient(right, #5FE1FA, #B262FB); /* For Opera 11.1 to 12.0 */
     background: -moz-linear-gradient(right, #5FE1FA, #B262FB); /* For Firefox 3.6 to 15 */
     background: linear-gradient(to right, #5FE1FA , #B262FB); /* Standard syntax */
+}
+.bottomDiv .developer{
+    width: 100%;
+    text-align:center;
+    position: absolute;
+    bottom:0;
+    padding-bottom: 1vh;
+    left:0;
+    background-color: white
+}
+.bottomDiv .developer img{
+    display: block;
+    margin:auto;
+    max-height: 7vh;
 }
 
 .bottomDiv .content .userInfo{
@@ -725,18 +756,18 @@ th{
     animation: all 0.5s;
 }
 #arrowUp{
- background-color: white;
- top:9vh;
- z-index:1;
- position: absolute;
- width: auto;
- max-width: 10vw;
- text-align: center;
- left: 0; 
- right: 0; 
- margin-left: auto; 
- margin-right: auto;  
- animation: all 0.5s;
+   background-color: white;
+   top:9vh;
+   z-index:1;
+   position: absolute;
+   width: auto;
+   max-width: 10vw;
+   text-align: center;
+   left: 0; 
+   right: 0; 
+   margin-left: auto; 
+   margin-right: auto;  
+   animation: all 0.5s;
 }
 .modal-dialog {
     margin-left: 10vw;
@@ -773,21 +804,6 @@ th{
 
 #waiting-respond{
     width: 100%;
-}
-.developer{
-    height: 15%;
-    width: 100%;
-    text-align:center;
-    position: absolute;
-    bottom:0;
-    padding-bottom: 1vh;
-    left:0;
-    background-color: white
-}
-.developer img{
-    display: block;
-    margin:auto;
-    max-height: 7vh;
 }
 #userInfoTitle{
     font-size: 14px;
@@ -887,6 +903,7 @@ textarea:focus, input:focus{
     border: 1px solid white;
     color:#7995C7;
 }
+
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
