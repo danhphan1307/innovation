@@ -1,0 +1,12 @@
+CACHE MANIFEST
+index.html
+app.77fc3a5df0da7c49d9d8.js
+polyfills.77fc3a5df0da7c49d9d8.js
+vendor.77fc3a5df0da7c49d9d8.js
+free-and-paid-parking.json
+
+NETWORK: 
+*
+
+FALLBACK:
+/ /offline.html
