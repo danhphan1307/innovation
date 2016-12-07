@@ -15,13 +15,12 @@ body {
     z-index: 0;
 }
 .carousel-control.right,.carousel-control.left {
-    opacity: 0;
     top: -30%;
     background-image:none;
 }
 @-webkit-keyframes leftAni{
-   from {opacity: 0;left: -100px;}
-   to {opacity: 1;left:0;} 
+ from {opacity: 0;left: -100px;}
+ to {opacity: 1;left:0;} 
 }
 @keyframes leftAni {
     from {opacity: 0;left: -100px;}
@@ -509,7 +508,7 @@ h2{
     color:#1CBB9B; 
 }
 .cityBike .register a{
-   color:#1CBB9B;  
+ color:#1CBB9B;  
 }
 #markerFacility, #markerSearch,#markerBike, #polygon, #carouselInstruction button{
     margin-right:2%;
@@ -518,8 +517,7 @@ h2{
 }
 #unpark{
     outline:none;
-    margin-left:25%;
-    width: 50%;
+    width: 100%;
     min-height: 30px;
     border-radius: 5%;
     background-color:white;
@@ -562,11 +560,11 @@ h2{
     background:#1cbb9b;
 }
 .lovePanel{
- width: 100%;
- background: #FF9AD7;
- display:flex;justify-content:center;align-items:center;
- color:white;
- height:7vh;   
+   width: 100%;
+   background: #FF9AD7;
+   display:flex;justify-content:center;align-items:center;
+   color:white;
+   height:7vh;   
 }
 .locationPanel #saveIcon{
     background:#1cbb9b;
@@ -756,18 +754,18 @@ th{
     animation: all 0.5s;
 }
 #arrowUp{
-   background-color: white;
-   top:9vh;
-   z-index:1;
-   position: absolute;
-   width: auto;
-   max-width: 10vw;
-   text-align: center;
-   left: 0; 
-   right: 0; 
-   margin-left: auto; 
-   margin-right: auto;  
-   animation: all 0.5s;
+ background-color: white;
+ top:9vh;
+ z-index:1;
+ position: absolute;
+ width: auto;
+ max-width: 10vw;
+ text-align: center;
+ left: 0; 
+ right: 0; 
+ margin-left: auto; 
+ margin-right: auto;  
+ animation: all 0.5s;
 }
 .modal-dialog {
     margin-left: 10vw;
@@ -832,8 +830,13 @@ th{
 textarea:focus, input:focus{
     outline: none;
 }
+#input3, #input4{
+    width: 40%;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dedede;
+}
 #input1,#input2{
-    width: 100%;
+    width: 90%;
     padding-bottom: 5px;
     border-bottom: 1px solid #dedede;
 }
@@ -849,7 +852,7 @@ textarea:focus, input:focus{
     color: white;
     text-align: center;
     border-radius: 30px;
-    line-height: 3.5;
+    line-height: 2.5;
     position: absolute;
     left: 50%;
     transform: translate(-50%, -90%);
