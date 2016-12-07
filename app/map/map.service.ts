@@ -305,8 +305,10 @@ export class MapService{
              amount: _amount,
              customer: localStorage.getItem("customer")
          });
+         /*
          (<HTMLInputElement>document.getElementById('card_number')).value= localStorage.getItem("credit");
          (<HTMLInputElement>document.getElementById('cc-exp')).value= localStorage.getItem("year");
          (<HTMLInputElement>document.getElementById('cc-csc')).value= localStorage.getItem("ccv");
+         */
      }
  }
