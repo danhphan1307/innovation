@@ -1,21 +1,18 @@
-<div class="row" [hidden]="!state">
-  <div class="col-md-12">
-  	<div id="instructionTitle">
-  	  	<h2>parking</h2>
-  	</div>
-    <carousel [interval]="0" [noWrap]="noWrapSlides">
-      <slide *ngFor="let slidez of slides; let index=index" [active]="slidez.active">
-        <img [src]="slidez.image" style="margin:auto;max-width: 50%" class="img-responsive">
-        <div class="carousel-caption" style="top:95%;">
-          <h4>{{slidez.title}}</h4>
-          <p>{{slidez.text}}</p>
-          <div *ngIf="index==7">
-          	<input type="checkbox" checked="checked" name="showInstructionCheckbox" id="showInstructionCheckbox"/>
-          	<label for="showInstructionCheckbox">Don't show again</label><br/>
-          	<button (click)="closeInstruction()">Close</button>
-          </div>
-        </div>
-      </slide>
-    </carousel>
-  </div>
+
+<div id="instructionTitle">
+ <h2>parking</h2>
 </div>
+<carousel [interval]="0" [noWrap]="noWrapSlides">
+  <slide *ngFor="let slidez of slides; let index=index" [active]="slidez.active">
+    <img [src]="slidez.image" style="margin:auto;max-width: 50%" class="img-responsive">
+    <div class="carousel-caption" style="top:95%;">
+      <h4>{{slidez.title}}</h4>
+      <p>{{slidez.text}}</p>
+      <div *ngIf="index==7">
+       <input type="checkbox" checked="checked" name="showInstructionCheckbox" id="showInstructionCheckbox"/>
+       <label for="showInstructionCheckbox">Don't show again</label><br/>
+       <button (click)="closeInstruction()">Close</button>
+     </div>
+   </div>
+ </slide>
+</carousel>

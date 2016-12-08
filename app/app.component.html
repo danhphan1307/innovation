@@ -1,4 +1,4 @@
-<carouselInstruction id="carouselInstruction"></carouselInstruction>
+<carouselInstruction id="carouselInstruction" [hidden]="!carouselComponent.state"></carouselInstruction>
 <blackoverlay></blackoverlay>
 <filter id="filter" (radiusUpdated)="MapComponent.updateRadius($event)" (radiusUpdated)="FacilityComponent.updateRadius($event, MapComponent)"></filter>
 <div id="controlNav">

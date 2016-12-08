@@ -76,7 +76,9 @@ export class CarouselComponent {
   }
 
   public showInstruction(){
+    console.log('call');
     this.state = true;
+    console.log(this.state);
   }
 
   public addSlide():void {
@@ -84,7 +86,7 @@ export class CarouselComponent {
     this.slides.push({
       image: `../img/${newWidth}.png`,
       title:`${['Parking', 'Ticket', 'Payment', 'Finding', 'Park and Ride', 'City Bikes', 'User Information', 'Let\'s Park'][this.slides.length % this.pictureNumber]}`,
-      text: `${['You can instantly see the parking price of your current location', 'Cannot be simplier to buy a ticket', 'Why you have to pay with coin if you use our app ?', 'Access Helsinki Region Infoshare Database to find a parking spot', 'Park your car and use public transportation to save the enviroment', 'Bicycling arround the city. Why not ?', 'Get your car location, even offline!', ''][this.slides.length % this.pictureNumber]}`
+      text: `${['You can instantly see the parking price of your current location', 'Cannot be simplier to buy a ticket', 'Why you have to pay with coin if you use our app ?', 'Access Helsinki Region Infoshare Database to find a parking spot', 'Park your car and use public transportation to save the enviroment', 'Bicycling arround the city and enjoying fresh air. Why not?', 'Get your car location, even offline!', ''][this.slides.length % this.pictureNumber]}`
     });
   }
 }
