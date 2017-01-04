@@ -1,10 +1,9 @@
-import { Component, OnInit, OnChanges, ViewChild, Output, EventEmitter } from '@angular/core';
+import {Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import {ParkingZoneFilterService} from '../shared/parking-zone-filter.service';
 import {MapService} from '../map/map.service'
-import {ParkingZoneFilterService} from '../shared/parking-zone-filter.service'
-import {AgmCoreModule} from 'angular2-google-maps/core';
 import {MapComponent} from '../map/map.component';
-import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum'
-import {Coords} from '../models/location'
+import {PricingZoneEnum,ColorCode, ActiveComponent} from '../models/model-enum';
+import {Coords} from '../models/location';
 import {ParkingType} from '../models/parking-type';
 
 @Component({
@@ -37,10 +36,6 @@ export class ParkZoneComponent implements OnInit {
 
   ngOnInit(){
     this.triggered.emit(ActiveComponent.PAIDZONE)
-  }
-
-  ngOnChanges(){
-
   }
 
   /**
@@ -102,7 +97,6 @@ export class ParkZoneComponent implements OnInit {
           map.placePolygon(path2[0],colorCode, z.properties.sallittu_pysakointitapa, indexAbcd);
           map.placePolygon(path2[1],colorCode, z.properties.sallittu_pysakointitapa, indexAbcd);
         }
-
       }
       if(_func){
         _func();

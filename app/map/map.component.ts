@@ -25,7 +25,6 @@ import {Help} from '../component/help.component';
  };
 
  declare var google: any;
-
  @Component({
      selector: 'map-gg',
      template: `
@@ -93,7 +92,6 @@ import {Help} from '../component/help.component';
      kmlLayer : any = new google.maps.KmlLayer(this.klmSrc, {
          suppressInfoWindows: true,
          preserveViewport: true
-
      });
 
      constructor(private _router: Router, private _mapService: MapService ) {
@@ -724,7 +722,6 @@ import {Help} from '../component/help.component';
                  this.infowindowPolygon.setPosition(event.latLng);
                  this.infowindowPolygon.setContent(content);
                  this.infowindowPolygon.open(this.map, polygon);
-
                  var el = document.getElementById('polygon');
                  google.maps.event.addDomListener(el,'click',()=>{
                      this.showDirection(markerPolygon,false);
@@ -742,9 +739,6 @@ import {Help} from '../component/help.component';
          for (var i = 0; i < coords.length; i++) {
              var markerEntrance = this.service.placeMarker(this.map, coords[i].lat, coords[i].lon, "entrance");
              this.markers.push(markerEntrance);
-             google.maps.event.addListener(markerEntrance, 'click', () => {
-                 this.showDirection(markerEntrance,false);
-             });
          }
      }
 
@@ -815,9 +809,7 @@ import {Help} from '../component/help.component';
             this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
         }else {
             this.clearDirection();
-
             this.service.directionsService(this.map, current, destination, this.directionArray,'car',google.maps.DirectionsTravelMode.DRIVING,true);
-
             this.service.directionsService(this.map, current, destination, this.directionArray,'public',google.maps.DirectionsTravelMode.TRANSIT);
         }
         this.help.updateSave('?saddr='+this.centerLat+','+this.centerLon +'&daddr='+destination.lat()+','+destination.lng());

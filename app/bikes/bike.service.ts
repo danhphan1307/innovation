@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
-import { BikeStation }  from './bike';
+import {Http, Response, Headers } from '@angular/http';
+import {BikeStation }  from './bike';
 
 import {Observable} from 'rxjs/Rx';
 
@@ -12,10 +12,7 @@ import 'rxjs/add/operator/toPromise';
 export class BikeService{
 
   private bikeUrl = 'https://api.digitransit.fi/routing/v1/routers/hsl/bike_rental/';
-
-
   constructor(private http: Http){
-
   }
   /**
    * [Http service to get bike stations]
@@ -31,7 +28,6 @@ export class BikeService{
     let body = res.json();
     return body.stations || { };
   }
-
 
   private getHeaders(){
     let headers = new Headers();

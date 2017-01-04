@@ -39,12 +39,10 @@ export class FacilityComponent implements OnInit {
    radius:number;
 
    constructor(private facilityService: FacilityService){
-
    }
 
    ngOnInit(){
      this.triggered.emit(ActiveComponent.PARKING)
-
    }
 
   /**

@@ -202,7 +202,7 @@ export class MapService{
                  temp_marker.setIcon(this.iconsBike[type].icon);
              }else if(_type=="park"){
                  //temp_marker.setIcon(this.iconsParkHere[type].icon);
-             }else if(_type=="fefault"){
+             }else if(_type=="default"){
                  //temp_marker.setIcon(null);
              }
          });

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CarouselModule } from 'ng2-bootstrap/ng2-bootstrap';
+
 function localStorage_hasData() {
   try {
     return (localStorage.getItem("showInstruction") =='true');
@@ -76,9 +77,7 @@ export class CarouselComponent {
   }
 
   public showInstruction(){
-    console.log('call');
     this.state = true;
-    console.log(this.state);
   }
 
   public addSlide():void {
